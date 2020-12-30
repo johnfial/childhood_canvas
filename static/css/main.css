@@ -1,0 +1,108 @@
+/* 
+# THIS FILE IS IN (OR WAS COPIED FROM) HERE:
+# DJANGO LAB 3, TWITTER MVP CLONE: https://github.com/PdxCodeGuild/class_orca/blob/main/3%20Django/labs/lab03-chirp.md
+# PROJECT NAME: blog_project, # APP NAMES: blog_app, users_app 
+*/
+
+/* 
+Below was originally to make Chrome reload the CSS, but Shift+F5 worked well.
+src="/css/styles.css?v={random number/string}" 
+
+COLOR COMMENTS, MOSTLY FROM https://visme.co/blog/website-color-schemes/ # 4 'Cool and Fresh'
+
+Green-centered, kinda 'digital old video game' theme:
+    #05386B dark, almost black
+    #379683 light, almost grey
+    #5CDB95 bright green, base background
+    #BEE4AF lighter green/grey, 
+    #EDF7E1 light colored white-ish text
+
+NOTES:
+    #here is an id="here"
+    .here is a class="here"
+
+*/
+
+li, ol {
+    /* display: flex; */
+    font-size: 15px;
+    color: #5cdb62 ;
+    background-color:#05386B;
+}
+h1, h2, h3 , h4, h5, h6 {
+    text-align: center;
+}
+header {
+    border-bottom: 5px solid #EDF7E1;
+    margin-bottom: 18px;
+    display: flex;
+}
+header h1 a {
+    text-decoration: none;
+}
+h2 a {
+    text-decoration: none;
+}
+legend {
+    text-align: center;
+    font-style: italic;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 18px;
+    background-color: #5CDB95;
+    color: #05386B;
+    margin-left: 5%;
+    margin-right: 5%;
+    /* 
+    copied from pete's code:
+    width: 100vw;
+    height: 100vh; 
+    */
+}
+
+footer {
+    /* position: fixed; */
+    text-align: center;
+    border-bottom: 5px solid #EDF7E1;
+    margin-bottom: 15%;
+}
+
+canvas {
+    border: 2px solid black;
+    border-radius: 20px;
+  }
+
+/* This is the formatting for forms, like new chirp or password change page */
+form {
+    display: flex;
+    justify-content: center;
+    /* margin: 10px; */
+    /* padding: 10px; */
+    /* border: 5px dashed red; */
+    max-width: 90%;
+}
+/* BUTTONS */
+input { 
+    background-color: #379683;
+    color: rgb(0, 0, 0);
+}
+
+
+
+@media (min-width: 700px) {    
+    body {
+        margin-left: 15%;
+        margin-right: 15%;    
+    }    
+}
+@media (min-width: 1000px) {   
+    body {
+        margin-left: 20%;
+        margin-right: 20%;    
+    }    
+}

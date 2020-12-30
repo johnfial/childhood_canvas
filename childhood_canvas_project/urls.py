@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
+from django.conf.urls.static import static
 
 # THIS IS THE PROJECT **childhood_canvas_project** URLS.PY FILE
 
@@ -25,4 +26,11 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('canvas/', include('canvas_app.urls')),
-]
+] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # only necessary if using media...
+
+
+
+# // ##############################################################################
+# // # John Fial, PDX Code Guild, 2020-2021, www,johnfial.com
+# // 
+# // ##############################################################################

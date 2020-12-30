@@ -116,11 +116,21 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
+# https://stackoverflow.com/questions/27886477/invalid-block-tag-static
+
+# DON'T FORGET TO CHANGE ABOVE:
+# TEMPLATES  = [    { 
+#       ...
+#       'DIRS': [ BASE_DIR / 'templates' ], 
+#       ... } ]
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [ BASE_DIR / 'static' ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_REDIRECT_URL = 'home'

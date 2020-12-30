@@ -1,8 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- development version, includes helpful console warnings -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+  <!-- or: -->    <!-- production version, optimized for size and speed -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+
+  <!-- ANOTHER VUE ON A CDN OPTION: -->
+  <!-- Include Vue from a CDN of your choice, I chose unpkg -->
+  <!-- <script src="https://unpkg.com/vue"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" defer></script>
+  <!-- VUE: -->
+  <script src="{% static 'js/main.js'%}" defer></script>
+
+  <!-- <script src="https://unpkg.com/axios/dist/axios.min.js" defer></script> -->
+
+
+  <link rel="stylesheet" href="{% static 'css/github_necolas_normalize.css'%}">
+  <link rel="stylesheet" href="{% static 'css/main.css'%}">
+
+
   <title>
     {% block title %}
     Childhood Canvas
@@ -16,6 +37,8 @@
     {% block content %}
     {% endblock %}
     
-  </main>  
+  </main>
+
+
 </body>
 </html>

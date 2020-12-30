@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
   {% block title %}Homepage {% endblock %}
 
 {% block content %}
@@ -16,4 +17,27 @@
 
   {% endif %}
 
+
+  <hr>
+  <div class="div_canvas">
+    
+    <div id='clock'>  
+      <h2>Current Computer Clock Time:</h2>
+      <script src="{% static 'js/clock.js' %} "></script>    
+    </div>
+
+    <div id='vue_app'>
+      <h2>VUE App</h2>
+      
+    </div>
+    
+  <div id="canvas_js">
+    <script src="{% static 'js/canvas.js' %} " defer></script>  
+    <canvas width="800" height="800">
+    </canvas>
+  </div>
+    
+      
+  </div>
+<hr>
 {% endblock %}

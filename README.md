@@ -46,8 +46,8 @@
 
 1. - As a parental/caregiver accountholder, I want the ability to have **multiple profiles (for different children/adults) under my one account** so that everything is in one place.
    - Tasks: 
-      - [ ] Create Custom User Model WITH different users/children within that...
-      - [ ] Create several Test Logins
+      - [x] Create Custom User Model WITH different users/children within that...
+      - [x] Create several Test Logins
 
 2. As a caregiver, **I want a full-screen lock that my child can interact with**, but not escape to the open operating system.
    - Tasks: 
