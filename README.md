@@ -254,3 +254,16 @@ You can make an unordered list by preceding one or more lines of text with - or 
 ---
 
 If a task list item description begins with a parenthesis, you'll need to escape it with \\
+
+<!-- Quenstions and notes -->
+- Help fixing repos...
+
+- Where to take notes? Did you log/track in GitHub?
+
+- Should all this keylogging code be in JS vanilla?
+- How, if at all, can I use VUE to make this easier? Should I use a dictionary to map keys to functions?
+
+- Is a single event listener going to get crazy overloaded with so much code? Better way?
+
+- Resizing and positions of drawn elements: When I resize the window, the face seems to re-size automatically, even though Pete's smiley uses exact pixels.
+

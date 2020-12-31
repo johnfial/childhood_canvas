@@ -1,0 +1,117 @@
+/* 
+# THIS FILE IS IN (OR WAS COPIED FROM) HERE:
+# DJANGO LAB 3, TWITTER MVP CLONE: https://github.com/PdxCodeGuild/class_orca/blob/main/3%20Django/labs/lab03-chirp.md
+# PROJECT NAME: blog_project, # APP NAMES: blog_app, users_app 
+*/
+
+/* 
+Below was originally to make Chrome reload the CSS, but Shift+F5 worked well.
+src="/css/styles.css?v={random number/string}" 
+
+COLOR COMMENTS, MOSTLY FROM https://visme.co/blog/website-color-schemes/ # 4 'Cool and Fresh'
+
+Green-centered, kinda 'digital old video game' theme:
+    #05386B dark, almost black
+    #379683 light, almost grey
+    #5CDB95 bright green, base background
+    #BEE4AF lighter green/grey, 
+    #EDF7E1 light colored white-ish text
+
+NOTES:
+    #here is an id="here"
+    .here is a class="here"
+*/
+body {    
+    background-color: #000000;
+}
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    color: #05386B;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+/* CANVAS HERE */
+/* flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
+#div_left_canvas {
+    padding: 1%;
+    max-width: 100%;
+} 
+canvas {
+    /* position: fixed; */
+    border: 2px solid white;
+    border-radius: 10px;
+    background-color: rgb(0, 168, 8);
+    max-width: 100%;
+}
+
+#div_right_logs {
+    padding: 1%;
+    color: white;
+    background-color: brown;
+    border-radius: 10px;
+    max-width: 100%;
+    width: 400px;
+    height: 400px;
+}
+#keyboard_logs{
+    /* position: fixed; */
+    color: white;
+    background-color: black;
+    font-size: 50px;
+    font-weight: bolder;
+}
+:fullscreen {
+    background-color: violet;
+}
+:-webkit-full-screen {
+    background-color: violet;
+}
+:-ms-fullscreen {
+    background-color: violet;
+}
+
+
+li, ol {
+    font-size: 15px;
+}
+/* h1, h2, h3 , h4, h5, h6 {    text-align: center; } */
+/* header {
+    border-bottom: 5px solid #EDF7E1;
+    margin-bottom: 18px;
+    display: flex;
+} */
+/* footer {
+    text-align: center;
+    border-bottom: 5px solid #EDF7E1;
+    margin-bottom: 15%;
+} */
+form {
+    display: flex;
+    justify-content: center;
+    /* margin: 10px; */
+    /* padding: 10px; */
+    /* border: 5px dashed red; */
+    max-width: 90%;
+}
+/* BUTTONS */
+input { 
+    background-color: #379683;
+    color: rgb(0, 0, 0);
+}
+
+@media (min-width: 700px) {  
+}
+@media (min-width: 1000px) {   
+    #div_left_canvas {
+        max-width: 45%;
+    }
+    #div_right_logs {
+        width: 800px;
+        height: 800px;
+        max-width: 45%;
+    }
+}

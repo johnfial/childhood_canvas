@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+
+    <!-- <link rel="stylesheet" href="{% static 'css/github_necolas_normalize.css'%}"> -->
+    <link rel="stylesheet" href="main.css">
+
+    <title>
+      Childhood Canvas
+    </title>
+  </head>
+
+  <body>
+    <main>
+        
+      <div id="div_left_canvas">        
+        <script src="canvas.js" defer></script>          
+        <canvas width="800" height="800" id='canvas'>
+        </canvas>
+      </div>
+
+      <div id="div_right_logs">
+        <!-- <p>Focus this frame first (usually by clicking in/on it), then pressing keyboard keys</p> -->
+          <p id="keyboard_logs">
+          </p>
+        <p>Notes: 
+          <ul>
+            <li>(Firefox) browser option must be disabled: "Search for text when you start typing"</li>
+            <!-- <li></li> -->
+          </ul>
+        </p>
+      </div>
+        
+    </main>
+  </body>
+</html>

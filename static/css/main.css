@@ -65,17 +65,17 @@ body {
     */
 }
 
+canvas {
+    border: 2px solid black;
+    border-radius: 20px;
+  }
+
 footer {
     /* position: fixed; */
     text-align: center;
     border-bottom: 5px solid #EDF7E1;
     margin-bottom: 15%;
 }
-
-canvas {
-    border: 2px solid black;
-    border-radius: 20px;
-  }
 
 /* This is the formatting for forms, like new chirp or password change page */
 form {
