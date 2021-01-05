@@ -1,26 +1,4 @@
-/* 
-# THIS FILE IS IN (OR WAS COPIED FROM) HERE:
-# DJANGO LAB 3, TWITTER MVP CLONE: https://github.com/PdxCodeGuild/class_orca/blob/main/3%20Django/labs/lab03-chirp.md
-# PROJECT NAME: blog_project, # APP NAMES: blog_app, users_app 
-*/
 
-/* 
-Below was originally to make Chrome reload the CSS, but Shift+F5 worked well.
-src="/css/styles.css?v={random number/string}" 
-
-COLOR COMMENTS, MOSTLY FROM https://visme.co/blog/website-color-schemes/ # 4 'Cool and Fresh'
-
-Green-centered, kinda 'digital old video game' theme:
-    #05386B dark, almost black
-    #379683 light, almost grey
-    #5CDB95 bright green, base background
-    #BEE4AF lighter green/grey, 
-    #EDF7E1 light colored white-ish text
-
-NOTES:
-    #here is an id="here"
-    .here is a class="here"
-*/
 body {    
     background-color: #000000;
 }

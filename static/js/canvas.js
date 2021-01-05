@@ -1,11 +1,11 @@
 // pete's tutorial: https://github.com/pjz987/guides/blob/master/docs/canvas-tutorial.md
 // also see night sky generator: https://codepen.io/pjz987/pen/zYrwRMx
 
-const canvas = document.getElementById('canvas_js');
+const canvas = document.getElementById('div_canvas');
 const ctx = canvas.getContext('2d');
 // const ctx = canvas.getContext('2d');
-const width = 500;
-const height = 500;
+const width = 800;
+const height = 800;
 
 // // rect x: 250, y: 200, w: 250, h: 350 lineWidth: 2
 // context.rect(250, 200, 250, 350);

@@ -262,21 +262,25 @@ If a task list item description begins with a parenthesis, you'll need to escape
 - Should all this keylogging code be in JS vanilla?
 
 - How, if at all, can I use VUE to make this easier? Should I use a dictionary to map keys to functions?
-### idea: custom component of canvas, object/dict that would lookup what they press, 
-### API call once key is pressed, 
-### maybe store everything that's been drawn, store that
+   ### idea: object/dict that would lookup what they press, 
+   ### API call once key is pressed, 
+   ### maybe store everything that's been drawn, store that
 
-### on mount, populate data
-OR 
-### data in API
-
-### VUE app with canvas, at keypress, method to animate
+   ### on mount, populate data
 
 
-- Is a single event listener going to get crazy overloaded with so much code? Better way?
-###
-
-- Resizing and positions of drawn elements: When I resize the window, the face seems to re-size automatically, even though Pete's smiley uses exact pixels.
-### normal, 'window' does that 
 
 - Where to take notes? Did you log/track in GitHub?
+
+---
+
+
+
+### 5 jan 2021 questions:
+
+- First -- get VUE drawing on the canvas (initializers?)
+- Second -- - Where to have object/dict that looks up keypresses?
+- Is the mounted() place the best spot for those initializers?
+
+
+- Easy: How to fix diagonal positioning for circle/random?

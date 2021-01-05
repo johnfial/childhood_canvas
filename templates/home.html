@@ -5,39 +5,42 @@
 
 {% block content %}
   {% if user.is_authenticated %}
-    User: {{ user.username }}
-    <p>
+  <p>
+    User: <strong> {{ user.username }} </strong> | 
       <a href="{% url 'logout' %}">Log Out</a>
     </p>
 
   {% else %}
-    <p>Anonymous User</p>
-    <a href="{% url 'login' %}">Login</a> |
-    <a href="{% url 'signup' %}">Sign Up</a>
+  <p>
+    User: <strong> Guest </strong> |
+      <a href="{% url 'login' %}">Login</a> |
+      <a href="{% url 'signup' %}">Sign Up</a>
+  </p>
 
   {% endif %}
-
-
-  <hr>
-  <div class="div_canvas">
+  
+  <div id='vue_app'>
+    <h2>VUE App</h2>
+      <template>
+        Position: {{x}}, {{y}}
+      </template>
     
-    <div id='clock'>  
-      <h2>Current Computer Clock Time:</h2>
-      <script src="{% static 'js/clock.js' %} "></script>    
+    
+    <div id="div_left_canvas" class="div_canvas">
+      <!-- <script src="{% static 'js/canvas.js' %} " defer></script>   -->
+      <canvas width="800" height="800" id='canvas' @mousemove="draw" @mousedown="start_drawing" @mouseup="stop_drawing">
+      </canvas>
+
     </div>
 
-    <div id='vue_app'>
-      <h2>VUE App</h2>
-      
+    <div id="div_right_logs">
+      <div>
+        <p id="keyboard_logs">
+        </p>
+      </div>
     </div>
-    
-  <div id="canvas_js">
-    <script src="{% static 'js/canvas.js' %} " defer></script>  
-    <canvas width="800" height="800">
-    </canvas>
+
+
   </div>
-    
-      
-  </div>
-<hr>
+
 {% endblock %}
