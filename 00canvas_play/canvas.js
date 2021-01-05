@@ -77,9 +77,9 @@ var elem = document.documentElement;
 // openFullscreen()
 
 // https://www.w3schools.com/js/js_window.asp
-console.log(window.screen)
+console.log(window.screen);
 // console.log(window.screen.width)
-console.log(`Window size: ${window.innerWidth} * ${window.innerHeight}`)
+console.log(`Window size: ${window.innerWidth} * ${window.innerHeight}.`);
 
 // talkerscode.com/webtricks/disable-click-cut-copy-paste-using-jquery.php
 //http://talkerscode.com/webtricks/enable-and-disable-keyboard-keys-using-javascript.php (demo at bottom)
@@ -107,35 +107,60 @@ console.log(`Window size: ${window.innerWidth} * ${window.innerHeight}`)
         // 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
 
-function draw_circle(yChange) {    
+
+function generate_random_x_y(x, y) {
+    // // random integer between 0 and random_max
+    // var random_number = Math.random()
+    // var random_max = 11
+    // var random_int_max = Math.floor(random_number * Math.floor(random_max))
+};
+function draw_circle_random(input_x, input_y) {    
+    console.log('draw_circle_random() function.')
+
+    var random_number = Math.random()
+    let random_x = Math.floor(random_number * Math.floor(input_x))
+    let random_y = Math.floor(random_number * Math.floor(input_y))
+
+    console.log(`draw_circle_random() function with random_x : ${random_x} & random_y : ${random_y}.`)
+
     context.beginPath();
-    context.arc(x, 250 + yChange, 25, 0, Math.PI);
-    context.closePath();
+    context.arc(random_x, random_y, 50, 0, 2*Math.PI);
+    // https://www.w3schools.com/tags/canvas_arc.asp
+    // context.arc() syntax:    context.arc(     x,     y,     r,     sAngle,     eAngle,     counterclockwise);
     context.fillStyle = 'blue';
     context.fill();
     context.stroke();
+    context.closePath();
+    
 };
 
 document.addEventListener('keyup', logKey);
 function logKey(event) {
+
+    //basic right-side keyboard logs
     console.log(event.code);
-    keyboard_logs.textContent += ` ${event.key}`;
+    keyboard_logs.textContent += ` ${event.key} `;    
+
     if (event.code === 'KeyC') {
         draw_face(50);
     };
     if (event.keyCode == 91) { // 91 is the ⊞ WINDOWS key
         // event.preventDefault(); // won't work
-        console.log("Win Key was clicked");
-    }
+        console.log("Win Key was clicked.");
+    };  
     if (event.code === 'Alt') {
         event.preventDefault();
-        console.log("Alt Key was clicked");
-    }
-    // Here I'm attempting to make any digit (which are inconveniently 'string' of 'Digit3' or 'Numpad3'...) draw the same thing...
-    // console.log(typeof(event.code))
-    if (event.code === 'KeyA' ) {
-        draw_circle(275);
+        console.log("Alt Key was clicked.");
     };
+    if (event.code === 'KeyA' ) {
+        // generate_random_x_y(window.innerWidth, window.innerHeight)
+        console.log(`Window size: ${window.innerWidth} * ${window.innerHeight}.`)
+        draw_circle_random(window.innerWidth, window.innerHeight);
+    };
+    
+    // Section 2
+    // Here I'm attempting to make any digit (which are inconveniently 'string' of 'Digit3' or 'Numpad3'...) draw the same thing...
+        // console.log(typeof(event.code))
 };
  
 
