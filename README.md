@@ -258,9 +258,7 @@ If a task list item description begins with a parenthesis, you'll need to escape
 
 
 
-<!-- Quenstions and notes 29 dec -->
-- Should all this keylogging code be in JS vanilla?
-
+<!-- Questions and notes 29 dec -->
 - How, if at all, can I use VUE to make this easier? Should I use a dictionary to map keys to functions?
    ### idea: object/dict that would lookup what they press, 
    ### API call once key is pressed, 
@@ -268,7 +266,7 @@ If a task list item description begins with a parenthesis, you'll need to escape
 
    ### on mount, populate data
 
-
+---
 
 - Where to take notes? Did you log/track in GitHub?
 
@@ -276,11 +274,26 @@ If a task list item description begins with a parenthesis, you'll need to escape
 
 
 
-### 5 jan 2021 questions:
+<!-- Questions and notes 5 jan 2021 -->
 
-- First -- get VUE drawing on the canvas (initializers?)
 - Second -- - Where to have object/dict that looks up keypresses?
-- Is the mounted() place the best spot for those initializers?
+- event listener on mounted? in raw JS?
 
 
-- Easy: How to fix diagonal positioning for circle/random?
+    05jan2021 pete help: 
+        // objectname.keycode()
+        // objectname[keyPress](3,7)
+
+        // can use: 
+        //     objectname.lookup
+        //     or
+        //     objectname['aoeu']
+
+        //     but objectname[keyPress] does something different!
+
+        // term: code is 'minified'
+
+        // svg graphics libraries: 
+        // http://snapsvg.io/
+        // http://fabricjs.com/
+        // http://paperjs.org/

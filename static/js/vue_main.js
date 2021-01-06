@@ -11,15 +11,46 @@ new Vue({
     data: {
         vueCanvas: null,
         is_drawing: false,
-        key_lookups: {            
+        key_lookups: {
         },
+        x: null,
+        y: null,
         example_array: [],
         example_string: "",
         example_integer: 1,
         example_boolean: false,
     },
     methods: {
+        logKey: function(event) {
+            // basic right-side keyboard logs:
+            console.log(`event.code: ${event.code}.`)
+            keyboard_logs.textContent += ` ${event.key} ` 
+        
+            // Working keypresses:
+            if (event.code === 'Space') {
+                this.draw_face(50)
+            }
+            if (event.keyCode == 91) { // 91 is the ⊞ WINDOWS key
+                // event.preventDefault(); // won't work
+                console.log("Win Key was clicked.")
+                this.draw_gradient()
+            }
+            if (event.code === 'Alt') {
+                // event.preventDefault()
+                console.log("Alt Key was clicked.")
+            }
+            if (event.code === 'KeyA' ) {
+                // generate_random_x_y(window.innerWidth, window.innerHeight)
+                console.log(`Window size: ${window.innerWidth} * ${window.innerHeight}.`)
+                this.draw_circle_random(window.innerWidth, window.innerHeight)
+            }
+
+            // Section 2:
+            // Here I'm attempting to make any digit (which are inconveniently 'string' of 'Digit3' or 'Numpad3'...) draw the same thing...
+                // console.log(typeof(event.code))
+        },
         log_this: function() {
+            // unused
             console.log(`logging log_this`)            
         },        
         draw_circle_random: function(input_x, input_y) {    
@@ -28,6 +59,7 @@ new Vue({
 
             var random_number = Math.random()
             let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
             console.log(`draw_circle_random() function with random_x : ${random_x} & random_y : ${random_y}.`)
@@ -94,54 +126,27 @@ new Vue({
             
             window.requestAnimationFrame(() => this.draw_face(yChange))
         },
-        logKey: function(event) {
-
-            //basic right-side keyboard logs:
-            console.log(`event.code: ${event.code}.`)
-            keyboard_logs.textContent += ` ${event.key} ` 
-
+        draw_gradient: function() {
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /          testing:
             var gradient = this.vueCanvas.createLinearGradient(0, 0, 200, 0)
             gradient.addColorStop(0, "red")
             gradient.addColorStop(1, "white")
+
             // Fill with gradient
             this.vueCanvas.fillStyle = gradient
             this.vueCanvas.fillRect(10, 10, 150, 80);
-        
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / Working keypresses:
-            if (event.code === 'KeyC') {
-                console.log("KeyC was clicked.")
-                this.draw_face(50)
-            }
-            if (event.keyCode == 91) { // 91 is the ⊞ WINDOWS key
-                // event.preventDefault(); // won't work
-                console.log("Win Key was clicked.")
-            }
-            if (event.code === 'Alt') {
-                // event.preventDefault()
-                console.log("Alt Key was clicked.")
-            }
-            if (event.code === 'KeyA' ) {
-                // generate_random_x_y(window.innerWidth, window.innerHeight)
-                console.log(`Window size: ${window.innerWidth} * ${window.innerHeight}.`)
-                this.draw_circle_random(window.innerWidth, window.innerHeight)
-            }
-
-            // Section 2:
-            // Here I'm attempting to make any digit (which are inconveniently 'string' of 'Digit3' or 'Numpad3'...) draw the same thing...
-                // console.log(typeof(event.code))
         },
         draw_line: function(x1, y1, x2, y2) {
             let canvas = this.vueCanvas
             canvas.beginPath()
             canvas.strokeStyle = 'black'
-            canvas.lineWidth = 1
+            canvas.lineWidth = 3
             canvas.moveTo(x1, y1)
             canvas.lineTo(x2, y2)
             canvas.stroke()
             canvas.closePath()
         },
-        draw: function(e) {
+        draw: function(e) { // thanks to: https://dev.to/reiallenramos/drawing-in-vue-using-mousemove-event-34cg
             if(this.is_drawing) {
             this.draw_line(this.x, this.y, e.offsetX, e.offsetY)
             this.x = e.offsetX // don't confuse with clientX 
