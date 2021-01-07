@@ -13,11 +13,7 @@ new Vue({
         is_drawing: false,
         x: null,
         y: null,
-        keys_and_functions: {
-            Space: `console.log('this')`,
-            KeyA: console.log('Im a function inside a value, inside an object, inside the data object, isnide the VUE shell!!!!'),
-            KeyA: `test`,
-        },
+        keys_and_functions: {},
         example_array: [],
         example_string: "",
         example_integer: 1,
@@ -33,15 +29,16 @@ new Vue({
 
             // basic right-side keyboard logs:
             console.log(`logKey: function(KeyboardEvent) running with KeyboardEvent.code: ${KeyboardEvent.code} and KeyboardEvent.key : ${KeyboardEvent.key}.`)
-            keyboard_logs.textContent += ` ${KeyboardEvent.code}`
+            keyboard_logs.textContent += `${KeyboardEvent.code}, `
             last_keypress.textContent = KeyboardEvent.code
 
             console.log('here follows keys_and_functions test : this.keys_and_functions.key_lookup')
             let key_lookup = KeyboardEvent.code // change this to experiment
-            console.log(this.keys_and_functions[key_lookup])
+            this.keys_and_functions[key_lookup]()
+            console.log(`~~~~~~line 42`)
         
             // Working keypresses:
-            if (KeyboardEvent.code === 'KeyC') {
+            if (KeyboardEvent.code === 'KeyR') {
                 this.draw_face(50)
             }
             if (KeyboardEvent.keyCode == 91) { // 91 is the ⊞ WINDOWS key
@@ -87,7 +84,7 @@ new Vue({
             canvas.stroke()
             canvas.closePath()
         },
-        draw_face: function(yChange) {
+        draw_face: function(yChange=50) {
 
             let canvas = this.vueCanvas
 
@@ -191,6 +188,11 @@ new Vue({
         // const height = 800
 
         document.addEventListener('keypress', this.logKey) // huge difference between keyup and keydown!
+        this.keys_and_functions = {
+            KeyA: () => console.log('Im a function inside a value, inside an object, inside the data object, isnide the VUE shell!!!!'),
+            Space: this.draw_face,
+            KeyC: `test`,
+        }
     },
 })
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
