@@ -5,37 +5,54 @@
 
 {% block content %}
   {% if user.is_authenticated %}
-  <p>
-    User: <strong> {{ user.username }} </strong> | 
-      <a href="{% url 'logout' %}">Log Out</a>
-    </p>
+  <header>
+    <p>
+      {% comment %}
+          Verbatim...
+          <!-- https://dev.to/reiallenramos/drawing-in-vue-using-mousemove-event-34cg -->
+          <!-- https://vsupalov.com/vue-js-delimiters-django/ -->
+      {% endcomment %}
+      {% verbatim %}
+      User: <strong> {{ user.username }} </strong> | 
+        <a href="{% url 'logout' %}">Log Out</a>
+      {% endverbatim %}
+      </p>
 
-  {% else %}
-  <p>
-    User: <strong> Guest </strong> |
-      <a href="{% url 'login' %}">Login</a> |
-      <a href="{% url 'signup' %}">Sign Up</a>
-  </p>
+    {% else %}
+    <p>
+      User: <strong> Guest </strong> |
+        <a href="{% url 'login' %}">Login</a> |
+        <a href="{% url 'signup' %}">Sign Up</a>
+    </p>
+  </header>
 
   {% endif %}
   
   <div id='vue_app'>
-    <h2>VUE App</h2>
-      <template>
-        Position: {{x}}, {{y}}
-      </template>
     
-    
-    <div id="div_left_canvas" class="div_canvas">
+      <!-- <div id="div_left_canvas" class="div_canvas"> -->
       <!-- <script src="{% static 'js/canvas.js' %} " defer></script>   -->
-      <canvas width="800" height="800" id='canvas' @mousemove="draw" @mousedown="start_drawing" @mouseup="stop_drawing">
+      <canvas
+        width="900"
+        height="900"
+        id='canvas' 
+        @mousemove="draw" 
+        @mousedown="start_drawing" 
+        @mouseup="stop_drawing"
+      >
       </canvas>
-
-    </div>
+      <!-- </div> -->
 
     <div id="div_right_logs">
+    
       <div>
-        <p id="keyboard_logs">
+      {% verbatim %}
+          <h1 id="mouse_position"> Position: {{ x }}, {{ y }} </h1>
+      {% endverbatim %}
+        <p id="last_keypress">
+        </p>
+      <div>
+        <p id="keyboard_logs">Full keypress log:
         </p>
       </div>
     </div>
