@@ -169,14 +169,16 @@ new Vue({
         },
         draw_rectangle: function() {
             let offset = 0
-            let canvas = this.vueCanvas
             function draw() {
-                // console.log('draw_rectangle() function...')
-                canvas.clearRect(0, 0, 200, 200)
-                canvas.clearRect(0, 0, this.canvas_width, this.canvas_height)
+                console.log('draw_rectangle() function...')
+                let canvas = this.vueCanvas
+                console.log('line 175')
+                console.log(canvas)
+                canvas.clearRect(0, 0, 500, 500)
+                // canvas.clearRect(0, 0, this.canvas_width, this.canvas_height)
                 canvas.setLineDash([4, 2])
                 canvas.lineDashOffset = -offset
-                canvas.strokeRect(50, 50, 300, 300)
+                canvas.strokeRect(10, 10, 100, 300)
             }
             function march() {
                 offset++
@@ -216,7 +218,7 @@ new Vue({
             KeyP: 1,
 
             KeyA: () => this.draw_circle_random(500, 500, 'red'),
-            KeyS: 1,
+            KeyS: () => 1,
             KeyD: () => this.draw_rectangle(), 
             KeyF: 1, 
             KeyG: 1, 

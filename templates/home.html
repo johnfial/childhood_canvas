@@ -23,8 +23,7 @@
   
   <div id='vue_app'>
     
-      <!-- <div id="div_left_canvas" class="div_canvas"> -->
-      <!-- <script src="{% static 'js/canvas.js' %} " defer></script>   -->
+      <!-- https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
       <canvas
         width="1300"
         height="1000"
@@ -40,9 +39,7 @@
     
       <div>
         {% comment %}
-            Verbatim...
-            <!-- https://dev.to/reiallenramos/drawing-in-vue-using-mousemove-event-34cg -->
-            <!-- https://vsupalov.com/vue-js-delimiters-django/ -->
+            Verbatim tag in Django lets me ignore using custom delimeters for Vue vs. Django., see https://vsupalov.com/vue-js-delimiters-django/
         {% endcomment %}
       {% verbatim %}
           <h1 id="mouse_position"> Position: {{ x }}, {{ y }} </h1>
@@ -50,9 +47,8 @@
         <p id="last_keypress">
         </p>
       <div>
-        <p id="keyboard_logs">Full keypress log:
-          <br>
-        </p>
+        <p>Full keypress log:</p>
+        <p id="keyboard_logs"></p>
       </div>
     </div>
 
