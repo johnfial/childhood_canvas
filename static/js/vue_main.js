@@ -250,18 +250,10 @@ new Vue({
             // }
         }
     },
+    created: function() {
+        console.log('created() function')
+    },
 })
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-
-
-
-// To-do: 
-
-//have default be a random circle color!
-
-//Fullscreen toggle button
-// bigger picture: move my 
-// add a reset/refresh button
-// add an eraser!!
