@@ -51,7 +51,7 @@ canvas {
     border-radius: 10px;
     margin: 1%;
     color: white;
-    width: 500px;
+    width: 450px;
     height: 1000px;
 }
 #mouse_position {
@@ -94,9 +94,24 @@ form {
     max-width: 90%;
 }
 /* BUTTONS */
-input { 
-    background-color: #379683;
+/* https://www.w3schools.com/csS/css3_buttons.asp */
+/* Use display:block instead of float:left to group the buttons below each other, instead of side by side: */
+#button_area {
+    display: flex;
+    width: 100px;
+    height: 1000px;
+}
+button { 
     color: rgb(0, 0, 0);
+    margin-top: 100px;
+    width: 75px;
+    height: 75px;
+    background-color: black;
+    color: white;
+    font-size: 25px;
+    font-weight: bolder;
+    border: 2px solid white;
+    border-radius: 40%;
 }
 
 @media (min-width: 700px) {  

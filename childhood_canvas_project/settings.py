@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -126,8 +127,6 @@ USE_TZ = True
 #       'DIRS': [ BASE_DIR / 'templates' ], 
 #       ... } ]
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [ BASE_DIR / 'static' ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -135,3 +134,30 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# DEPLOYMENT NOTES:
+
+# manage.py check --deploy
+
+# Consider: enabling cached template loader...
+# https://docs.djangoproject.com/en/2.2/ref/templates/api/#template-loaders
+# https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-TEMPLATES
+
+# "If you haven’t set up backups for your database, do it right now!"
+# "Now is a good time to check your backup strategy for *MEDIA_ROOT and MEDIA_URL¶* files."
+
+# from https://stackoverflow.com/questions/48913016/django-the-staticfiles-dirs-setting-should-not-contain-the-static-root-setting 
+# regarding a search for PythonAnywhere error: 'The STATICFILES_DIRS setting should not contain the STATIC_ROOT setting.'
+# (seems to be a non-serious debug warning only...)
+STATIC_URL = '/static/'
+# STATICFILES_DIRS = [ BASE_DIR / 'static' ]
+if not DEBUG:
+    STATIC_ROOT = ''
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/'),
+]
+
+# https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/ :
+# CSRF_COOKIE_SECURE = True # default False
+# SESSION_COOKIE_SECURE = True # # default False
