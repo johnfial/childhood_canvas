@@ -9,6 +9,7 @@ new Vue({
     data: {
         vueCanvas: null,
         vueCanvas_tree: null,
+
         is_drawing: false,
         x: null,
         y: null,
@@ -425,6 +426,7 @@ new Vue({
             console.log('this.draw_load_page function()')
             
             let canvas = this.vueCanvas
+            canvas.clearRect(0, 0, this.canvas_width, this.canvas_width)
             
             canvas.fillStyle = 'rgb(200, 100, 100)'      
             canvas.fillRect(25, 25, 250, 250)
@@ -440,6 +442,22 @@ new Vue({
             canvas.fillText('then try random keyboard keys or draw on me !', 100, 545)
 
             canvas.save()
+
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+
+            console.log('draw_image_test() START')
+
+            var img = new Image(100, 100);   // Create new img element
+            img.addEventListener('load', function() {
+                    // execute drawImage statements here
+                    canvas.drawImage(img,100,10)
+                }, false)
+            img.src = 'static/media/test.svg'
+            img.width = "100"
+            img.height = "100"
+            console.log('draw_image_test() END')
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+
 
         },
         drawing_notes: function() { // unused
@@ -579,6 +597,8 @@ new Vue({
 
             init();
         },
+        draw_image_test: function() {
+        },
     },
     created: function() { // created()  >>  mounted()
         console.log('created() function')
@@ -590,12 +610,17 @@ new Vue({
         this.vueCanvas = canvas.getContext('2d')
 
         var canvas_tree = document.getElementById('canvas_tree')
-        this.vueCanvas_tree = canvas_tree.getContext('2d')
+        this.vueCanvas_tree = canvas_tree.getContext('2d')        
+        
+        let ctx = this.vueCanvas // just in case I forget that anywhere else!
         
         // Keypress listener:
         document.addEventListener('keypress', this.keypress_listener) // huge difference between 'keyup', 'keydown', and 'keypress'!
         this.draw_load_page()
+        
         this.draw_tree_animated_from_NicoleEyO()
+
+
 
         // BIG LIST of key / draw function lookups...
         // Try moving this to the 'data' normally to see if it remains executable...
