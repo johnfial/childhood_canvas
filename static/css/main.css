@@ -9,7 +9,6 @@ header {
     text-align: center;
     border-bottom: 5px solid #EDF7E1;
 }
-
 body {    
     background-color: #000000;
 }
@@ -21,26 +20,22 @@ main {
     margin-left: 1%;
     margin-right: 1%;
 }
+
+/* flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
+/* grid: https://css-tricks.com/snippets/css/complete-guide-grid/ */
 #vue_app {
     display: flex;
     border: 2px solid white;
     border-radius: 10px;
 }
-
-
-/* CANVAS HERE */
-/* flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
-/* grid: https://css-tricks.com/snippets/css/complete-guide-grid/ */
-canvas {
-    border: 2px solid white;
-    border-radius: 10px;
-    background-color: rgb(215, 230, 2);
+#canvas_main {  /* MAIN CANVAS HERE */
+    background-color: rgb(146, 2, 230);
     /* width: 1300px; */
-    /* height: 1000px; */
+    /* height: 900px; */
     margin: 1%;
-    /* max-width: 45%; */
+    border: 2x solid white;
+    border-radius: 10px;
 }
-
 
 /* RIGHT LOGS HERE */
 #div_right_logs {
@@ -51,15 +46,21 @@ canvas {
     border-radius: 10px;
     margin: 1%;
     color: white;
-    width: 450px;
+    width: 400px;
     height: 1000px;
+}
+#canvas_tree {
+    border: 1px solid white;
+    border-radius: 10px;
+    margin-left: 25px;
+    margin-top: 25px;
 }
 #mouse_position {
     text-align: center;
-    font-size: 50px;
+    font-size: 40px;
 }
 #last_keypress {
-    font-size: 50px;
+    font-size: 40px;
     text-align: center;
 }
 #keyboard_logs{
@@ -97,16 +98,17 @@ form {
 /* https://www.w3schools.com/csS/css3_buttons.asp */
 /* Use display:block instead of float:left to group the buttons below each other, instead of side by side: */
 #button_area {
-    display: flex;
+    display: flex;    
+    flex-direction: column;
+    margin-top: 100px;
     width: 100px;
     height: 1000px;
 }
 button { 
     color: rgb(0, 0, 0);
-    margin-top: 100px;
     width: 75px;
     height: 75px;
-    background-color: black;
+    background-color: red;
     color: white;
     font-size: 25px;
     font-weight: bolder;

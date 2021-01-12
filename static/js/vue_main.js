@@ -1,15 +1,14 @@
-
-// / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-// / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+// John Fial, 2020-2021 PDX Code Guild, 
+// Capstone Project 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
 // tutorials used: 
-    // https://dev.to/reiallenramos/drawing-in-vue-using-mousemove-event-34cg
 
 new Vue({
     el: '#vue_app',
     data: {
         vueCanvas: null,
+        vueCanvas_tree: null,
         is_drawing: false,
         x: null,
         y: null,
@@ -20,7 +19,27 @@ new Vue({
         example_boolean: false,
         // thanks to https://gist.github.com/bobspace/2712980 for the color list! :
         random_css_color_list: [
-            'white', 'black', 'red', 'orange', 'yellow', 'green',
+            'white', 'black',
+            'white', 'black',
+            'white', 'black',
+            'white', 'black',
+            'white', 'black',
+            'white', 'black',
+            'white', 'black',
+            'white', 'black',
+            'white', 'black',
+            'white', 'black', 
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
             "AliceBlue",
             "AntiqueWhite",
             "Aqua",
@@ -170,7 +189,7 @@ new Vue({
             "Yellow",
         ],
         canvas_width: 1300,
-        canvas_height: 1000,
+        canvas_height: 900,
     },
     methods: {
         keypress_listener: function(KeyboardEvent) {
@@ -205,34 +224,69 @@ new Vue({
             this.x = e.offsetX
             this.y = e.offsetY
         },
-        draw_circle_random: function(input_x=this.canvas_width, input_y=this.canvas_height, color='white') {
-            let canvas = this.vueCanvas
-            console.log('draw_circle_random() function.')
+        draw_random_circle: function(color='random', input_x=this.canvas_width, input_y=this.canvas_height) {
 
+            console.log('draw_random_circle() function.')
+
+            let canvas = this.vueCanvas
+
+            // Random position:
             var random_number = Math.random()
             let random_x = Math.floor(random_number * Math.floor(input_x))
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            console.log(`draw_circle_random() function with random_x : ${random_x} & random_y : ${random_y}.`)
-
+            // Random color from list in data{}
+            if (color === 'random') {
+                color = this.pick_random_color()
+                canvas.fillStyle = color
+            }
+            else {
+                canvas.fillStyle = color
+            }
+            
             canvas.beginPath()
+                // https://www.w3schools.com/tags/canvas_arc.asp
+                // context.arc() syntax:    context.arc(     x,     y,     r,     sAngle,     eAngle,     counterclockwise);
             canvas.arc(random_x, random_y, 50, 0, 2*Math.PI)
-            // https://www.w3schools.com/tags/canvas_arc.asp
-            // context.arc() syntax:    context.arc(     x,     y,     r,     sAngle,     eAngle,     counterclockwise);
-            // canvas.fillStyle = color
-            
-            // random color section:
-            random_color_seed = Math.random()
-            console.log(`random_color_seed: ${random_color_seed}`)
-            random_color_integer = Math.floor(random_color_seed * Math.floor(this.random_css_color_list.length))
-            console.log(`Math.floor(this.random_css_color_list.length) : ${Math.floor(this.random_css_color_list.length)}`)
-            console.log(`random_color_integer: ${random_color_integer}`)
-            canvas.fillStyle = this.random_css_color_list[random_color_integer]
-            
+
             canvas.fill()
             canvas.stroke()
             canvas.closePath()
+        },
+        draw_random_square: function(color='random', input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('draw_random_square: function()')
+            
+            let canvas = this.vueCanvas
+
+            // Random position:
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            // Random color from list in data{}
+            if (color === 'random') {
+                color = this.pick_random_color()
+                canvas.fillStyle = color
+            }
+            else {
+                canvas.fillStyle = color
+            }
+
+            canvas.fillRect(random_x, random_y, 100, 100)
+
+        },
+        pick_random_color: function() {
+            console.log(`pick_random_color: function() start`)
+
+            random_color_seed = Math.random()
+            random_color_integer = Math.floor(random_color_seed * Math.floor(this.random_css_color_list.length))
+            color = this.random_css_color_list[random_color_integer]
+
+            console.log(`pick_random_color: function() picking color with ${color}`)
+            return color
         },
         draw_face: function(yChange=50) {
 
@@ -287,7 +341,7 @@ new Vue({
             
             window.requestAnimationFrame(() => this.draw_face(yChange))
         },
-        draw_gradient: function() {
+        draw_gradient: function() { // unused
             var gradient = this.vueCanvas.createLinearGradient(0, 0, 200, 0)
             gradient.addColorStop(0, "red")
             gradient.addColorStop(1, "white")
@@ -330,10 +384,11 @@ new Vue({
         draw_rectangle: function() {
             let offset = 0
             let canvas = this.vueCanvas
+            
             function draw() {
                 // console.log('draw_rectangle() function...')
                 canvas.clearRect(0, 0, 200, 200)
-                canvas.clearRect(0, 0, this.canvas_width, this.canvas_height)
+                // canvas.clearRect(0, 0, this.canvas_width, this.canvas_height)
                 canvas.setLineDash([4, 2])
                 canvas.lineDashOffset = -offset
                 canvas.strokeRect(50, 50, 300, 300)
@@ -344,49 +399,225 @@ new Vue({
                     offset = 0
                 }
                 draw()
-                setTimeout(march, 20)
+                setTimeout(march, 2)
             }
-            march()
+            // disabling this until i understand it better
+            // march()
+
+            canvas.setLineDash([10, 3])
+            canvas.strokeRect(450, 450, 300, 300)
+
         },
         clear_canvas: function() {
             console.log('clear_canvas function()')
-            let canvas = this.vueCanvas
-            canvas.clearRect(0, 0, this.canvas_width, this.canvas_height)    
 
+            let canvas = this.vueCanvas
+
+            canvas.clearRect(0, 0, this.canvas_width, this.canvas_height)
+            
             // RESET THE STROKE TO BLACK, SOLID, DEFAULTS...
+            canvas.fillStyle = 'rgb(0, 0, 0, 0)'    
+            
             // DOESN'T REMOVE THE MARCHING ANTS RECTANGLE...        
+
+        },
+        draw_load_page: function() {
+            console.log('this.draw_load_page function()')
+            
+            let canvas = this.vueCanvas
+            
+            canvas.fillStyle = 'rgb(200, 100, 100)'      
+            canvas.fillRect(25, 25, 250, 250)
+            canvas.fillStyle = 'rgb(255, 50, 50, 0.5)'
+            canvas.fillRect(45, 45, 250, 250)
+
+            canvas.fillStyle = 'rgb(0, 0, 0)'
+            canvas.font = '75px serif'
+            // canvas.fillText('                       童年帆布 ', 100, 400)
+            canvas.font = '35px serif'
+            canvas.fillText('Welcome to Childhood Canvas! Make your browser fullscreen,', 100, 500)
+            //  Meant for toddlers
+            canvas.fillText('then try random keyboard keys or draw on me !', 100, 545)
+
+            canvas.save()
+
+        },
+        drawing_notes: function() { // unused
+
+            // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes
+            // First, you create the path.
+            // Then you use drawing commands to draw into the path.
+            // Once the path has been created, you can stroke or fill the path to render it.
+
+            // you will almost always want to specifically set your starting position after resetting a path.
+        },
+        draw_triangle: function() {
+            var canvas = this.vueCanvas
+
+            canvas.beginPath()
+            canvas.moveTo(750,500)
+            canvas.lineTo(1000,750)
+            canvas.lineTo(1000,250)
+            canvas.fill()
+
+
+        },
+        draw_test_smiley: function() {
+            var canvas = this.vueCanvas
+            canvas.restore()
+
+            canvas.beginPath();
+            canvas.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
+            canvas.moveTo(110, 75);
+            canvas.arc(75, 75, 35, 0, Math.PI, false);  // Mouth (clockwise)
+            canvas.moveTo(65, 65);
+            canvas.arc(60, 65, 5, 0, Math.PI * 2, true);  // Left eye
+            canvas.moveTo(95, 65);
+            canvas.arc(90, 65, 5, 0, Math.PI * 2, true);  // Right eye
+            canvas.stroke();
+            
+        },
+        draw_tree_animated_from_NicoleEyO: function() { // code/tree modified from https://codepen.io/ntaylor09/pen/vKGePr :            
+                
+            var ctx = this.vueCanvas_tree
+            
+            //Some variables
+            var length, divergence, reduction, line_width, start_points = [];
+            var W = 300 // window.innerWidth;
+            var H = 300 // window.innerHeight;
+
+            function init() {
+                
+                //filling the canvas
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, W, H);
+                
+                //length of the trunk - 100-150
+                length = 30 + Math.round(Math.random()*50);
+                
+                //angle at which branches will diverge - 10-60
+                divergence = 15 + Math.round(Math.random()*50);
+                
+                //Every branch will be 0.75times of the previous one - 0.5-0.75
+                //with 2 decimal points
+                reduction = Math.round(50 + Math.random()*20)/100;
+                
+                //width of the branch/trunk
+                line_width = 15;
+                
+                //This is the end point of the trunk, from where branches will diverge
+                var trunk = {x: W/2, y: length+30, angle: 90};
+                //It becomes the start point for branches
+                start_points = []; //empty the start points on every init();
+                start_points.push(trunk);
+                
+                //Y coordinates go positive downwards, hence they are inverted by deducting it
+                //from the canvas height = H
+                ctx.beginPath();
+                ctx.moveTo(trunk.x, H-5);
+                ctx.lineTo(trunk.x, H-trunk.y);
+                ctx.strokeStyle = "brown";
+                ctx.lineWidth = line_width;
+                ctx.stroke();
+                
+                branches();
+            }            
+            
+            //Lets draw the branches now
+            function branches()
+            {
+                //reducing line_width and length
+                length = length * reduction;
+                line_width = line_width * reduction;
+                ctx.lineWidth = line_width;
+                
+                var new_start_points = [];
+                ctx.beginPath();
+                for(var i = 0; i < start_points.length; i++)
+                {
+                    var sp = start_points[i];
+                    //2 branches will come out of every start point. Hence there will be
+                    //2 end points. There is a difference in the divergence.
+                    var ep1 = get_endpoint(sp.x, sp.y, sp.angle+divergence, length);
+                    var ep2 = get_endpoint(sp.x, sp.y, sp.angle-divergence, length);
+                    
+                    //drawing the branches now
+                    ctx.moveTo(sp.x, H-sp.y);
+                    ctx.lineTo(ep1.x, H-ep1.y);
+                    ctx.moveTo(sp.x, H-sp.y);
+                    ctx.lineTo(ep2.x, H-ep2.y);
+                    
+                    //Time to make this function recursive to draw more branches
+                    ep1.angle = sp.angle+divergence;
+                    ep2.angle = sp.angle-divergence;
+                    
+                    new_start_points.push(ep1);
+                    new_start_points.push(ep2);
+                }
+                //Lets add some more color
+                if(length < 10) ctx.strokeStyle = "green";
+                else ctx.strokeStyle = "brown";
+                ctx.stroke();
+                start_points = new_start_points;
+                //recursive call - only if length is more than 2.
+                //Else it will fall in an long loop
+                if(length > 2) setTimeout(branches, 100);
+
+                // Time in miliseconds, so 1,000 = 1s or 5,000 = 5s, etc.
+                else setTimeout(init, 2500);
+            }
+            
+            function get_endpoint(x, y, a, length)
+            {
+                //This function will calculate the end points based on simple vectors
+                //http://physics.about.com/od/mathematics/a/VectorMath.htm
+                //You can read about basic vectors from this link
+                var epx = x + length * Math.cos(a*Math.PI/180);
+                var epy = y + length * Math.sin(a*Math.PI/180);
+                return {x: epx, y: epy};
+            }
+
+            init();
         },
     },
-    created: function() { // created() before >> mounted()
+    created: function() { // created()  >>  mounted()
         console.log('created() function')
     },
     mounted:function() {
         console.log(`mounted:function(), window size: ${window.innerWidth} * ${window.innerHeight}.`)
 
-        var canvas = document.getElementById('canvas')
+        var canvas = document.getElementById('canvas_main')
         this.vueCanvas = canvas.getContext('2d')
 
-        document.addEventListener('keypress', this.keypress_listener) // huge difference between keyup, keydown, and keypress!
+        var canvas_tree = document.getElementById('canvas_tree')
+        this.vueCanvas_tree = canvas_tree.getContext('2d')
+        
+        // Keypress listener:
+        document.addEventListener('keypress', this.keypress_listener) // huge difference between 'keyup', 'keydown', and 'keypress'!
+        this.draw_load_page()
+        this.draw_tree_animated_from_NicoleEyO()
+
         // BIG LIST of key / draw function lookups...
+        // Try moving this to the 'data' normally to see if it remains executable...
         this.keys_and_functions = { // Thanks Pete! Can have an easy lookup with a lookup on the left and a function on the right WITH arguments!
             // Space: () => console.log('I am a console.log() function, inside a key/value pair inside an object, inside the mounted function, inside the Vue shell!!!!'),
             
-            default: () => this.draw_circle_random(),
+            default: () => this.draw_test_smiley(),
 
-            Space: 1,
+            Space: () => this.clear_canvas(),
             
-            KeyQ: 1,
-            KeyW: 1,
-            KeyE: 1,
-            KeyR: 1,
-            KeyT: 1,
-            KeyY: 1,
-            KeyU: 1, 
-            KeyI: 1, 
-            KeyO: 1, 
-            KeyP: 1,
+            KeyQ: () => this.draw_random_square('white', 700, 700),
+            KeyW: () => this.draw_tree_animated_from_NicoleEyO(),
+            KeyE: () => this.draw_random_square(),
+            KeyR: () => this.draw_random_square(),
+            KeyT: () => this.draw_random_square(),
+            KeyY: () => this.draw_random_square(),
+            KeyU: () => this.draw_random_square(), 
+            KeyI: () => this.draw_random_square(), 
+            KeyO: () => this.draw_random_square(), 
+            KeyP: () => this.draw_random_square(),
 
-            KeyA: () => this.draw_circle_random(500, 500, 'red'),
+            KeyA: () => this.draw_random_circle('red', 500, 500),
             KeyS: 1,
             KeyD: () => this.draw_rectangle(), 
             KeyF: 1, 
@@ -420,8 +651,8 @@ new Vue({
             //     console.log("Win Key was clicked.")
             // }
         }
+
     },
 })
-// / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-// / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
