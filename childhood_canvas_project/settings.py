@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os # this is important!!
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,9 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'd4lfp((w_un^az#s7n9qq4qr5t_z$e@l^4h+fb4q*o$w78%q3s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+DEBUG = True            # DIS-ABLE THIS FOR PRODUCTION
+                        # ALSO ENABLE FOR PRODUCTION @ VERY BOTTOM OF FILE: CSRF_COOKIE_SECURE & SESSION_COOKIE_SECURE
+ALLOWED_HOSTS = [
+    "johnfial.pythonanywhere.com",
+                        # When DEBUG is True and ALLOWED_HOSTS is empty, the host is validated against :
+    '.localhost',       # DIS-ABLE THIS FOR PRODUCTION
+    '127.0.0.1',        # DIS-ABLE THIS FOR PRODUCTION
+    ]
 
 
 # Application definition
@@ -80,7 +85,12 @@ WSGI_APPLICATION = 'childhood_canvas_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+
+        # Original:
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+
+        # New From: https://stackoverflow.com/questions/64634674/django-typeerror-argument-of-type-posixpath-is-not-iterable
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -159,5 +169,5 @@ STATICFILES_DIRS = [
 ]
 
 # https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/ :
-# CSRF_COOKIE_SECURE = True # default False
-# SESSION_COOKIE_SECURE = True # # default False
+# CSRF_COOKIE_SECURE = True # default False             # ENABLE THIS FOR PRODUCTION
+# SESSION_COOKIE_SECURE = True # # default False        # ENABLE THIS FOR PRODUCTION

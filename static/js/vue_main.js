@@ -2,7 +2,9 @@
 // Capstone Project 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
-// tutorials used: 
+// import fabric from 'fabric'
+// // Object.defineProperty(Vue.prototype, '$fabric', { value : fabric });
+// Vue.use(fabric) // https://vuejs.org/v2/guide/plugins.html#ad
 
 new Vue({
     el: '#vue_app',
@@ -190,7 +192,7 @@ new Vue({
             "Yellow",
         ],
         canvas_width: 1300,
-        canvas_height: 900,
+        canvas_height: 1000,
     },
     methods: {
         keypress_listener: function(KeyboardEvent) {
@@ -423,6 +425,25 @@ new Vue({
 
         },
         draw_load_page: function() {
+
+            console.log('draw_image_test() START')
+
+            var img = new Image();   // Create new img element
+            img.addEventListener('load', function() {
+                    // execute drawImage statements here
+                    canvas.drawImage(img,600,600)
+                }, false)
+            // also try:
+            // image.onload = function(){
+            //     ctx.drawImage(this, 0,0);
+            // }
+            img.src = 'static/media/test.svg'
+            img.x = "100"
+            img.y = "100"
+            img.width = "100"
+            img.height = "100"
+            console.log('draw_image_test() END')
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             console.log('this.draw_load_page function()')
             
             let canvas = this.vueCanvas
@@ -443,19 +464,6 @@ new Vue({
 
             canvas.save()
 
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-
-            console.log('draw_image_test() START')
-
-            var img = new Image(100, 100);   // Create new img element
-            img.addEventListener('load', function() {
-                    // execute drawImage statements here
-                    canvas.drawImage(img,100,10)
-                }, false)
-            img.src = 'static/media/test.svg'
-            img.width = "100"
-            img.height = "100"
-            console.log('draw_image_test() END')
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
 
@@ -599,6 +607,28 @@ new Vue({
         },
         draw_image_test: function() {
         },
+        fabric_draw_circle: function() {
+            console.log('fabric_draw_circle()')
+
+            let canvas = this.vueCanvas
+
+            fabric.circle({
+                radius: 20, fill: 'green', left: 100, top: 100
+            })
+            
+            canvas.add(circle)
+            
+            // let canvas = this.vueCanvas
+
+            // var circle = new fabric.Circle({
+            //     radius: 20, fill: 'green', left: 100, top: 100
+            //     })
+            //   var triangle = new fabric.Triangle({
+            //     width: 20, height: 30, fill: 'blue', left: 50, top: 50
+            //   })
+
+            //   canvas.add(circle, triangle)
+        },
     },
     created: function() { // created()  >>  mounted()
         console.log('created() function')
@@ -620,6 +650,8 @@ new Vue({
         
         this.draw_tree_animated_from_NicoleEyO()
 
+        this.fabric_draw_circle()
+
 
 
         // BIG LIST of key / draw function lookups...
@@ -627,7 +659,7 @@ new Vue({
         this.keys_and_functions = { // Thanks Pete! Can have an easy lookup with a lookup on the left and a function on the right WITH arguments!
             // Space: () => console.log('I am a console.log() function, inside a key/value pair inside an object, inside the mounted function, inside the Vue shell!!!!'),
             
-            default: () => this.draw_test_smiley(),
+            default: () => this.draw_random_square(),
 
             Space: () => this.clear_canvas(),
             
@@ -644,7 +676,8 @@ new Vue({
 
             KeyA: () => this.draw_random_circle('red', 500, 500),
             KeyS: 1,
-            KeyD: () => this.draw_rectangle(), 
+            // KeyD: () => this.draw_rectangle(),
+            KeyD: 1,
             KeyF: 1, 
             KeyG: 1, 
             KeyH: 1, 
@@ -678,6 +711,6 @@ new Vue({
         }
 
     },
-})
+});
 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 

@@ -7,7 +7,7 @@ header {
     /* grid-row-start: 2; */
     justify-content: center;
     text-align: center;
-    border-bottom: 5px solid #EDF7E1;
+    /* border-bottom: 5px solid #EDF7E1; */
 }
 body {    
     background-color: #000000;
@@ -17,21 +17,22 @@ main {
     /* grid-template-columns: auto 200px auto; */
     /* grid-template-rows: 5% 90% 5%; */
     color: white;
-    margin-left: 1%;
-    margin-right: 1%;
+    /* margin-left: 1%; */
+    /* margin-right: 1%; */
 }
 
 /* flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
 /* grid: https://css-tricks.com/snippets/css/complete-guide-grid/ */
 #vue_app {
     display: flex;
-    border: 2px solid white;
-    border-radius: 10px;
+    border: 1px solid white;
+    border-radius: 2px;
+    margin: 1%;
 }
 #canvas_main {  /* MAIN CANVAS HERE */
     background-color: rgb(146, 2, 230);
-    /* width: 1300px; */
-    /* height: 900px; */
+    width: 1300px;
+    height: 1000px;
     margin: 1%;
     border: 2x solid white;
     border-radius: 10px;
@@ -42,7 +43,7 @@ main {
     /* grid-column-start: 3; */
     /* grid-row-start: 2; */
     display: grid;
-    border: 2px solid white;
+    border: 3px dashed white;
     border-radius: 10px;
     margin: 1%;
     color: white;
@@ -81,11 +82,10 @@ main {
 li, ol {
     font-size: 15px;
 }
-/* footer {
-    text-align: center;
-    border-bottom: 5px solid #EDF7E1;
-    margin-bottom: 15%;
-} */
+footer {
+    border: 1px dashed grey;
+    margin: 1%;
+}
 form {
     display: flex;
     justify-content: center;
@@ -102,7 +102,7 @@ form {
     flex-direction: column;
     margin-top: 100px;
     width: 100px;
-    height: 1000px;
+    height: 900px;
 }
 button { 
     color: rgb(0, 0, 0);

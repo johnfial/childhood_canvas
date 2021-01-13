@@ -1,38 +1,37 @@
 {% extends 'base.html' %}
 
-{% load static %}
-  {% block title %}Homepage {% endblock %}
-
 {% block content %}
-  {% if user.is_authenticated %}
+{% load static %}
+
+  <!-- {% block title %} Childhood Canvas {% endblock %} -->
+
   <header>
-    <p>
-      User: <strong> {{ user.username }} </strong> | 
-        <a href="{% url 'logout' %}">Log Out</a>
-      </p>
-
+    {% if user.is_authenticated %}
+        <p>
+          User: <strong> {{ user.username }} </strong> | 
+            <a href="{% url 'logout' %}">Log Out</a>
+          </p>
     {% else %}
-    <p>
-      User: <strong> Guest </strong> |
-        <a href="{% url 'login' %}">Login</a> |
-        <a href="{% url 'signup' %}">Sign Up</a>
-    </p>
-  </header>
-
-  {% endif %}
+        <p>
+          User: <strong> Guest </strong> |
+            <a href="{% url 'login' %}">Login</a> |
+            <a href="{% url 'signup' %}">Sign Up</a>
+        </p>
+    {% endif %}
+  </header> 
   
   <div id='vue_app'>
     
       <!-- https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
       <canvas
         id='canvas_main' 
-        width="1300"
-        height="900"
-        @mousemove="draw" 
+        width = "1300"
+        height = "1000"
+        @mousemove="draw"
         @mousedown="start_drawing" 
         @mouseup="stop_drawing"
         >
-        <!-- From https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Hit_regions_and_accessibility ::: -->
+        From https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Hit_regions_and_accessibility :::
               <h2>Fallback</h2>
               <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a 1300x900 pixel canvas for toddlers.
                 Perhaps try a different, modern browser on the PC in fullscreen.
@@ -43,6 +42,10 @@
                 and a purple <a href="https://en.wikipedia.org/wiki/Triangle" onfocus="drawTriangle();" onblur="drawPicture();">triangle</a>,
                 both of which are semi-opaque, so the full circle can be seen underneath.</p>
       </canvas>
+      
+      <!-- <svg src="{% static 'media/test.svg' %}" width="200" height="200" x="200" y="200"> -->
+
+      </svg>
 
       <div id="button_area">
         <button >Fullscreen (F11)</button>
@@ -77,13 +80,13 @@
       </div>
 
       <footer>
-        <div id="footer">
+        <!-- <div id="footer"> -->
           <h1>Credits</h1>
           <ul>
             <li>Tree: Nicole Eyo</li>
             <li>Smiley: Pete's tutorial</li>
           </ul>
-        </div>
+        <!-- </div> -->
       </footer>
     </div>
 
