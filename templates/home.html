@@ -23,34 +23,44 @@
   <div id='vue_app'>
     
       <!-- https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
-      <canvas
-        id='canvas_main' 
-        width = "1300"
-        height = "1000"
-        @mousemove="draw"
-        @mousedown="start_drawing" 
-        @mouseup="stop_drawing"
-        >
-        From https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Hit_regions_and_accessibility :::
-              <h2>Fallback</h2>
-              <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a 1300x900 pixel canvas for toddlers.
-                Perhaps try a different, modern browser on the PC in fullscreen.
-                In the background is a pink circle.
-                Partially overlaying the <a href="https://en.wikipedia.org/wiki/Circle" onfocus="drawCircle();" onblur="drawPicture();">circle</a>.
-                Partially overlaying the circle is a green
-                <a href="https://en.wikipedia.org/wiki/Square" onfocus="drawSquare();" onblur="drawPicture();">square</a>
-                and a purple <a href="https://en.wikipedia.org/wiki/Triangle" onfocus="drawTriangle();" onblur="drawPicture();">triangle</a>,
-                both of which are semi-opaque, so the full circle can be seen underneath.</p>
-      </canvas>
+      <div id="konva_test">
+        <canvas
+          id='canvas_main' 
+          width = "1300"
+          height = "1000"
+          @mousemove="draw"
+          @mousedown="start_drawing" 
+          @mouseup="stop_drawing"
+          >
+          From https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Hit_regions_and_accessibility :::
+                <h2>Fallback</h2>
+                <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a 1300x900 pixel canvas for toddlers.
+                  Perhaps try a different, modern browser on the PC in fullscreen.
+                  In the background is a pink circle.
+                  Partially overlaying the <a href="https://en.wikipedia.org/wiki/Circle" onfocus="drawCircle();" onblur="drawPicture();">circle</a>.
+                  Partially overlaying the circle is a green
+                  <a href="https://en.wikipedia.org/wiki/Square" onfocus="drawSquare();" onblur="drawPicture();">square</a>
+                  and a purple <a href="https://en.wikipedia.org/wiki/Triangle" onfocus="drawTriangle();" onblur="drawPicture();">triangle</a>,
+                  both of which are semi-opaque, so the full circle can be seen underneath.</p>
+        </canvas>
+      </div>
       
-      <!-- <svg src="{% static 'media/test.svg' %}" width="200" height="200" x="200" y="200"> -->
-
       </svg>
 
       <div id="button_area">
-        <button >Fullscreen (F11)</button>
-        <button @click="draw_load_page">Redraw</button>
-        <button @click="clear_canvas">Clear</button>
+        <button class="button_working" @click="fullscreen_toggle" >[full]</button>
+        <br>
+        <br>
+        <button class="button_working" @click="draw_load_page"    >Redraw</button>
+        <br>
+        <button class="button_working" @click="clear_canvas"      >Clear</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button class="button_in_dev"  @click="canvas_save_image" >Save (dev)</button>
+        <button class="button_in_dev"  @click="page_reload"       >Reload Page (dev)</button>
       </div>
 
     <div id="div_right_logs">

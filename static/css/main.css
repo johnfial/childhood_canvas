@@ -104,8 +104,7 @@ form {
     width: 100px;
     height: 900px;
 }
-button { 
-    color: rgb(0, 0, 0);
+.button_working { 
     width: 75px;
     height: 75px;
     background-color: red;
@@ -113,6 +112,13 @@ button {
     font-size: 25px;
     font-weight: bolder;
     border: 2px solid white;
+    border-radius: 40%;
+}
+.button_in_dev {
+    background-color: grey;
+    font-size: 15px;
+    width: 75px;
+    height: 75px;
     border-radius: 40%;
 }
 

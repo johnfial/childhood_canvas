@@ -6,7 +6,7 @@
 // // Object.defineProperty(Vue.prototype, '$fabric', { value : fabric });
 // Vue.use(fabric) // https://vuejs.org/v2/guide/plugins.html#ad
 
-new Vue({
+let vue_app = new Vue({
     el: '#vue_app',
     data: {
         vueCanvas: null,
@@ -15,7 +15,8 @@ new Vue({
         is_drawing: false,
         x: null,
         y: null,
-        keys_and_functions: {},
+        // keys_and_functions: {},
+        
         example_array: [],
         example_string: "",
         example_integer: 1,
@@ -193,6 +194,21 @@ new Vue({
         ],
         canvas_width: 1300,
         canvas_height: 1000,
+        fullscreen: false,
+        
+        // Konva Stuff here:
+        configKonva: {
+            width: 800,
+            height: 800,
+          },
+        configCircle: {
+            x: 100,
+            y: 100,
+            radius: 70,
+            fill: 'red',
+            stroke: 'black',
+            strokeWidth: 4
+        },
     },
     methods: {
         keypress_listener: function(KeyboardEvent) {
@@ -405,7 +421,7 @@ new Vue({
                 setTimeout(march, 2)
             }
             // disabling this until i understand it better
-            // march()
+            march()
 
             canvas.setLineDash([10, 3])
             canvas.strokeRect(450, 450, 300, 300)
@@ -422,50 +438,6 @@ new Vue({
             canvas.fillStyle = 'rgb(0, 0, 0, 0)'    
             
             // DOESN'T REMOVE THE MARCHING ANTS RECTANGLE...        
-
-        },
-        draw_load_page: function() {
-
-            console.log('draw_image_test() START')
-
-            var img = new Image();   // Create new img element
-            img.addEventListener('load', function() {
-                    // execute drawImage statements here
-                    canvas.drawImage(img,600,600)
-                }, false)
-            // also try:
-            // image.onload = function(){
-            //     ctx.drawImage(this, 0,0);
-            // }
-            img.src = 'static/media/test.svg'
-            img.x = "100"
-            img.y = "100"
-            img.width = "100"
-            img.height = "100"
-            console.log('draw_image_test() END')
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            console.log('this.draw_load_page function()')
-            
-            let canvas = this.vueCanvas
-            canvas.clearRect(0, 0, this.canvas_width, this.canvas_width)
-            
-            canvas.fillStyle = 'rgb(200, 100, 100)'      
-            canvas.fillRect(25, 25, 250, 250)
-            canvas.fillStyle = 'rgb(255, 50, 50, 0.5)'
-            canvas.fillRect(45, 45, 250, 250)
-
-            canvas.fillStyle = 'rgb(0, 0, 0)'
-            canvas.font = '75px serif'
-            // canvas.fillText('                       童年帆布 ', 100, 400)
-            canvas.font = '35px serif'
-            canvas.fillText('Welcome to Childhood Canvas! Make your browser fullscreen,', 100, 500)
-            //  Meant for toddlers
-            canvas.fillText('then try random keyboard keys or draw on me !', 100, 545)
-
-            canvas.save()
-
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-
 
         },
         drawing_notes: function() { // unused
@@ -610,13 +582,13 @@ new Vue({
         fabric_draw_circle: function() {
             console.log('fabric_draw_circle()')
 
-            let canvas = this.vueCanvas
+            // let canvas = this.vueCanvas
 
-            fabric.circle({
-                radius: 20, fill: 'green', left: 100, top: 100
-            })
-            
-            canvas.add(circle)
+            // let circle = fabric.Circle({
+            //     radius: 20, fill: 'green', left: 100, top: 100
+            // })
+
+            // canvas.add(circle)
             
             // let canvas = this.vueCanvas
 
@@ -629,54 +601,174 @@ new Vue({
 
             //   canvas.add(circle, triangle)
         },
-    },
-    created: function() { // created()  >>  mounted()
-        console.log('created() function')
+        draw_load_page: function() {
+
+            console.log('this.draw_load_page function() START')
+            
+            let canvas = this.vueCanvas
+            canvas.clearRect(0, 0, this.canvas_width, this.canvas_width)
+            
+            canvas.fillStyle = 'rgb(200, 100, 100)'      
+            canvas.fillRect(25, 25, 250, 250)
+            canvas.fillStyle = 'rgb(255, 50, 50, 0.5)'
+            canvas.fillRect(45, 45, 250, 250)
+
+            canvas.fillStyle = 'rgb(0, 0, 0)'
+            canvas.font = '75px serif'
+            // canvas.fillText('                       童年帆布 ', 100, 400)
+            canvas.font = '35px serif'
+            canvas.fillText('Welcome to Childhood Canvas! Make your browser fullscreen,', 100, 500)
+            //  Meant for toddlers
+            canvas.fillText('then try random keyboard keys or draw on me !', 100, 545)
+
+            console.log('this.draw_load_page function() END')
+
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+
+
+        },
+        konva_draw_test: function() {
+            console.log('konva_draw_test() START')
+            // How to use Konva canvas with Vue?
+            // https://konvajs.org/docs/vue/index.html 
+
+            var stage = new Konva.Stage({
+                container: 'konva_test', //canvas_main is not a div, per se, but the <canvas>...
+                width: 900,
+                height: 900,
+            })
+            var layer = new Konva.Layer()
+
+            stage.add(layer)
+
+            Konva.Image.fromURL('static/media/test.svg', (imagename) => {
+                imagename.setAttrs({
+                    x: 15,
+                    y: 15,
+                    scaleX: 4.0,
+                    scaleY: 4.0,
+                })
+                layer.add(imagename)
+                layer.draw()
+            })
+
+            var circle = new Konva.Circle({
+                x: 440, // stage.width() / 2,
+                y: 650,  // stage.height() / 2, 
+                radius: 70, 
+                fill: 'red',
+                stroke: 'white',
+                strokeWidth: 4,
+            })
+            layer.add(circle)
+            layer.draw()
+
+            console.log('konva_draw_test() END')
+        },
+        fullscreen_toggle: function() {
+            console.log('fullscreen_toggle() START')
+            // thanks https://www.w3schools.com/howto/howto_js_fullscreen.asp
+            var document_main = document.documentElement
+
+            /* View in fullscreen */
+            function openFullscreen() {
+                if (document_main.requestFullscreen) {
+                document_main.requestFullscreen();
+                } else if (document_main.webkitRequestFullscreen) { /* Safari */
+                document_main.webkitRequestFullscreen();
+                } else if (document_main.msRequestFullscreen) { /* IE11 */
+                document_main.msRequestFullscreen();
+                }
+            }
+            
+            /* Close fullscreen */
+            function closeFullscreen() {
+                if (document.exitFullscreen) {
+                document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+                }
+            }
+
+            if (this.fullscreen === false) {
+                openFullscreen()
+                this.fullscreen = true
+            }
+            else {
+                closeFullscreen()
+                this.fullscreen = false
+            }
+
+
+        },
+        fullscreen_f11_toggle_data_only: function() {
+            console.log('fullscreen_f11_toggle_data_only() START')
+
+            if (this.fullscreen === false) {
+                openFullscreen()
+                this.fullscreen = true
+            }
+            else {
+                closeFullscreen()
+                this.fullscreen = false
+            }
+        },
+        canvas_save_image: function() {
+            console.log('canvas_save_image() START')
+            window.alert(`Sorry! Still under development... For now, you'll have to take a screenshot.
+                ---
+                For Mac: ⇧⌘5 , or see: https://setapp.com/how-to/snipping-tool-for-mac
+                ---
+                For Windows: Start > Type 'Snipping' or see: https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b
+            `)
+
+        },
+        page_reload: function() {
+            console.log('page_reload() START')
+        },
     },
     mounted:function() {
-        console.log(`mounted:function(), window size: ${window.innerWidth} * ${window.innerHeight}.`)
-
-        var canvas = document.getElementById('canvas_main')
-        this.vueCanvas = canvas.getContext('2d')
-
-        var canvas_tree = document.getElementById('canvas_tree')
-        this.vueCanvas_tree = canvas_tree.getContext('2d')        
-        
-        let ctx = this.vueCanvas // just in case I forget that anywhere else!
+        console.log(`mounted() START, with window size: ${window.innerWidth} * ${window.innerHeight}.`)
         
         // Keypress listener:
-        document.addEventListener('keypress', this.keypress_listener) // huge difference between 'keyup', 'keydown', and 'keypress'!
-        this.draw_load_page()
+        document.addEventListener('keypress', this.keypress_listener) // huge difference between 'keyup', 'keydown', and 'keypress'! 
         
-        this.draw_tree_animated_from_NicoleEyO()
+        // CANVAS INITIALIZE (Still need to use it in each method/function...)
+        var canvas = document.getElementById('canvas_main')
+        this.vueCanvas = canvas.getContext('2d')
+        this.draw_load_page()
 
-        this.fabric_draw_circle()
+        // // REPLACE above if using Konva...
+        // this.konva_draw_test()        
 
-
-
-        // BIG LIST of key / draw function lookups...
-        // Try moving this to the 'data' normally to see if it remains executable...
-        this.keys_and_functions = { // Thanks Pete! Can have an easy lookup with a lookup on the left and a function on the right WITH arguments!
+        // BIG LIST of keypress / draw function lookups:
+        this.keys_and_functions = {             
+            // NOTE: The reason this can't be in the data raw 'data' is because it would start executing the functions. So we replace the blank data object here on 'mounted()'
+            // Thanks Pete! This makes an easy lookup with a lookup on the left and a function on the right WITH arguments!
             // Space: () => console.log('I am a console.log() function, inside a key/value pair inside an object, inside the mounted function, inside the Vue shell!!!!'),
             
             default: () => this.draw_random_square(),
+
+            F11: () => this.fullscreen_f11_toggle_data_only(),
 
             Space: () => this.clear_canvas(),
             
             KeyQ: () => this.draw_random_square('white', 700, 700),
             KeyW: () => this.draw_tree_animated_from_NicoleEyO(),
-            KeyE: () => this.draw_random_square(),
-            KeyR: () => this.draw_random_square(),
-            KeyT: () => this.draw_random_square(),
-            KeyY: () => this.draw_random_square(),
-            KeyU: () => this.draw_random_square(), 
-            KeyI: () => this.draw_random_square(), 
-            KeyO: () => this.draw_random_square(), 
-            KeyP: () => this.draw_random_square(),
+            KeyE: 1,
+            KeyR: 1,
+            KeyT: 1,
+            KeyY: 1,
+            KeyU: 1,
+            KeyI: 1, 
+            KeyO: 1, 
+            KeyP: () => this.draw_rectangle(),
 
             KeyA: () => this.draw_random_circle('red', 500, 500),
-            KeyS: 1,
-            // KeyD: () => this.draw_rectangle(),
+            KeyS: 1, 
+            KeyD: 1,
             KeyD: 1,
             KeyF: 1, 
             KeyG: 1, 
@@ -693,10 +785,12 @@ new Vue({
             KeyN: 1, 
             KeyM: 1,
 
+            // Open some of his videos :
+            // https://www.w3schools.com/jsref/met_win_open.asp :
             Numpad0: 1,
-            Numpad1: 1,
-            Numpad2: 1,
-            Numpad3: 1,
+            Numpad1: () => window.open('https://www.youtube.com/watch?v=zRxX63txOXk'), // Pupu Hinuhinu
+            Numpad2: () => window.open('https://www.youtube.com/watch?v=ssHkMWcGat4&feature=emb_title'), // Arecibo Observatory collapse from 1 Dec 2020
+            Numpad3: () => window.open('https://www.youtube.com/watch?v=FezVApPddqU'), // Mele Kalikimaka psych version
             Numpad4: 1,
             Numpad5: 1,
             Numpad6: 1,
@@ -710,6 +804,16 @@ new Vue({
             // }
         }
 
+        // // This is the separate 300x300 canvas for the 'tree' in the top right
+        // var canvas_tree = document.getElementById('canvas_tree')
+        // this.vueCanvas_tree = canvas_tree.getContext('2d')       
+        // this.draw_tree_animated_from_NicoleEyO()
+        
+        console.log(`mounted() END`)
+        // END MOUNTED
+    },
+    created: function() { // created()  >>  mounted()
+        console.log('created() START')
     },
 });
 
