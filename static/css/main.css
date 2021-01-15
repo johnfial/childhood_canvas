@@ -1,3 +1,6 @@
+/* flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
+/* grid: https://css-tricks.com/snippets/css/complete-guide-grid/ */
+
 /* HERE IS MAIN CSS APPLICATBLE TO ALL PAGES */
 h1, h2, h3 , h4, h5, h6 {
     text-align: center;
@@ -13,6 +16,7 @@ header {
 body {    
     background-color: rgb(31, 0, 0);
     color: white;
+    font-family: 'Advent Pro', sans-serif;
 }
 li, ol {
     font-size: 15px;
@@ -34,42 +38,71 @@ a {
     color: grey;
 }
 
-
-
-/* flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
-/* grid: https://css-tricks.com/snippets/css/complete-guide-grid/ */
-
-
-/* HERE STARTS THE CANVAS-SPECIFIC CSS */
+/* 1. HERE STARTS THE CANVAS-SPECIFIC CSS */
+/* Left-side main canvas: */
 #div_main_canvas {
     display: grid;
 }
 #vue_app {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1350px 1fr 4fr;
     border: 1px solid white;
     border-radius: 2px;
     margin: 1%;
 }
-#canvas_main, #div_konva_canvas {  /* MAIN CANVAS HERE */
-    background-color: rgb(0, 54, 204);
+#div_konva_canvas {  /* MAIN CANVAS HERE */
+    background-color: rgb(0, 88, 219);
     width: 1300px;
     height: 1100px;
     margin: 1%;
     border: 2x solid white;
     border-radius: 10px;
 }
-/* RIGHT LOGS HERE */
+
+
+/* 2. BUTTONS IN MIDDLE: */
+/* https://www.w3schools.com/csS/css3_buttons.asp */
+/* Use display:block instead of float:left to group the buttons below each other, instead of side by side: */
+#button_area {
+    display: flex;    
+    flex-direction: column;
+    margin-top: 100px;
+    width: 100px;
+    height: 1000px;
+}
+.button_working { 
+    width: 100px;
+    height: 75px;
+    background-color: red;
+    color: white;
+    font-size: 20px;
+    font-weight: bolder;
+    border: 2px solid white;
+    border-radius: 30%;
+}
+.button_in_dev {
+    background-color: grey;
+    font-size: 15px;
+    width: 75px;
+    height: 75px;
+    border-radius: 40%;
+}
+
+
+/* 3. RIGHT LOGS HERE */
 #div_right_logs {
     /* grid-column-start: 3; */
     /* grid-row-start: 2; */
     display: grid;
-    grid-template-rows: 50px 350px 150px 1fr 150px;
-    border: 1px dashed white;
+    grid-column: 3;
+    grid-template-rows: 50px 350px 150px 1fr 200px;
+    border: 1px solid grey;
     border-radius: 10px;
-    margin: 1%;
+    margin: 25px;
+    /* margin: 20px; */
     color: white;
-    width: 400px;
-    height: 1100px;
+    /* width: 350px; */
+    /* height: 1100px; */
 }
 #authenticated_user_account {
     /* background-color: black; */
@@ -79,7 +112,7 @@ a {
 
     /* border: 1px solid white; */
     border-radius: 10px;
-    margin-left: 50px;
+    margin-left: 25px;
     margin-top: 25px;
 }
 #mouse_position {
@@ -99,7 +132,7 @@ a {
 }
 
 
-
+/* Silly fullscreen-via-CSS attempt... */
 :fullscreen {
     background-color: violet;
 }
@@ -111,34 +144,7 @@ a {
 }
 
 
-/* BUTTONS */
-/* https://www.w3schools.com/csS/css3_buttons.asp */
-/* Use display:block instead of float:left to group the buttons below each other, instead of side by side: */
-#button_area {
-    display: flex;    
-    flex-direction: column;
-    margin-top: 100px;
-    width: 100px;
-    height: 1100px;
-}
-.button_working { 
-    width: 75px;
-    height: 75px;
-    background-color: red;
-    color: white;
-    font-size: 25px;
-    font-weight: bolder;
-    border: 2px solid white;
-    border-radius: 40%;
-}
-.button_in_dev {
-    background-color: grey;
-    font-size: 15px;
-    width: 75px;
-    height: 75px;
-    border-radius: 40%;
-}
-
+/* Responsive changes, only barely applicable to this site... */
 @media (min-width: 700px) {  
 }
 @media (min-width: 1000px) {   
@@ -146,12 +152,9 @@ a {
         /* max-width: 45%; */
     }
     #canvas_main, #div_konva_canvas {  /* MAIN CANVAS HERE */
-        background-color: rgb(71, 0, 204);
-        width: 1300px;
-        height: 1000px;
-        margin: 1%;
-        border: 2x solid white;
-        border-radius: 10px;
+        /* width: 1300px; */
+        /* height: 1000px; */
+        /* margin: 1%; */
     }
     #div_right_logs {
         /* width: 800px; */
@@ -159,6 +162,6 @@ a {
         /* max-width: 45%; */
     }
     form {
-        max-width: 30%;
+        /* max-width: 30%; */
     }
 }

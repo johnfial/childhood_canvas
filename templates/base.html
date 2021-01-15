@@ -26,12 +26,16 @@
   <!-- <script src="https://cdn.jsdelivr.net/npm/konva@7/lib/index.js"></script> -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/konva@7.2.2/lib/index.min.js"></script> -->
 
-  <!-- 3. General Normalize CSS: -->
-  <link rel="stylesheet" href="{% static 'css/github_necolas_normalize.css'%}">
+  <!-- 3. General Normalize CSS, Fonts: -->
+  <link rel="stylesheet" href="{% static 'css/github_necolas_normalize.css'%}">  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@500&display=swap"> 
   
   <!-- 4. My Main CSS and VUE/Canvas App: -->
   <link rel="stylesheet" href="{% static 'css/main.css'%}">
   <script src="{% static 'js/vue_main.js'%}" defer></script>  
+
+
 
   <title>
     {% block title %}

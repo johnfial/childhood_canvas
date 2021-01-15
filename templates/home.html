@@ -15,8 +15,7 @@
             <a href="{% url 'signup' %}">Sign Up</a>
         </p>
     {% endif %}
-  </header> 
-  
+  </header>   
 
   {% if user.is_authenticated %}
     <div id='vue_app'>
@@ -25,7 +24,9 @@
       <!-- <button id="play">Play</button> -->
       <!-- <button id="pause">Pause</button> -->
       <div id="div_konva_canvas">
-        Fallback Your browser can't display the canvas!
+        <h2>Fallback</h2>
+          <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a 1300x900 pixel canvas for toddlers.
+            Perhaps try a different, modern browser on the PC in fullscreen.
       </div>
       <!-- <canvas
         id='canvas_main' 
@@ -35,34 +36,32 @@
         @mousedown="start_drawing" 
         @mouseup="stop_drawing"
         >
-        <h2>Fallback</h2>
-          <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a 1300x900 pixel canvas for toddlers.
-            Perhaps try a different, modern browser on the PC in fullscreen.
-              From https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Hit_regions_and_accessibility :::
-              In the background is a pink circle.
-              Partially overlaying the <a href="https://en.wikipedia.org/wiki/Circle" onfocus="drawCircle();" onblur="drawPicture();">circle</a>.
-              Partially overlaying the circle is a green
-              <a href="https://en.wikipedia.org/wiki/Square" onfocus="drawSquare();" onblur="drawPicture();">square</a>
-              and a purple <a href="https://en.wikipedia.org/wiki/Triangle" onfocus="drawTriangle();" onblur="drawPicture();">triangle</a>,
-              both of which are semi-opaque, so the full circle can be seen underneath.</p>
+        Fallback: this was the old canvas!
       </canvas> -->
       
       </svg>
 
       <div id="button_area">
-        <button class="button_working" @click="fullscreen_toggle" >[full]</button>
+        <button class="button_working" @click="fullscreen_toggle"                   >fullscreen [F11]</button>
         <br>
+        <button class="button_working" @click="clear_canvas"                        >blank [spacebar]</button>
         <br>
-        <button class="button_working" @click="konva_canvas_initialize"    >Redraw</button>
-        <br>
-        <button class="button_working" @click="clear_canvas"      >Clear</button>
-        <br>
-        <br>
+        <button class="button_working"  @click="window.location.reload(true)"       >Reload</button>
         <br>
         <br>
         <br>
-        <button class="button_in_dev"  @click="canvas_save_image" >Save (dev)</button>
-        <button class="button_in_dev"  @click="page_reload"       >Reload Page (dev)</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button class="button_in_dev"  @click="canvas_save_image" >save (dev)</button>
       </div>
 
     <div id="div_right_logs">
@@ -79,7 +78,7 @@
         width="300"
         height="300"
         >
-          Fallback: Yikes! Your browser cannot display this HTML5 Drawing Canvas: This is a small tree drawing, credits see footer.
+          Fallback: Yikes! Your browser cannot display this HTML5 Drawing Canvas: This is a small tree drawing, for credits (and link) see footer.
       </canvas>
     
       <div>
@@ -116,8 +115,16 @@
   {% else %}
     <div>
       <h1>
-        Sign-in above to use and view Childhood Canvas!
+        Childhood Canvas
       </h1>
+      <p>
+        Childhood Canvas is a visual play sandbox for older babies and toddlers, aged 12-36months. 
+        Intended for limited-use in a screen-obsessed world, it is evolving into both a keyboard-training application 
+        and a personal 'operating system,' where parents can program shortcuts to their toddler's favorite videos. 
+        <br>
+        For more information or the source code, see the GitHub <a href="https://github.com/johnfial/childhood_canvas">repo and readme.md file here</a>.
+        Sign-in above to use and view Childhood Canvas.
+      </p>
     </div>
   {% endif %}
 

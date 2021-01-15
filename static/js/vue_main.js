@@ -683,7 +683,7 @@ let vue_app = new Vue({
             })
 
         },
-        konva_image_butterfly: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+        konva_image_butterfly: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {
             
             console.log('konva_image_elephant()')
             
@@ -695,10 +695,10 @@ let vue_app = new Vue({
 
             Konva.Image.fromURL('static/media/pixabay_gdj_gordon_johnson_butterfly-5883438.svg', (butterfly) => {
                 butterfly.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: 1,
-                    scaleY: 1,
+                    x: input_x,
+                    y: input_y,
+                    scaleX: scale,
+                    scaleY: scale,
                 })
                 this.Konva_canvas_layer1.add(butterfly)
                 this.Konva_canvas_layer1.draw()
@@ -708,17 +708,31 @@ let vue_app = new Vue({
         konva_canvas_initialize: function() {
             console.log('konva_canvas_initialize() START')
 
-            this.konva_image_butterfly(15, 15)
 
             var circle = new Konva.Circle({
-                x: 440, // stage.width() / 2,
-                y: 650,  // stage.height() / 2, 
+                x: 630, // stage.width() / 2,
+                y: 900,  // stage.height() / 2, 
                 radius: 70, 
                 fill: 'red',
                 stroke: 'white',
                 strokeWidth: 4,
             })
-            this.Konva_canvas_layer1.add(circle)
+
+            var welcome_text = new Konva.Text({
+                x: 400,
+                y: 50,
+                text: `Welcome to Childhood Canvas, \nPlease go grab some tea of 'anise. \nNow you're on campus! \n\nMake your browser fullscreen, \nClick the keyboard's buttons, find some beans, \nAnd remember: share this page as a meme!`,
+                fontSize: 30,
+                fontFamily: `Advent Pro`,
+                fill: 'black',
+                width: 700,
+                margin: 100,
+                // padding: '10',
+                align: 'left',
+            })
+
+            this.konva_image_butterfly(200, 300, 4)
+            this.Konva_canvas_layer1.add(circle, welcome_text)
             this.Konva_canvas_layer1.draw()
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
@@ -812,9 +826,10 @@ let vue_app = new Vue({
 
         // REPLACE above if using Konva...
         this.Konva_canvas_Stage = new Konva.Stage({
-            container: 'div_konva_canvas', //canvas_main is not a div, per se, but the <canvas>...
+            container: 'div_konva_canvas', // this is the div name
             width: 1300,
             height: 1100,
+            // color: white,
         })        
         this.Konva_canvas_layer1 = new Konva.Layer()
         this.Konva_canvas_Stage.add(this.Konva_canvas_layer1)
