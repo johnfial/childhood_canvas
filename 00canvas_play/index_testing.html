@@ -7,6 +7,7 @@
     <!-- <link rel="stylesheet" href="{% static 'css/github_necolas_normalize.css'%}"> -->
     <link rel="stylesheet" href="main.css">
 
+    <script src="https://unpkg.com/konva@7.0.3/konva.min.js"></script>
     <title>
       Childhood Canvas
     </title>
@@ -15,12 +16,15 @@
   <body>
     <main>
         
-      <div id="div_left_canvas">        
+      <button id="play">Play</button>
+      <button id="pause">Pause</button>
+      <div id="konva_test">        
 
-        <script src="canvas_testing.js" defer></script>          
+        <script src="canvas_testing.js" defer></script>
 
-        <canvas width="800" height="800" id='canvas_main'>
-        </canvas>
+        <!-- <canvas width="800" height="800" id='canvas_main'>
+        </canvas> -->
+      
           
         <!-- <svg src="{% static 'media/test.svg' %}" width="200" height="200" x="200" y="200"></svg> -->
 

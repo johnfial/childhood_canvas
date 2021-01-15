@@ -3,14 +3,11 @@
 {% block content %}
 {% load static %}
 
+<main id="div_main_canvas">
   <!-- {% block title %} Childhood Canvas {% endblock %} -->
 
   <header>
     {% if user.is_authenticated %}
-        <p>
-          User: <strong> {{ user.username }} </strong> | 
-            <a href="{% url 'logout' %}">Log Out</a>
-          </p>
     {% else %}
         <p>
           User: <strong> Guest </strong> |
@@ -20,30 +17,35 @@
     {% endif %}
   </header> 
   
-  <div id='vue_app'>
-    
+
+  {% if user.is_authenticated %}
+    <div id='vue_app'>
+      
       <!-- https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
-      <div id="konva_test">
-        <canvas
-          id='canvas_main' 
-          width = "1300"
-          height = "1000"
-          @mousemove="draw"
-          @mousedown="start_drawing" 
-          @mouseup="stop_drawing"
-          >
-          From https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Hit_regions_and_accessibility :::
-                <h2>Fallback</h2>
-                <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a 1300x900 pixel canvas for toddlers.
-                  Perhaps try a different, modern browser on the PC in fullscreen.
-                  In the background is a pink circle.
-                  Partially overlaying the <a href="https://en.wikipedia.org/wiki/Circle" onfocus="drawCircle();" onblur="drawPicture();">circle</a>.
-                  Partially overlaying the circle is a green
-                  <a href="https://en.wikipedia.org/wiki/Square" onfocus="drawSquare();" onblur="drawPicture();">square</a>
-                  and a purple <a href="https://en.wikipedia.org/wiki/Triangle" onfocus="drawTriangle();" onblur="drawPicture();">triangle</a>,
-                  both of which are semi-opaque, so the full circle can be seen underneath.</p>
-        </canvas>
+      <!-- <button id="play">Play</button> -->
+      <!-- <button id="pause">Pause</button> -->
+      <div id="div_konva_canvas">
+        Fallback Your browser can't display the canvas!
       </div>
+      <!-- <canvas
+        id='canvas_main' 
+        width = "1300"
+        height = "1100"
+        @mousemove="draw"
+        @mousedown="start_drawing" 
+        @mouseup="stop_drawing"
+        >
+        <h2>Fallback</h2>
+          <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a 1300x900 pixel canvas for toddlers.
+            Perhaps try a different, modern browser on the PC in fullscreen.
+              From https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Hit_regions_and_accessibility :::
+              In the background is a pink circle.
+              Partially overlaying the <a href="https://en.wikipedia.org/wiki/Circle" onfocus="drawCircle();" onblur="drawPicture();">circle</a>.
+              Partially overlaying the circle is a green
+              <a href="https://en.wikipedia.org/wiki/Square" onfocus="drawSquare();" onblur="drawPicture();">square</a>
+              and a purple <a href="https://en.wikipedia.org/wiki/Triangle" onfocus="drawTriangle();" onblur="drawPicture();">triangle</a>,
+              both of which are semi-opaque, so the full circle can be seen underneath.</p>
+      </canvas> -->
       
       </svg>
 
@@ -51,7 +53,7 @@
         <button class="button_working" @click="fullscreen_toggle" >[full]</button>
         <br>
         <br>
-        <button class="button_working" @click="draw_load_page"    >Redraw</button>
+        <button class="button_working" @click="konva_canvas_initialize"    >Redraw</button>
         <br>
         <button class="button_working" @click="clear_canvas"      >Clear</button>
         <br>
@@ -64,6 +66,13 @@
       </div>
 
     <div id="div_right_logs">
+
+      <div id="authenticated_user_account">
+        <p>
+          Welcome user: <strong> {{ user.username }} </strong> | Thanks for logging in! | 
+            <a href="{% url 'logout' %}">Log Out</a>
+          </p>
+      </div>
 
       <canvas 
         id="canvas_tree"
@@ -78,29 +87,39 @@
               Verbatim tag in Django lets me ignore using custom delimeters for Vue vs. Django., see https://vsupalov.com/vue-js-delimiters-django/
           {% endcomment %}
         {% verbatim %}
-            <h1 id="mouse_position"> Position: {{ x }}, {{ y }} </h1>
+            <h1 id="mouse_position"> Mouse: {{ x }}, {{ y }} </h1>
         {% endverbatim %}
-          <p id="last_keypress">
+          <p id="last_keypress">Keyboard: 
           </p>
       </div>
 
       <div>
-        <p>Full keypress log:</p>
-        <p id="keyboard_logs"></p>
+        <p class="class_keyboard_logs">Full keypress log:</p>
+        <p class="class_keyboard_logs" id="keyboard_logs"></p>
       </div>
 
-      <footer>
+      <footer id="credits">
         <!-- <div id="footer"> -->
-          <h1>Credits</h1>
+          <h1>Credits:</h1>
           <ul>
-            <li>Tree: Nicole Eyo</li>
-            <li>Smiley: Pete's tutorial</li>
+            <li>Overall: <a href="https://johnfial.github.io/" target="_blank">John Fial</a></li>
+            <li>Tree: <a href="https://codepen.io/ntaylor09/pen/vKGePr" target="_blank">Nicole Eyo</a></li>
+            <li>SVG Images: Most from <a href="https://pixabay.com/vectors/" target="_blank">Pixabay</a> , see source code.</li>
+            <!-- <li>Smiley: Pete's tutorial</li> -->
           </ul>
         <!-- </div> -->
       </footer>
     </div>
 
 
-  </div>
+    </div>
+  {% else %}
+    <div>
+      <h1>
+        Sign-in above to use and view Childhood Canvas!
+      </h1>
+    </div>
+  {% endif %}
 
+</main>
 {% endblock %}

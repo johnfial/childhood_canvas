@@ -7,11 +7,23 @@
 
   {% block content %}
 
+  <main>
     <h1>Sign Up</h1>
+    
+    <hr>
+    
+    <h4>
+      Note: I took all standard steps to ensure the security of this site, but am just a one-man operation. 
+      As such, do not re-use a password used on any other site! If you need a 'throwaway password,' use 'asdf1234' .
+    </h4>
+
+    <hr>
+
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Sign Up</button>
   </form>
 
+  </main>
 {% endblock %}

@@ -1,3 +1,4 @@
+/* HERE IS MAIN CSS APPLICATBLE TO ALL PAGES */
 h1, h2, h3 , h4, h5, h6 {
     text-align: center;
 }
@@ -10,50 +11,75 @@ header {
     /* border-bottom: 5px solid #EDF7E1; */
 }
 body {    
-    background-color: #000000;
-}
-main {
-    display: grid;
-    /* grid-template-columns: auto 200px auto; */
-    /* grid-template-rows: 5% 90% 5%; */
+    background-color: rgb(31, 0, 0);
     color: white;
-    /* margin-left: 1%; */
-    /* margin-right: 1%; */
 }
+li, ol {
+    font-size: 15px;
+}
+footer {
+    /* border: 1px dashed grey; */
+    margin: 1%;
+}
+form {
+    /* display: flex; */
+    justify-content: center;
+    /* margin: 10px; */
+    /* padding: 10px; */
+    /* border: 5px dashed red; */
+    max-width: 30%;
+    padding: 5%;
+}
+a {
+    color: grey;
+}
+
+
 
 /* flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
 /* grid: https://css-tricks.com/snippets/css/complete-guide-grid/ */
+
+
+/* HERE STARTS THE CANVAS-SPECIFIC CSS */
+#div_main_canvas {
+    display: grid;
+}
 #vue_app {
     display: flex;
     border: 1px solid white;
     border-radius: 2px;
     margin: 1%;
 }
-#canvas_main {  /* MAIN CANVAS HERE */
-    background-color: rgb(146, 2, 230);
+#canvas_main, #div_konva_canvas {  /* MAIN CANVAS HERE */
+    background-color: rgb(0, 54, 204);
     width: 1300px;
-    height: 1000px;
+    height: 1100px;
     margin: 1%;
     border: 2x solid white;
     border-radius: 10px;
 }
-
 /* RIGHT LOGS HERE */
 #div_right_logs {
     /* grid-column-start: 3; */
     /* grid-row-start: 2; */
     display: grid;
-    border: 3px dashed white;
+    grid-template-rows: 50px 350px 150px 1fr 150px;
+    border: 1px dashed white;
     border-radius: 10px;
     margin: 1%;
     color: white;
     width: 400px;
-    height: 1000px;
+    height: 1100px;
+}
+#authenticated_user_account {
+    /* background-color: black; */
+    margin: 2%;
 }
 #canvas_tree {
-    border: 1px solid white;
+
+    /* border: 1px solid white; */
     border-radius: 10px;
-    margin-left: 25px;
+    margin-left: 50px;
     margin-top: 25px;
 }
 #mouse_position {
@@ -64,10 +90,16 @@ main {
     font-size: 40px;
     text-align: center;
 }
-#keyboard_logs{
-    background-color: black;
+.class_keyboard_logs {
     font-size: 15px;
+    padding: 2%;
 }
+#credits {
+    padding: 1%;
+}
+
+
+
 :fullscreen {
     background-color: violet;
 }
@@ -79,21 +111,6 @@ main {
 }
 
 
-li, ol {
-    font-size: 15px;
-}
-footer {
-    border: 1px dashed grey;
-    margin: 1%;
-}
-form {
-    display: flex;
-    justify-content: center;
-    /* margin: 10px; */
-    /* padding: 10px; */
-    /* border: 5px dashed red; */
-    max-width: 90%;
-}
 /* BUTTONS */
 /* https://www.w3schools.com/csS/css3_buttons.asp */
 /* Use display:block instead of float:left to group the buttons below each other, instead of side by side: */
@@ -102,7 +119,7 @@ form {
     flex-direction: column;
     margin-top: 100px;
     width: 100px;
-    height: 900px;
+    height: 1100px;
 }
 .button_working { 
     width: 75px;
@@ -128,9 +145,20 @@ form {
     #div_left_canvas {
         /* max-width: 45%; */
     }
+    #canvas_main, #div_konva_canvas {  /* MAIN CANVAS HERE */
+        background-color: rgb(71, 0, 204);
+        width: 1300px;
+        height: 1000px;
+        margin: 1%;
+        border: 2x solid white;
+        border-radius: 10px;
+    }
     #div_right_logs {
         /* width: 800px; */
         /* height: 800px; */
         /* max-width: 45%; */
+    }
+    form {
+        max-width: 30%;
     }
 }

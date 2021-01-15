@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os # this is important!!
+from . secrets import * # has new secret key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,8 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'd4lfp((w_un^az#s7n9qq4qr5t_z$e@l^4h+fb4q*o$w78%q3s'
+                                                                                                                            # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = 'd4lfp((w_un^az#s7n9qq4qr5t_z$e@l^4h+fb4q*o$w78%q3s' # OLD, committed by accident                            # SECURE THIS FOR PRODUCTION! 
+                                                                                                                            # IF IT WAS ACCIDENTALLY PUSHED, CREATE A NEW ONE!
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True            # DIS-ABLE THIS FOR PRODUCTION
@@ -29,8 +31,8 @@ DEBUG = True            # DIS-ABLE THIS FOR PRODUCTION
 ALLOWED_HOSTS = [
     "johnfial.pythonanywhere.com",
                         # When DEBUG is True and ALLOWED_HOSTS is empty, the host is validated against :
-    '.localhost',       # DIS-ABLE THIS FOR PRODUCTION
-    '127.0.0.1',        # DIS-ABLE THIS FOR PRODUCTION
+    '.localhost',                                                                                                           # DIS-ABLE THIS FOR PRODUCTION
+    '127.0.0.1',                                                                                                            # DIS-ABLE THIS FOR PRODUCTION
     ]
 
 
@@ -169,5 +171,26 @@ STATICFILES_DIRS = [
 ]
 
 # https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/ :
-# CSRF_COOKIE_SECURE = True # default False             # ENABLE THIS FOR PRODUCTION
-# SESSION_COOKIE_SECURE = True # # default False        # ENABLE THIS FOR PRODUCTION
+# CSRF_COOKIE_SECURE = True # default False                                                                                  # ENABLE THIS FOR PRODUCTION
+# SESSION_COOKIE_SECURE = True # # default False                                                                             # ENABLE THIS FOR PRODUCTION
+# SECURE_SSL_REDIRECT = True # # default False                                                                             # ENABLE THIS FOR PRODUCTION # https://docs.djangoproject.com/en/3.1/ref/settings/#secure-ssl-redirect
+
+
+
+# WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! 
+# Setting *THESE THREE* incorrectly can irreversibly break your site. 
+# Read the HTTP Strict Transport Security documentation first. 
+# @ https://docs.djangoproject.com/en/3.1/ref/middleware/#http-strict-transport-security
+# Documentation for all three @ https://docs.djangoproject.com/en/3.1/ref/settings/#std:setting-SECURE_HSTS_INCLUDE_SUBDOMAINS
+
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True # default False
+# SECURE_HSTS_PRELOAD = True # default False
+
+# SECURE_HSTS_SECONDS = 360 # (360 = 6 minutes, 3600 = 1 hour, 31536000 = 1 year ) # 0 default, 
+    # Guidance on above seconds setting: 
+    # "When enabling HSTS, it’s a good idea to first use a small value for testing, 
+    # for example, SECURE_HSTS_SECONDS = 3600 for one hour. Each time a Web browser sees the HSTS header 
+    # from your site, it will refuse to communicate non-securely (using HTTP) with your domain 
+    # for the given period of time. Once you confirm that all assets are served securely on your site 
+    # (i.e. HSTS didn’t break anything), it’s a good idea to increase this value 
+    # so that infrequent visitors will be protected (31536000 seconds, i.e. 1 year, is common).""

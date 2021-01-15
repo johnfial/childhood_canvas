@@ -3,41 +3,35 @@
 {% load static %}
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Need Axios? -->
-  <!-- <script src="https://unpkg.com/axios/dist/axios.min.js" defer></script> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
 
-  <!-- development version, includes helpful console warnings -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
-  <!-- or: -->    <!-- production version, optimized for size and speed -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+  <!-- 1. VUE: -->
+    <!-- NEWEST development version, includes helpful console warnings,
+    For prototyping or learning purposes, you can use the latest version with:  -->
+                                                                                                                              <!-- VUE: DIS-ABLE FOR PRODUCTION!   -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+    
+    <!-- or: -->
+    <!-- For production, we recommend linking to a specific version number and build
+      to avoid unexpected breakage from newer versions. Also optimized for size and speed. 
+      https://www.cdnpkg.com/vue -->
+                                                                                                                              <!-- VUE: ENABLE FOR PRODUCTION!  -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js" integrity="sha256-KSlsysqp7TXtFo/FHjb1T9b425x3hrvzjMWaJyKbpcI=" crossorigin="anonymous"></script> -->
 
-  <!-- ANOTHER VUE ON A CDN OPTION: -->
-  <!-- Include Vue from a CDN of your choice, I chose unpkg -->
-  <!-- <script src="https://unpkg.com/vue"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- 2. Konva, which has a Vue-version!  https://konvajs.org/docs/vue/index.html  -->
+                                                                                                                             <!-- Konva Newest: DIS-ABLE FOR PRODUCTION!  -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/konva@7/lib/index.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/konva/7.0.3/konva.min.js"></script>
+                                                                                                                             <!-- Konva: ENABLE FOR PRODUCTION!  -->                                                                                                                             
+  <!-- <script src="https://cdn.jsdelivr.net/npm/konva@7/lib/index.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/konva@7.2.2/lib/index.min.js"></script> -->
 
-  <!-- My Main VUE/Canvas App: -->
-  <script src="{% static 'js/vue_main.js'%}" defer></script>  
-
-  <!-- Trying to get Fabric installed here with a CDN: -->
-      <!-- from https://developer.microsoft.com/en-us/fabric-js/getstarted/getstarted -->
-      <!-- <script src="{% static 'js/fabric-nogradients-nopatterns-noshadows.js'%}" defer></script> -->  
-      <!-- <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/css/fabric.min.css" />
-      <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/css/fabric.components.min.css" /> -->
-      <!-- <script src="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/js/fabric.min.js"></script> -->
-      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.3.0/fabric.min.js"></script> -->
-  
-  <!-- Forget Fabric, now trying to use Konva, which has a Vue-version! -->
-    <!-- https://konvajs.org/docs/vue/index.html -->
-    <!--1. Link Vue Javascript & Konva-->
-    <!-- <script src='https://unpkg.com/konva@4.0.0/konva.min.js'></script> -->
-    <script src="https://unpkg.com/konva@7.0.3/konva.min.js"></script>
-
+  <!-- 3. General Normalize CSS: -->
   <link rel="stylesheet" href="{% static 'css/github_necolas_normalize.css'%}">
+  
+  <!-- 4. My Main CSS and VUE/Canvas App: -->
   <link rel="stylesheet" href="{% static 'css/main.css'%}">
-
+  <script src="{% static 'js/vue_main.js'%}" defer></script>  
 
   <title>
     {% block title %}
@@ -48,12 +42,8 @@
 </head>
 
 <body>
-  <main>
     {% block content %}
     {% endblock %}
-    
-  </main>
-
 
 </body>
 </html>

@@ -9,20 +9,18 @@
 let vue_app = new Vue({
     el: '#vue_app',
     data: {
-        vueCanvas: null,
+        fullscreen: false,
+
+        vueCanvas: null, // unused
         vueCanvas_tree: null,
+        Konva_canvas_Stage: null,
 
         is_drawing: false,
         x: null,
         y: null,
-        // keys_and_functions: {},
-        
-        example_array: [],
-        example_string: "",
-        example_integer: 1,
-        example_boolean: false,
-        // thanks to https://gist.github.com/bobspace/2712980 for the color list! :
-        random_css_color_list: [
+        keys_and_functions: {}, // we can't have the arrow () => functions here, so this is blank and they'll load on mounted()
+                
+        random_css_color_list: [ // thanks to https://gist.github.com/bobspace/2712980 for the color list! :
             'white', 'black',
             'white', 'black',
             'white', 'black',
@@ -192,14 +190,14 @@ let vue_app = new Vue({
             "WhiteSmoke",
             "Yellow",
         ],
-        canvas_width: 1300,
-        canvas_height: 1000,
-        fullscreen: false,
+
+        canvas_width: 1300, // unused
+        canvas_height: 1100, // unused
         
         // Konva Stuff here:
         configKonva: {
-            width: 800,
-            height: 800,
+            width: 1300,
+            height: 1100,
           },
         configCircle: {
             x: 100,
@@ -211,101 +209,8 @@ let vue_app = new Vue({
         },
     },
     methods: {
-        keypress_listener: function(KeyboardEvent) {
-            // NOTES:
-            // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
-            // KeyboardEvent.code is the PHYSICAL key pressed (regardless of modifier OR keyboard layout) 
-            // while KeyboardEvent.key is the 'sent' key...
-            // while KeyboardEvent.keyCode is the numerical code...
 
-            // Right-side keyboard logs:
-            console.log(`logKey: function(KeyboardEvent) running with KeyboardEvent.code: ${KeyboardEvent.code} and KeyboardEvent.key : ${KeyboardEvent.key}.`)
-            keyboard_logs.textContent += `${KeyboardEvent.code}, `
-            last_keypress.textContent = KeyboardEvent.code
-
-            // Left-side Draw function lookup, 
-            let key_lookup = KeyboardEvent.code // 
-                // TEMPORARY DEFAULT VALUE WHILE I CREATE LIST:
-            if ( this.keys_and_functions[key_lookup] == 1) {
-                this.keys_and_functions[`default`]()
-            }
-            else if ( this.keys_and_functions[key_lookup] ) {
-                this.keys_and_functions[key_lookup]() // execute it!
-            }
-            else {
-                console.log('LOOKUP NOT FOUND, PERFORMING DEFAULT VALUE:')
-                this.keys_and_functions[`default`]() // perform some default draw value...
-                keyboard_logs.textContent += `(not found) `
-            }
-        },
-        log_this: function(e) {
-            // unused
-            this.x = e.offsetX
-            this.y = e.offsetY
-        },
-        draw_random_circle: function(color='random', input_x=this.canvas_width, input_y=this.canvas_height) {
-
-            console.log('draw_random_circle() function.')
-
-            let canvas = this.vueCanvas
-
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            // Random color from list in data{}
-            if (color === 'random') {
-                color = this.pick_random_color()
-                canvas.fillStyle = color
-            }
-            else {
-                canvas.fillStyle = color
-            }
-            
-            canvas.beginPath()
-                // https://www.w3schools.com/tags/canvas_arc.asp
-                // context.arc() syntax:    context.arc(     x,     y,     r,     sAngle,     eAngle,     counterclockwise);
-            canvas.arc(random_x, random_y, 50, 0, 2*Math.PI)
-
-            canvas.fill()
-            canvas.stroke()
-            canvas.closePath()
-        },
-        draw_random_square: function(color='random', input_x=this.canvas_width, input_y=this.canvas_height) {
-            
-            console.log('draw_random_square: function()')
-            
-            let canvas = this.vueCanvas
-
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            // Random color from list in data{}
-            if (color === 'random') {
-                color = this.pick_random_color()
-                canvas.fillStyle = color
-            }
-            else {
-                canvas.fillStyle = color
-            }
-
-            canvas.fillRect(random_x, random_y, 100, 100)
-
-        },
-        pick_random_color: function() {
-            console.log(`pick_random_color: function() start`)
-
-            random_color_seed = Math.random()
-            random_color_integer = Math.floor(random_color_seed * Math.floor(this.random_css_color_list.length))
-            color = this.random_css_color_list[random_color_integer]
-
-            console.log(`pick_random_color: function() picking color with ${color}`)
-            return color
+        draw_test_smiley: function() {   // unused          
         },
         draw_face: function(yChange=50) {
 
@@ -360,6 +265,173 @@ let vue_app = new Vue({
             
             window.requestAnimationFrame(() => this.draw_face(yChange))
         },
+
+        // non-draw or helper functions: 
+        keypress_listener: function(KeyboardEvent) {
+            // NOTES:
+            // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
+            // KeyboardEvent.code is the PHYSICAL key pressed (regardless of modifier OR keyboard layout) 
+            // while KeyboardEvent.key is the 'sent' key...
+            // while KeyboardEvent.keyCode is the numerical code...
+
+            // Right-side keyboard logs:
+            console.log(`logKey: function(KeyboardEvent) running with KeyboardEvent.code: ${KeyboardEvent.code} and KeyboardEvent.key : ${KeyboardEvent.key}.`)
+            keyboard_logs.textContent += `${KeyboardEvent.code}, `
+            last_keypress.textContent = `Keyboard: ${KeyboardEvent.code}`
+
+            // Left-side Draw function lookup, 
+            let key_lookup = KeyboardEvent.code // 
+                // TEMPORARY DEFAULT VALUE WHILE I CREATE LIST:
+            if ( this.keys_and_functions[key_lookup] == 1) {
+                this.keys_and_functions[`default`]()
+            }
+            else if ( this.keys_and_functions[key_lookup] ) {
+                this.keys_and_functions[key_lookup]() // execute it!
+            }
+            else {
+                console.log('LOOKUP NOT FOUND, PERFORMING DEFAULT VALUE:')
+                this.keys_and_functions[`default`]() // perform some default draw value...
+                keyboard_logs.textContent += `(not found) `
+            }
+        },
+        log_this: function(e) {
+            // unused
+            this.x = e.offsetX
+            this.y = e.offsetY
+        },
+        pick_random_color: function() {
+            // console.log(`pick_random_color: function() start`)
+
+            random_color_seed = Math.random()
+            random_color_integer = Math.floor(random_color_seed * Math.floor(this.random_css_color_list.length))
+            color = this.random_css_color_list[random_color_integer]
+
+            console.log(`pick_random_color: function() picking color with ${color}`)
+            return color
+        },
+        fullscreen_toggle: function() {
+            console.log('fullscreen_toggle() START')
+            // thanks https://www.w3schools.com/howto/howto_js_fullscreen.asp
+            var document_main = document.documentElement
+
+            /* View in fullscreen */
+            function openFullscreen() {
+                if (document_main.requestFullscreen) {
+                document_main.requestFullscreen();
+                } else if (document_main.webkitRequestFullscreen) { /* Safari */
+                document_main.webkitRequestFullscreen();
+                } else if (document_main.msRequestFullscreen) { /* IE11 */
+                document_main.msRequestFullscreen();
+                }
+            }
+            
+            /* Close fullscreen */
+            function closeFullscreen() {
+                if (document.exitFullscreen) {
+                document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+                }
+            }
+
+            if (this.fullscreen === false) {
+                openFullscreen()
+                this.fullscreen = true
+            }
+            else {
+                closeFullscreen()
+                this.fullscreen = false
+            }
+
+
+        },
+        fullscreen_f11_toggle_data_only: function() {
+            console.log('fullscreen_f11_toggle_data_only() START')
+
+            if (this.fullscreen === false) {
+                openFullscreen()
+                this.fullscreen = true
+            }
+            else {
+                closeFullscreen()
+                this.fullscreen = false
+            }
+        },
+        canvas_save_image: function() {
+            console.log('canvas_save_image() START')
+            window.alert(`Sorry! Still under development... For now, you'll have to take a screenshot.
+                ---
+                For Mac: ⇧⌘5 , or see: https://setapp.com/how-to/snipping-tool-for-mac
+                ---
+                For Windows: Start > Type 'Snipping' or see: https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b
+            `)
+
+        },
+
+        // shapes:
+        draw_random_circle: function(color='random', input_x=this.canvas_width, input_y=this.canvas_height) {
+
+            console.log('draw_random_circle() function.')
+
+            // Random position:
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            // Random color from list in data{}
+            if (color === 'random') {
+                color = this.pick_random_color()
+            }
+
+            // layer = this.Konva_canvas_layer1
+
+            var circle = new Konva.Circle({
+                x: random_x,
+                y: random_y,
+                radius: 40,
+                fill: color,
+                stroke: 'white',
+                strokeWidth: 4,
+            })
+            this.Konva_canvas_layer1.add(circle)
+            this.Konva_canvas_layer1.draw()
+            
+        },
+        draw_random_square: function(color='random', input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('draw_random_square: function()')
+            
+            // Random position:
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            // Random color from list in data{}
+            if (color === 'random') {
+                color = this.pick_random_color()
+            }
+
+            // layer = this.Konva_canvas_layer1
+
+            var rect1 = new Konva.Rect({
+                x: random_x,
+                y: random_y,
+                width: 75,
+                height: 75,
+                fill: color,
+                stroke: 'black',
+                strokeWidth: 10,
+            })
+            this.Konva_canvas_layer1.add(rect1)
+            this.Konva_canvas_layer1.draw()
+
+        },
+        draw_triangle: function() { // unused
+        },
         draw_gradient: function() { // unused
             var gradient = this.vueCanvas.createLinearGradient(0, 0, 200, 0)
             gradient.addColorStop(0, "red")
@@ -368,6 +440,8 @@ let vue_app = new Vue({
             this.vueCanvas.fillStyle = gradient
             this.vueCanvas.fillRect(100, 100, 150, 80);
         },
+        
+        // drawing PEN methods:
         draw_line: function(x1, y1, x2, y2) {
             let canvas = this.vueCanvas
             canvas.beginPath()
@@ -400,81 +474,8 @@ let vue_app = new Vue({
                 this.is_drawing = false
             }
         },
-        draw_rectangle: function() {
-            let offset = 0
-            let canvas = this.vueCanvas
-            
-            function draw() {
-                // console.log('draw_rectangle() function...')
-                canvas.clearRect(0, 0, 200, 200)
-                // canvas.clearRect(0, 0, this.canvas_width, this.canvas_height)
-                canvas.setLineDash([4, 2])
-                canvas.lineDashOffset = -offset
-                canvas.strokeRect(50, 50, 300, 300)
-            }
-            function march() {
-                offset++
-                if (offset > 16 ) {
-                    offset = 0
-                }
-                draw()
-                setTimeout(march, 2)
-            }
-            // disabling this until i understand it better
-            march()
 
-            canvas.setLineDash([10, 3])
-            canvas.strokeRect(450, 450, 300, 300)
-
-        },
-        clear_canvas: function() {
-            console.log('clear_canvas function()')
-
-            let canvas = this.vueCanvas
-
-            canvas.clearRect(0, 0, this.canvas_width, this.canvas_height)
-            
-            // RESET THE STROKE TO BLACK, SOLID, DEFAULTS...
-            canvas.fillStyle = 'rgb(0, 0, 0, 0)'    
-            
-            // DOESN'T REMOVE THE MARCHING ANTS RECTANGLE...        
-
-        },
-        drawing_notes: function() { // unused
-
-            // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes
-            // First, you create the path.
-            // Then you use drawing commands to draw into the path.
-            // Once the path has been created, you can stroke or fill the path to render it.
-
-            // you will almost always want to specifically set your starting position after resetting a path.
-        },
-        draw_triangle: function() {
-            var canvas = this.vueCanvas
-
-            canvas.beginPath()
-            canvas.moveTo(750,500)
-            canvas.lineTo(1000,750)
-            canvas.lineTo(1000,250)
-            canvas.fill()
-
-
-        },
-        draw_test_smiley: function() {
-            var canvas = this.vueCanvas
-            canvas.restore()
-
-            canvas.beginPath();
-            canvas.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
-            canvas.moveTo(110, 75);
-            canvas.arc(75, 75, 35, 0, Math.PI, false);  // Mouth (clockwise)
-            canvas.moveTo(65, 65);
-            canvas.arc(60, 65, 5, 0, Math.PI * 2, true);  // Left eye
-            canvas.moveTo(95, 65);
-            canvas.arc(90, 65, 5, 0, Math.PI * 2, true);  // Right eye
-            canvas.stroke();
-            
-        },
+        // Tree canvas:
         draw_tree_animated_from_NicoleEyO: function() { // code/tree modified from https://codepen.io/ntaylor09/pen/vKGePr :            
                 
             var ctx = this.vueCanvas_tree
@@ -577,80 +578,137 @@ let vue_app = new Vue({
 
             init();
         },
-        draw_image_test: function() {
-        },
-        fabric_draw_circle: function() {
-            console.log('fabric_draw_circle()')
 
-            // let canvas = this.vueCanvas
+        clear_canvas: function() {
+            console.log('clear_canvas function()')
 
-            // let circle = fabric.Circle({
-            //     radius: 20, fill: 'green', left: 100, top: 100
-            // })
+            // Destroy the layer, make a new one, add it to the Stage
+            this.Konva_canvas_layer1.destroy()
+            this.Konva_canvas_layer1 = new Konva.Layer()
+            this.Konva_canvas_Stage.add(this.Konva_canvas_layer1)
+            // this.Konva_canvas_Stage.clear()
 
-            // canvas.add(circle)
-            
-            // let canvas = this.vueCanvas
-
-            // var circle = new fabric.Circle({
-            //     radius: 20, fill: 'green', left: 100, top: 100
-            //     })
-            //   var triangle = new fabric.Triangle({
-            //     width: 20, height: 30, fill: 'blue', left: 50, top: 50
-            //   })
-
-            //   canvas.add(circle, triangle)
-        },
-        draw_load_page: function() {
-
-            console.log('this.draw_load_page function() START')
-            
-            let canvas = this.vueCanvas
-            canvas.clearRect(0, 0, this.canvas_width, this.canvas_width)
-            
-            canvas.fillStyle = 'rgb(200, 100, 100)'      
-            canvas.fillRect(25, 25, 250, 250)
-            canvas.fillStyle = 'rgb(255, 50, 50, 0.5)'
-            canvas.fillRect(45, 45, 250, 250)
-
-            canvas.fillStyle = 'rgb(0, 0, 0)'
-            canvas.font = '75px serif'
-            // canvas.fillText('                       童年帆布 ', 100, 400)
-            canvas.font = '35px serif'
-            canvas.fillText('Welcome to Childhood Canvas! Make your browser fullscreen,', 100, 500)
-            //  Meant for toddlers
-            canvas.fillText('then try random keyboard keys or draw on me !', 100, 545)
-
-            console.log('this.draw_load_page function() END')
-
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-
+            // Clear the text logs:
+            keyboard_logs.textContent = ''
 
         },
-        konva_draw_test: function() {
-            console.log('konva_draw_test() START')
-            // How to use Konva canvas with Vue?
-            // https://konvajs.org/docs/vue/index.html 
+        page_reload: function() {
+            console.log('page_reload() START')
+        },
+        konva_image_elephant: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('konva_image_elephant()')
+            
+            // Random position:
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            var stage = new Konva.Stage({
-                container: 'konva_test', //canvas_main is not a div, per se, but the <canvas>...
-                width: 900,
-                height: 900,
-            })
-            var layer = new Konva.Layer()
-
-            stage.add(layer)
-
-            Konva.Image.fromURL('static/media/test.svg', (imagename) => {
-                imagename.setAttrs({
-                    x: 15,
-                    y: 15,
-                    scaleX: 4.0,
-                    scaleY: 4.0,
+            Konva.Image.fromURL('static/media/Pixabay_Clker-Free-Vector-Images_elephant-24732.svg', (elephant) => {
+                elephant.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: 2.0,
+                    scaleY: 2.0,
                 })
-                layer.add(imagename)
-                layer.draw()
+                this.Konva_canvas_layer1.add(elephant)
+                this.Konva_canvas_layer1.draw()
             })
+
+        },
+        konva_image_smiley_face_svg: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('konva_image_smiley_face_svg()')
+            
+            // Random position:
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/pixabay_OpenClipart-Vectors_face-1298202.svg', (smiley) => {
+                smiley.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: 2.0,
+                    scaleY: 2.0,
+                })
+                this.Konva_canvas_layer1.add(smiley)
+                this.Konva_canvas_layer1.draw()
+            })
+
+        },
+        konva_image_dolphin: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('konva_image_dolphin()')
+            
+            // Random position:
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/pixabay_Clker-Free-Vector-Images_dolphin-41436.svg', (dolphin) => {
+                dolphin.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: 2.0,
+                    scaleY: 2.0,
+                })
+                this.Konva_canvas_layer1.add(dolphin)
+                this.Konva_canvas_layer1.draw()
+            })
+
+        },
+        konva_image_cement_mixer_truck: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('konva_image_cement_mixer_truck()')
+            
+            // Random position:
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/pixabay_Grafikingenieur_concrete-mixer-5630778.svg', (cement) => {
+                cement.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: 5,
+                    scaleY: 5,
+                })
+                this.Konva_canvas_layer1.add(cement)
+                this.Konva_canvas_layer1.draw()
+            })
+
+        },
+        konva_image_butterfly: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('konva_image_elephant()')
+            
+            // Random position:
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/pixabay_gdj_gordon_johnson_butterfly-5883438.svg', (butterfly) => {
+                butterfly.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: 1,
+                    scaleY: 1,
+                })
+                this.Konva_canvas_layer1.add(butterfly)
+                this.Konva_canvas_layer1.draw()
+            })
+
+        },
+        konva_canvas_initialize: function() {
+            console.log('konva_canvas_initialize() START')
+
+            this.konva_image_butterfly(15, 15)
 
             var circle = new Konva.Circle({
                 x: 440, // stage.width() / 2,
@@ -660,73 +718,85 @@ let vue_app = new Vue({
                 stroke: 'white',
                 strokeWidth: 4,
             })
-            layer.add(circle)
-            layer.draw()
+            this.Konva_canvas_layer1.add(circle)
+            this.Konva_canvas_layer1.draw()
 
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+            // Here's the old stuff...
+            
+            // canvas.fillStyle = 'rgb(0, 0, 0)'
+            // canvas.font = '75px serif'
+            // // canvas.fillText('                       童年帆布 ', 100, 400)
+            // canvas.font = '35px serif'
+            // canvas.fillText('Welcome to Childhood Canvas! Make your browser fullscreen,', 100, 500)
+            // //  Meant for toddlers
+            // canvas.fillText('then try random keyboard keys or draw on me !', 100, 545)
+
+            // console.log('this.draw_load_page function() END')
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             console.log('konva_draw_test() END')
         },
-        fullscreen_toggle: function() {
-            console.log('fullscreen_toggle() START')
-            // thanks https://www.w3schools.com/howto/howto_js_fullscreen.asp
-            var document_main = document.documentElement
+        konva_test_video: function() {
+            console.log('konva_test_video() START')
 
-            /* View in fullscreen */
-            function openFullscreen() {
-                if (document_main.requestFullscreen) {
-                document_main.requestFullscreen();
-                } else if (document_main.webkitRequestFullscreen) { /* Safari */
-                document_main.webkitRequestFullscreen();
-                } else if (document_main.msRequestFullscreen) { /* IE11 */
-                document_main.msRequestFullscreen();
-                }
-            }
+            // COPIED from https://konvajs.org/docs/sandbox/Video_On_Canvas.html :
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+    
+            var stage = new Konva.Stage({
+                container: 'konva_test',
+                width: width,
+                height: height,
+            });
+    
+            var layer = new Konva.Layer();
+            stage.add(layer);
+    
+            var video = document.createElement('video');
+            video.src = 'https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c4/Physicsworks.ogv/Physicsworks.ogv.240p.vp9.webm';
+    
+            var image = new Konva.Image({
+                image: video,
+                draggable: true,
+                x: 50,
+                y: 20,
+            });
+            layer.add(image);
+    
+            var text = new Konva.Text({
+                text: 'Loading video...',
+                width: stage.width(),
+                height: stage.height(),
+                align: 'center',
+                verticalAlign: 'middle',
+            });
+            layer.add(text);
+    
+            layer.draw();
+    
+            var anim = new Konva.Animation(function () {
+                // do nothing, animation just need to update the layer
+            }, layer);
+    
+            // update Konva.Image size when meta is loaded
+            video.addEventListener('loadedmetadata', function (e) {
+                text.text('Press PLAY...');
+                image.width(video.videoWidth);
+                image.height(video.videoHeight);
+                layer.draw();
+            });
+    
+            document.getElementById('play').addEventListener('click', function () {
+                text.destroy();
+                video.play();
+                anim.start();
+            });
+            document.getElementById('pause').addEventListener('click', function () {
+                video.pause();
+                anim.stop();
+            });
             
-            /* Close fullscreen */
-            function closeFullscreen() {
-                if (document.exitFullscreen) {
-                document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { /* Safari */
-                document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { /* IE11 */
-                document.msExitFullscreen();
-                }
-            }
-
-            if (this.fullscreen === false) {
-                openFullscreen()
-                this.fullscreen = true
-            }
-            else {
-                closeFullscreen()
-                this.fullscreen = false
-            }
-
-
-        },
-        fullscreen_f11_toggle_data_only: function() {
-            console.log('fullscreen_f11_toggle_data_only() START')
-
-            if (this.fullscreen === false) {
-                openFullscreen()
-                this.fullscreen = true
-            }
-            else {
-                closeFullscreen()
-                this.fullscreen = false
-            }
-        },
-        canvas_save_image: function() {
-            console.log('canvas_save_image() START')
-            window.alert(`Sorry! Still under development... For now, you'll have to take a screenshot.
-                ---
-                For Mac: ⇧⌘5 , or see: https://setapp.com/how-to/snipping-tool-for-mac
-                ---
-                For Windows: Start > Type 'Snipping' or see: https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b
-            `)
-
-        },
-        page_reload: function() {
-            console.log('page_reload() START')
+            // END COPY 
         },
     },
     mounted:function() {
@@ -735,13 +805,27 @@ let vue_app = new Vue({
         // Keypress listener:
         document.addEventListener('keypress', this.keypress_listener) // huge difference between 'keyup', 'keydown', and 'keypress'! 
         
-        // CANVAS INITIALIZE (Still need to use it in each method/function...)
-        var canvas = document.getElementById('canvas_main')
-        this.vueCanvas = canvas.getContext('2d')
-        this.draw_load_page()
+        // // CANVAS INITIALIZE (Still need to use it in each method/function...)
+            // var canvas = document.getElementById('canvas_main')
+            // this.vueCanvas = canvas.getContext('2d')
+            // this.draw_load_page()
 
-        // // REPLACE above if using Konva...
-        // this.konva_draw_test()        
+        // REPLACE above if using Konva...
+        this.Konva_canvas_Stage = new Konva.Stage({
+            container: 'div_konva_canvas', //canvas_main is not a div, per se, but the <canvas>...
+            width: 1300,
+            height: 1100,
+        })        
+        this.Konva_canvas_layer1 = new Konva.Layer()
+        this.Konva_canvas_Stage.add(this.Konva_canvas_layer1)
+        this.konva_canvas_initialize()
+        // this.konva_test_video()
+
+        // Below is the separate 300x300 canvas for the 'tree' in the top right
+        // ENABLE FOR PRODUCTION!                                                                                                           ENABLE FOR PRODUCTION! 
+        var canvas_tree = document.getElementById('canvas_tree')
+        this.vueCanvas_tree = canvas_tree.getContext('2d')       
+        this.draw_tree_animated_from_NicoleEyO()
 
         // BIG LIST of keypress / draw function lookups:
         this.keys_and_functions = {             
@@ -749,27 +833,27 @@ let vue_app = new Vue({
             // Thanks Pete! This makes an easy lookup with a lookup on the left and a function on the right WITH arguments!
             // Space: () => console.log('I am a console.log() function, inside a key/value pair inside an object, inside the mounted function, inside the Vue shell!!!!'),
             
-            default: () => this.draw_random_square(),
+            default: () => this.draw_random_circle(),
 
             F11: () => this.fullscreen_f11_toggle_data_only(),
 
             Space: () => this.clear_canvas(),
             
-            KeyQ: () => this.draw_random_square('white', 700, 700),
-            KeyW: () => this.draw_tree_animated_from_NicoleEyO(),
-            KeyE: 1,
+            KeyQ: () => this.draw_random_square('white'),
+            KeyW: 1,
+            KeyE: () => this.konva_image_elephant(),
             KeyR: 1,
             KeyT: 1,
             KeyY: 1,
             KeyU: 1,
             KeyI: 1, 
             KeyO: 1, 
-            KeyP: () => this.draw_rectangle(),
+            KeyP: 1,
 
+            //  konva_image_smiley_face_svg konva_image_cement_mixer_truck
             KeyA: () => this.draw_random_circle('red', 500, 500),
             KeyS: 1, 
-            KeyD: 1,
-            KeyD: 1,
+            KeyD: () => this.konva_image_dolphin(),
             KeyF: 1, 
             KeyG: 1, 
             KeyH: 1, 
@@ -778,10 +862,11 @@ let vue_app = new Vue({
             KeyL: 1,
 
             KeyZ: 1,
-            KeyX: 1,
-            KeyC: () => this.draw_face(),
+            KeyX: () => this.konva_image_smiley_face_svg(),
+            // KeyC: () => this.draw_face(),
+            KeyC: () => this.konva_image_cement_mixer_truck(),
             KeyV: 1, 
-            KeyB: 1, 
+            KeyB: () => this.konva_image_butterfly(), 
             KeyN: 1, 
             KeyM: 1,
 
@@ -790,6 +875,7 @@ let vue_app = new Vue({
             Numpad0: 1,
             Numpad1: () => window.open('https://www.youtube.com/watch?v=zRxX63txOXk'), // Pupu Hinuhinu
             Numpad2: () => window.open('https://www.youtube.com/watch?v=ssHkMWcGat4&feature=emb_title'), // Arecibo Observatory collapse from 1 Dec 2020
+            // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
             Numpad3: () => window.open('https://www.youtube.com/watch?v=FezVApPddqU'), // Mele Kalikimaka psych version
             Numpad4: 1,
             Numpad5: 1,
@@ -803,12 +889,6 @@ let vue_app = new Vue({
             //     console.log("Win Key was clicked.")
             // }
         }
-
-        // // This is the separate 300x300 canvas for the 'tree' in the top right
-        // var canvas_tree = document.getElementById('canvas_tree')
-        // this.vueCanvas_tree = canvas_tree.getContext('2d')       
-        // this.draw_tree_animated_from_NicoleEyO()
-        
         console.log(`mounted() END`)
         // END MOUNTED
     },
