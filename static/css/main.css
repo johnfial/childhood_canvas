@@ -66,14 +66,16 @@ a {
 #button_area {
     display: flex;    
     flex-direction: column;
-    margin-top: 100px;
+    /* display: grid; */
+    /* grid-template-rows: 100px 100px 100px 500px 1fr; */
+    margin-top: 50px;
     width: 100px;
     height: 1000px;
 }
 .button_working { 
     width: 100px;
     height: 75px;
-    background-color: red;
+    background-color: blue;
     color: white;
     font-size: 20px;
     font-weight: bolder;
@@ -81,6 +83,7 @@ a {
     border-radius: 30%;
 }
 .button_in_dev {
+    grid-row-start: 5;
     background-color: grey;
     font-size: 15px;
     width: 75px;
@@ -134,13 +137,14 @@ a {
 
 /* Silly fullscreen-via-CSS attempt... */
 :fullscreen {
-    background-color: violet;
+    background-color: black;
 }
-:-webkit-full-screen {
-    background-color: violet;
+
+:-webkit-full-screen { /* Chrome */
+    background-color: black;
 }
 :-ms-fullscreen {
-    background-color: violet;
+    background-color: black;
 }
 
 

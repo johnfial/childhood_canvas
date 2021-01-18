@@ -23,6 +23,7 @@
 # Project Overview
 
 - Childhood Canvas is a visual play sandbox for older babies and toddlers, intended for full-screen (lock screen), very limited-feature use.
+- A deployed version, usually slightly older, can be accessed at https://johnfial.pythonanywhere.com 
 
 <!--  -->
 <!--  -->
