@@ -3,6 +3,8 @@
 secrets.*
 secrets.py
 *.mkv
+00canvas_play/
+lab00_canvas_test_09_dec/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
