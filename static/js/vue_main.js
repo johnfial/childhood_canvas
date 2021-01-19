@@ -752,6 +752,10 @@ let vue_app = new Vue({
         },
         konva_test_video: function() {
             console.log('konva_test_video() START')
+                //             Vue/Youtube players:
+                // - https://developers.google.com/youtube/iframe_api_reference
+                // - https://github.com/andrewvasilchuk/vue-lazy-youtube-video
+                // - https://github.com/kaorun343/vue-youtube-embed
 
             // COPIED from https://konvajs.org/docs/sandbox/Video_On_Canvas.html :
             var width = window.innerWidth;
