@@ -2,9 +2,17 @@
 // Capstone Project 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
-// import fabric from 'fabric'
-// // Object.defineProperty(Vue.prototype, '$fabric', { value : fabric });
-// Vue.use(fabric) // https://vuejs.org/v2/guide/plugins.html#ad
+
+
+// https://github.com/andrewvasilchuk/vue-lazy-youtube-video
+// import Vue from 'vue';
+// import { VueLazyYoutubeVideo } from 'vue-lazy-youtube-video'; 
+
+// // as a plugin
+// Vue.use(VueLazyYoutubeVideo.Plugin);
+// // as a component
+// Vue.use('LazyYoutubeVideo', VueLazyYoutubeVideo.default)
+
 
 let vue_app = new Vue({
     el: '#vue_app',
@@ -685,9 +693,9 @@ let vue_app = new Vue({
         },
         konva_image_butterfly: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {
             
-            console.log('konva_image_elephant()')
+            console.log('konva_image_butterfly()')
             
-            // Random position:
+            // Random position:             
             var random_number = Math.random()
             let random_x = Math.floor(random_number * Math.floor(input_x))
             var random_number = Math.random()
@@ -695,8 +703,8 @@ let vue_app = new Vue({
 
             Konva.Image.fromURL('static/media/pixabay_gdj_gordon_johnson_butterfly-5883438.svg', (butterfly) => {
                 butterfly.setAttrs({
-                    x: input_x,
-                    y: input_y,
+                    x: random_x,
+                    y: random_y,
                     scaleX: scale,
                     scaleY: scale,
                 })
@@ -731,7 +739,17 @@ let vue_app = new Vue({
                 align: 'left',
             })
 
-            this.konva_image_butterfly(200, 300, 4)
+            
+            Konva.Image.fromURL('static/media/pixabay_gdj_gordon_johnson_butterfly-5883438.svg', (butterfly) => {
+                butterfly.setAttrs({
+                    x: 200,
+                    y: 300,
+                    scaleX: 4,
+                    scaleY: 4,
+                })
+                this.Konva_canvas_layer1.add(butterfly)
+                this.Konva_canvas_layer1.draw()
+            })
             this.Konva_canvas_layer1.add(circle, welcome_text)
             this.Konva_canvas_layer1.draw()
 
@@ -821,12 +839,7 @@ let vue_app = new Vue({
         console.log(`mounted() START, with window size: ${window.innerWidth} * ${window.innerHeight}.`)
         
         // Keypress listener:
-        document.addEventListener('keypress', this.keypress_listener) // huge difference between 'keyup', 'keydown', and 'keypress'! 
-        
-        // // CANVAS INITIALIZE (Still need to use it in each method/function...)
-            // var canvas = document.getElementById('canvas_main')
-            // this.vueCanvas = canvas.getContext('2d')
-            // this.draw_load_page()
+        document.addEventListener('keyup', this.keypress_listener) // huge difference between 'keyup', 'keydown', and 'keypress'! 
 
         // REPLACE above if using Konva...
         this.Konva_canvas_Stage = new Konva.Stage({

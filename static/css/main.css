@@ -14,7 +14,7 @@ header {
     /* border-bottom: 5px solid #EDF7E1; */
 }
 body {    
-    background-color: rgb(31, 0, 0);
+    background-color: rgb(0, 54, 41);
     color: white;
     font-family: 'Advent Pro', sans-serif;
 }
@@ -51,7 +51,7 @@ a {
     margin: 1%;
 }
 #div_konva_canvas {  /* MAIN CANVAS HERE */
-    background-color: rgb(0, 88, 219);
+    background-color: rgb(0, 167, 130);
     width: 1300px;
     height: 1100px;
     margin: 1%;
