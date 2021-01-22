@@ -25,6 +25,10 @@ footer {
     /* border: 1px dashed grey; */
     margin: 1%;
 }
+.main_text {
+    max-width: 50%;
+    margin-left: 25%;
+}
 form {
     /* display: flex; */
     justify-content: center;

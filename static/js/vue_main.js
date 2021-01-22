@@ -679,7 +679,7 @@ let vue_app = new Vue({
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/pixabay_Grafikingenieur_concrete-mixer-5630778.svg', (cement) => {
+            Konva.Image.fromURL('static/media/pixabay_Grafikingenieur_cement-mixer-5630778.svg', (cement) => {
                 cement.setAttrs({
                     x: random_x,
                     y: random_y,
@@ -713,6 +713,28 @@ let vue_app = new Vue({
             })
 
         },
+        konva_image_banana_monkey: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {
+            
+            console.log('konva_image_banana_monkey()')
+            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/pixabay_Clker-Free-Vector-Images_29580 images_banana_monkey-44564.svg', (banana_monkey) => {
+                banana_monkey.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(banana_monkey)
+                this.Konva_canvas_layer1.draw()
+            })
+
+        },        
         konva_canvas_initialize: function() {
             console.log('konva_canvas_initialize() START')
 
@@ -841,13 +863,12 @@ let vue_app = new Vue({
         // Keypress listener:
         document.addEventListener('keyup', this.keypress_listener) // huge difference between 'keyup', 'keydown', and 'keypress'! 
 
-        // REPLACE above if using Konva...
         this.Konva_canvas_Stage = new Konva.Stage({
             container: 'div_konva_canvas', // this is the div name
             width: 1300,
             height: 1100,
             // color: white,
-        })        
+        })
         this.Konva_canvas_layer1 = new Konva.Layer()
         this.Konva_canvas_Stage.add(this.Konva_canvas_layer1)
         this.konva_canvas_initialize()
@@ -898,7 +919,7 @@ let vue_app = new Vue({
             // KeyC: () => this.draw_face(),
             KeyC: () => this.konva_image_cement_mixer_truck(),
             KeyV: 1, 
-            KeyB: () => this.konva_image_butterfly(), 
+            KeyB: () => this.konva_image_banana_monkey(),
             KeyN: 1, 
             KeyM: 1,
 
@@ -914,7 +935,7 @@ let vue_app = new Vue({
             Numpad6: 1,
             Numpad7: 1,
             Numpad8: 1,
-            Numpad9: 1,
+            Numpad9: () => this.konva_image_butterfly(),
         
             // if (KeyboardEvent.keyCode == 91) { // 91 is the ⊞ WINDOWS key
             //     // event.preventDefault(); // won't work
