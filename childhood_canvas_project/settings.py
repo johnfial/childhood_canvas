@@ -163,12 +163,14 @@ LOGOUT_REDIRECT_URL = 'home'
 # regarding a search for PythonAnywhere error: 'The STATICFILES_DIRS setting should not contain the STATIC_ROOT setting.'
 # (seems to be a non-serious debug warning only...)
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [ BASE_DIR / 'static' ]
-if not DEBUG:
-    STATIC_ROOT = ''
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static/'),
-]
+# STATIC_ROOT = '/home/johnfial/johnfial.pythonanywhere.com/static/' # Deployed site!
+# STATICFILES_DIRS = [ BASE_DIR / 'static' ]                                                                                  # EXPERIMENTING: ENABLE THIS FOR PRODUCTION when dis-abling DEBUG=TRUE
+if not DEBUG:                                                                                                                 # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
+    STATIC_ROOT = ''                                                                                                          # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
+STATICFILES_DIRS = [                                                                                                          # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
+    os.path.join(BASE_DIR, 'static/'),                                                                                        # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
+]                                                                                                                             # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
+
 
 # https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/ :
 # CSRF_COOKIE_SECURE = True # default False                                                                                  # ENABLE THIS FOR PRODUCTION

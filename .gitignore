@@ -3,6 +3,7 @@
 secrets.*
 secrets.py
 *.mkv
+db.sqlite3
 00canvas_play/
 lab00_canvas_test_09_dec/
 
