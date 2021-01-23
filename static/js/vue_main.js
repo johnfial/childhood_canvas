@@ -713,17 +713,15 @@ let vue_app = new Vue({
             })
 
         },
-        konva_image_banana_monkey: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {
-            
-            console.log('konva_image_banana_monkey()')
-            
+        konva_image_B_banana_ape: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_B_banana_ape()')            
             // Random position:             
             var random_number = Math.random()
             let random_x = Math.floor(random_number * Math.floor(input_x))
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/pixabay_Clker-Free-Vector-Images_29580 images_banana_monkey-44564.svg', (banana_monkey) => {
+            Konva.Image.fromURL('static/media/B_pixabay_Clker-Free-Vector-Images_banana_ape-44564.svg', (banana_monkey) => {
                 banana_monkey.setAttrs({
                     x: random_x,
                     y: random_y,
@@ -733,8 +731,221 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.add(banana_monkey)
                 this.Konva_canvas_layer1.draw()
             })
+        },
+        konva_image_unicorn: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_unicorn()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
 
-        },        
+            Konva.Image.fromURL('static/media/U_pixabay_Lohrelei_unicorn-1237449.svg', (unicorn) => {
+                unicorn.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(unicorn)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_A_ambulance: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_A_ambulance()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/A_pixabay_Clker-Free-Vector-Images_ambulance-24405.svg', (ambulance) => {
+                ambulance.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(ambulance)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_F_flower: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_F_flower()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/F_pixabay_roark_rose-398576.svg', (flower) => {
+                flower.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(flower)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_H_hospital: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_H_hospital()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/H_stockio-com_hospital.svg', (hospital) => {
+                hospital.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(hospital)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_J_jar_jarra: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_J_jar_jarra()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/J_pixabay_OpenClipart-Vectors_jug-158910.svg', (jar) => {
+                jar.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(jar)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_M_mango: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_M_mango()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/M_OpenClipart-Vectors_mango-1295471.svg', (mango) => {
+                mango.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(mango)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_N_nine: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_N_nine()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/N_9_Clker-Free-Vector-Images_nine-38583.svg', (nine) => {
+                nine.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(nine)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_P_pineapple: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_P_pineapple()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/P_stux_pineapple-300038.svg', (pineapple) => {
+                pineapple.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(pineapple)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_P_pineapple: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_P_pineapple()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/P_stux_pineapple-300038.svg', (pineapple) => {
+                pineapple.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(pineapple)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_V_violin: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_V_violin()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/V_pixabay_Clker-Free-Vector-Images_violin-33610.svg', (violin) => {
+                violin.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(violin)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_T_taxi_PNG_NOT_SVG: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_T_taxi_PNG_NOT_SVG()')
+            console.log('PNG_NOT_SVG!')
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/T_taxi_freepngimg-com_33090-6-taxi-driver-clipart.png', (taxi) => {
+                taxi.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(taxi)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
         konva_canvas_initialize: function() {
             console.log('konva_canvas_initialize() START')
 
@@ -790,20 +1001,6 @@ let vue_app = new Vue({
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             console.log('konva_draw_test() END')
         },
-        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-        // A_pixabay_Clker-Free-Vector-Images_ambulance-24405.svg
-        // B_pixabay_Clker-Free-Vector-Images_ape-44564.svg
-        // F_pixabay_roark_rose-398576.svg
-        // G_pixabay_OpenClipart-Vectors_earth-147591.svg
-        // H_stockio-com_hospital.svg
-        // J_pixabay_OpenClipart-Vectors_jug-158910.svg
-        // M_OpenClipart-Vectors_mango-1295471.svg
-        // N_9_Clker-Free-Vector-Images_nine-38583.svg
-        // P_stux_pineapple-300038.svg
-        // U_pixabay_Lohrelei_unicorn-1237449.svg
-        // V_pixabay_Clker-Free-Vector-Images_violin-33610.svg
-        // PNG T_taxi_freepngimg-com_33090-6-taxi-driver-clipart.png PNG
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
         konva_test_video: function() {
             console.log('konva_test_video() START')
                 //             Vue/Youtube players:
@@ -899,65 +1096,65 @@ let vue_app = new Vue({
             // NOTE: The reason this can't be in the data raw 'data' is because it would start executing the functions. So we replace the blank data object here on 'mounted()'
             // Thanks Pete! This makes an easy lookup with a lookup on the left and a function on the right WITH arguments!
             // Space: () => console.log('I am a console.log() function, inside a key/value pair inside an object, inside the mounted function, inside the Vue shell!!!!'),
-            
             default: () => this.draw_random_circle(),
-
             F11: () => this.fullscreen_f11_toggle_data_only(),
-
             Space: () => this.clear_canvas(),
-            
+
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             KeyQ: () => this.draw_random_square('white'),
             KeyW: 1,
             KeyE: () => this.konva_image_elephant(),
             KeyR: 1,
-            KeyT: 1,
+            KeyT: () => this.konva_image_T_taxi_PNG_NOT_SVG(),
             KeyY: 1,
-            KeyU: 1,
+            KeyU: () => this.konva_image_unicorn(),
             KeyI: 1, 
             KeyO: 1, 
-            KeyP: 1,
+            KeyP: () => this.konva_image_P_pineapple(),
 
-            //  konva_image_smiley_face_svg konva_image_cement_mixer_truck
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             KeyA: () => this.draw_random_circle('red', 500, 500),
             KeyS: 1, 
             KeyD: () => this.konva_image_dolphin(),
-            KeyF: 1, 
+            KeyF: () => this.konva_image_F_flower(), 
             KeyG: 1, 
-            KeyH: 1, 
-            KeyJ: 1, 
+            KeyH: () => this.konva_image_H_hospital(), 
+            KeyJ: () => this.konva_image_J_jar_jarra(), 
             KeyK: 1, 
             KeyL: 1,
 
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             KeyZ: 1,
             KeyX: () => this.konva_image_smiley_face_svg(),
             // KeyC: () => this.draw_face(),
             KeyC: () => this.konva_image_cement_mixer_truck(),
-            KeyV: 1, 
-            KeyB: () => this.konva_image_banana_monkey(),
-            KeyN: 1, 
-            KeyM: 1,
+            KeyV: () => this.konva_image_V_violin(), 
+            KeyB: () => this.konva_image_B_banana_ape(),
+            KeyN: () => this.konva_image_N_nine(), 
+            KeyM: () => this.konva_image_M_mango(),
 
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             // Open some of his videos :
             // https://www.w3schools.com/jsref/met_win_open.asp :
-            Numpad0: 1,
+            Numpad0: () => window.open('https://www.youtube.com/watch?v=sYwRV7WHzm8'), // Silent Night
             Numpad1: () => window.open('https://www.youtube.com/watch?v=zRxX63txOXk'), // Pupu Hinuhinu
-            Numpad2: () => window.open('https://www.youtube.com/watch?v=ssHkMWcGat4&feature=emb_title'), // Arecibo Observatory collapse from 1 Dec 2020
-            // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
+            Numpad2: () => window.open('https://www.youtube.com/watch?v=ssHkMWcGat4'), // Arecibo Observatory collapse from 1 Dec 2020
+                // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
             Numpad3: () => window.open('https://www.youtube.com/watch?v=FezVApPddqU'), // Mele Kalikimaka psych version
-            Numpad4: 1,
+            Numpad4: () => window.open('https://www.youtube.com/watch?v=mjcuxw_HJtw'), // Humuhumunukunukuapua'a
             Numpad5: 1,
             Numpad6: 1,
             Numpad7: 1,
             Numpad8: 1,
             Numpad9: () => this.konva_image_butterfly(),
         
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             // if (KeyboardEvent.keyCode == 91) { // 91 is the ⊞ WINDOWS key
             //     // event.preventDefault(); // won't work
             //     console.log("Win Key was clicked.")
             // }
         }
         console.log(`mounted() END`)
-        // END MOUNTED
     },
     created: function() { // created()  >>  mounted()
         console.log('created() START')
