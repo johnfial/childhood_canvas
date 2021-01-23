@@ -808,7 +808,7 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_J_jar_jarra: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+        konva_image_J_jar_jarra: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1.5) {            
             console.log('konva_image_J_jar_jarra()')            
             // Random position:             
             var random_number = Math.random()
@@ -827,7 +827,7 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_M_mango: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+        konva_image_M_mango: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.1) {            
             console.log('konva_image_M_mango()')            
             // Random position:             
             var random_number = Math.random()
@@ -846,7 +846,7 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_N_nine: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+        konva_image_N_nine: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
             console.log('konva_image_N_nine()')            
             // Random position:             
             var random_number = Math.random()
@@ -865,7 +865,7 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_P_pineapple: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+        konva_image_P_pineapple: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
             console.log('konva_image_P_pineapple()')            
             // Random position:             
             var random_number = Math.random()
@@ -884,22 +884,22 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_P_pineapple: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
-            console.log('konva_image_P_pineapple()')            
+        konva_image_S_snake: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
+            console.log('konva_image_S_snake()')            
             // Random position:             
             var random_number = Math.random()
             let random_x = Math.floor(random_number * Math.floor(input_x))
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/P_stux_pineapple-300038.svg', (pineapple) => {
-                pineapple.setAttrs({
+            Konva.Image.fromURL('static/media/pixabay_OpenClipart-Vectors_rattlesnake-159135.svg', (snake) => {
+                snake.setAttrs({
                     x: random_x,
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
                 })
-                this.Konva_canvas_layer1.add(pineapple)
+                this.Konva_canvas_layer1.add(snake)
                 this.Konva_canvas_layer1.draw()
             })
         },
@@ -922,7 +922,7 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_T_taxi_PNG_NOT_SVG: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+        konva_image_T_taxi_PNG_NOT_SVG: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
             console.log('konva_image_T_taxi_PNG_NOT_SVG()')
             console.log('PNG_NOT_SVG!')
             // Random position:             
@@ -942,7 +942,46 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+        konva_image_W_whiskey: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.2) {            
+            console.log('konva_image_W_whiskey()')
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/pixabay_juhele_Whiskey_irish-4397841.svg', (whiskey) => {
+                whiskey.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(whiskey)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_X_xylophone: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
+            console.log('konva_image_X_xylophone()')
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/pixabay_Clker-Free-Vector-Image_X_xylophone-308024.svg', (xylophone) => {
+                xylophone.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                })
+                this.Konva_canvas_layer1.add(xylophone)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+
+        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /  
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
@@ -1102,7 +1141,7 @@ let vue_app = new Vue({
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             KeyQ: () => this.draw_random_square('white'),
-            KeyW: 1,
+            KeyW: () => this.konva_image_W_whiskey(),
             KeyE: () => this.konva_image_elephant(),
             KeyR: 1,
             KeyT: () => this.konva_image_T_taxi_PNG_NOT_SVG(),
@@ -1114,7 +1153,7 @@ let vue_app = new Vue({
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             KeyA: () => this.draw_random_circle('red', 500, 500),
-            KeyS: 1, 
+            KeyS: () => this.konva_image_S_snake(), 
             KeyD: () => this.konva_image_dolphin(),
             KeyF: () => this.konva_image_F_flower(), 
             KeyG: 1, 
@@ -1124,8 +1163,8 @@ let vue_app = new Vue({
             KeyL: 1,
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            KeyZ: 1,
-            KeyX: () => this.konva_image_smiley_face_svg(),
+            KeyZ: () => this.konva_image_smiley_face_svg(),
+            KeyX: () => this.konva_image_X_xylophone(),
             // KeyC: () => this.draw_face(),
             KeyC: () => this.konva_image_cement_mixer_truck(),
             KeyV: () => this.konva_image_V_violin(), 
