@@ -4,8 +4,9 @@ secrets.*
 secrets.py
 *.mkv
 db.sqlite3
-00canvas_play/
-lab00_canvas_test_09_dec/
+Pipfile*
+Pipfile
+Pipfile.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

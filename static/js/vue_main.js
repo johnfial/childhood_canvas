@@ -790,6 +790,20 @@ let vue_app = new Vue({
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             console.log('konva_draw_test() END')
         },
+        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+        // A_pixabay_Clker-Free-Vector-Images_ambulance-24405.svg
+        // B_pixabay_Clker-Free-Vector-Images_ape-44564.svg
+        // F_pixabay_roark_rose-398576.svg
+        // G_pixabay_OpenClipart-Vectors_earth-147591.svg
+        // H_stockio-com_hospital.svg
+        // J_pixabay_OpenClipart-Vectors_jug-158910.svg
+        // M_OpenClipart-Vectors_mango-1295471.svg
+        // N_9_Clker-Free-Vector-Images_nine-38583.svg
+        // P_stux_pineapple-300038.svg
+        // U_pixabay_Lohrelei_unicorn-1237449.svg
+        // V_pixabay_Clker-Free-Vector-Images_violin-33610.svg
+        // PNG T_taxi_freepngimg-com_33090-6-taxi-driver-clipart.png PNG
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
         konva_test_video: function() {
             console.log('konva_test_video() START')
                 //             Vue/Youtube players:
