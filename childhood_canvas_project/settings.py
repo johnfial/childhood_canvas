@@ -175,7 +175,7 @@ STATICFILES_DIRS = [                                                            
 # https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/ :
 # CSRF_COOKIE_SECURE = True # default False                                                                                  # ENABLE THIS FOR PRODUCTION
 # SESSION_COOKIE_SECURE = True # # default False                                                                             # ENABLE THIS FOR PRODUCTION
-# SECURE_SSL_REDIRECT = True # # default False                                                                             # ENABLE THIS FOR PRODUCTION # https://docs.djangoproject.com/en/3.1/ref/settings/#secure-ssl-redirect
+# SECURE_SSL_REDIRECT = True # # default False                                                                               # ENABLE THIS FOR PRODUCTION # https://docs.djangoproject.com/en/3.1/ref/settings/#secure-ssl-redirect
 
 
 

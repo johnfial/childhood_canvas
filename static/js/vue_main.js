@@ -1,18 +1,16 @@
 // John Fial, 2020-2021 PDX Code Guild, 
 // Capstone Project 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+    // https://github.com/andrewvasilchuk/vue-lazy-youtube-video
+    // import Vue from 'vue';
+    // import { VueLazyYoutubeVideo } from 'vue-lazy-youtube-video'; 
 
+    // // as a plugin
+    // Vue.use(VueLazyYoutubeVideo.Plugin);
+    // // as a component
+    // Vue.use('LazyYoutubeVideo', VueLazyYoutubeVideo.default)
 
-
-// https://github.com/andrewvasilchuk/vue-lazy-youtube-video
-// import Vue from 'vue';
-// import { VueLazyYoutubeVideo } from 'vue-lazy-youtube-video'; 
-
-// // as a plugin
-// Vue.use(VueLazyYoutubeVideo.Plugin);
-// // as a component
-// Vue.use('LazyYoutubeVideo', VueLazyYoutubeVideo.default)
-
+// Vue.use(VueYouTubeEmbed)
 
 let vue_app = new Vue({
     el: '#vue_app',
@@ -1042,6 +1040,29 @@ let vue_app = new Vue({
         },
         konva_test_video: function() {
             console.log('konva_test_video() START')
+            // https://www.npmjs.com/package/vue-js-modal
+            // https://v3.vuejs.org/examples/modal.html#modal-component
+            // https://www.w3schools.com/howto/howto_css_modals.asp // CSS Modal
+            // https://reactgo.com/vue-modal-component/
+
+
+            // Vue.use(VueYouTubeEmbed) // https://github.com/kaorun343/vue-youtube-embed#readme
+
+        },
+        konva_test_video_old: function(video_URL_string) {
+
+                // <iframe 
+                // width="560" 
+                // height="315" 
+                // src="https://www.youtube.com/embed/zRxX63txOXk" 
+                // src = video_URL_string
+                // frameborder="0" 
+                // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                // allowfullscreen
+                // ></iframe>
+
+            console.log('konva_test_video_old() START')
+            // Vue.use(VueYouTubeEmbed)
                 //             Vue/Youtube players:
                 // - https://developers.google.com/youtube/iframe_api_reference
                 // - https://github.com/andrewvasilchuk/vue-lazy-youtube-video
@@ -1175,13 +1196,14 @@ let vue_app = new Vue({
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             // Open some of his videos :
             // https://www.w3schools.com/jsref/met_win_open.asp :
-            Numpad0: () => window.open('https://www.youtube.com/watch?v=sYwRV7WHzm8'), // Silent Night
+            // Numpad0: () => window.open('https://www.youtube.com/watch?v=sYwRV7WHzm8'), // Silent Night
+            Numpad0: () => this.konva_test_video('https://www.youtube.com/watch?v=zRxX63txOXk'),
             Numpad1: () => window.open('https://www.youtube.com/watch?v=zRxX63txOXk'), // Pupu Hinuhinu
             Numpad2: () => window.open('https://www.youtube.com/watch?v=ssHkMWcGat4'), // Arecibo Observatory collapse from 1 Dec 2020
                 // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
             Numpad3: () => window.open('https://www.youtube.com/watch?v=FezVApPddqU'), // Mele Kalikimaka psych version
             Numpad4: () => window.open('https://www.youtube.com/watch?v=mjcuxw_HJtw'), // Humuhumunukunukuapua'a
-            Numpad5: 1,
+            Numpad5: () => window.open('https://www.youtube.com/watch?v=1h2BqSS5R3U'), // Alicia Keys Puts An At-Home Spin On Flo Rida's "My House"
             Numpad6: 1,
             Numpad7: 1,
             Numpad8: 1,
