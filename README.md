@@ -9,24 +9,17 @@
  
  -->
 
-<!--  -->
+# Project Overview
+
+- Childhood Canvas is a visual play sandbox for older babies and toddlers, intended for full-screen (lock screen), very limited-feature use.
+- The deployed version can be accessed at https://johnfial.pythonanywhere.com . Note that the deployed version is usually at least 1 week delayed.
 
 <!--  -->
 # Childhood Canvas, o 'Tela di infanzia'
    - ### by John Fial
    - ### PDX Code Guild, Class Orca, Oct 2020 – Jan 2021
    - ### Capstone Proposal, 28/29 December, 2020
-
-<!--  -->
-<!--  -->
-<!--  -->
-# Project Overview
-
-- Childhood Canvas is a visual play sandbox for older babies and toddlers, intended for full-screen (lock screen), very limited-feature use.
-- A deployed version, usually slightly older, can be accessed at https://johnfial.pythonanywhere.com 
-
-<!--  -->
-<!--  -->
+   
 <!--  -->
 ### Project Philosophy:
    -  Apart from most existing programs, it is meant to **stimulate two-handed interaction** with the digital keyboard, as opposed to the analog mouse. 
@@ -34,8 +27,7 @@
    - The project should also make it obvious to parents/adult caretakers just how much neurological 'masturbation' -- if I may use that term -- is involved in the human-computer's iconic input > output cycle. Video games, of couse, are the ultimate epitome of this cycle. (And although today's systems are somewhat beginning to implement a 3D/gravitational/Z-axis/VR aspect, we are a long way from either A) directly connecting to the brain, or B) adding other sensory informaiton, such as smells/tastes, temperature/skin pressure etc., ... but I digress! )
    - Indeed, **the goal is for the canvas to be anti-addictive**. That is, in contrast with the infinite capabilities of computers, the young user should exhaust interest in the canvas' capabilities within 20-45 minutes. After a week of such daily sessions, the canvas should allow new features (my job) as the child grows.
 
-<!--  -->
-<!--  -->
+
 <!--  -->
 # Features / User Stories
 
