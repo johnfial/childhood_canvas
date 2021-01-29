@@ -213,6 +213,11 @@ let vue_app = new Vue({
             stroke: 'black',
             strokeWidth: 4
         },
+
+        // Video Modal tests:
+        modal1: null,
+        btn1: null,
+        span1: null,
     },
     methods: {
 
@@ -481,8 +486,8 @@ let vue_app = new Vue({
             }
         },
 
-        // Tree canvas:
-        draw_tree_animated_from_NicoleEyO: function() { // code/tree modified from https://codepen.io/ntaylor09/pen/vKGePr :            
+        // Tree canvas MODIFIED FROM, CREDITS TO: https://codepen.io/ntaylor09/pen/vKGePr :            
+        draw_tree_animated_from_NicoleEyO: function() {
                 
             var ctx = this.vueCanvas_tree
             
@@ -601,6 +606,8 @@ let vue_app = new Vue({
         page_reload: function() {
             console.log('page_reload() START')
         },
+
+        // Images:
         konva_image_elephant: function(input_x=this.canvas_width, input_y=this.canvas_height) {
             
             console.log('konva_image_elephant()')
@@ -1038,15 +1045,51 @@ let vue_app = new Vue({
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             console.log('konva_draw_test() END')
         },
+        video_modal_initialize: function() {
+            // <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+            // <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
+            // Get the modal
+            this.modal1 = document.getElementById("myModal");
+
+            // Get the button that opens the modal
+            this.btn1 = document.getElementById("myBtn");
+
+            // Get the <span> element that closes the modal
+            this.span1 = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on the button, open the modal
+            this.btn1.onclick = function() {
+                this.modal.style.display = "block";
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            this.span1.onclick = function() {
+                this.modal1.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == this.modal1) {
+                    this.modal1.style.display = "none";
+                }
+            }
+            // <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        },
         konva_test_video: function() {
             console.log('konva_test_video() START')
+            
+            // Notes:
             // https://www.npmjs.com/package/vue-js-modal
             // https://v3.vuejs.org/examples/modal.html#modal-component
             // https://www.w3schools.com/howto/howto_css_modals.asp // CSS Modal
             // https://reactgo.com/vue-modal-component/
 
+            // test copy:
+            this.modal1.style.display = "block";
 
-            // Vue.use(VueYouTubeEmbed) // https://github.com/kaorun343/vue-youtube-embed#readme
+            console.log('konva_test_video() END')
+
+
 
         },
         konva_test_video_old: function(video_URL_string) {
@@ -1143,13 +1186,13 @@ let vue_app = new Vue({
         this.Konva_canvas_layer1 = new Konva.Layer()
         this.Konva_canvas_Stage.add(this.Konva_canvas_layer1)
         this.konva_canvas_initialize()
-        // this.konva_test_video()
+        this.video_modal_initialize()
 
-        // Below is the separate 300x300 canvas for the 'tree' in the top right
-        // ENABLE FOR PRODUCTION!                                                                                                           ENABLE FOR PRODUCTION! 
-        var canvas_tree = document.getElementById('canvas_tree')
-        this.vueCanvas_tree = canvas_tree.getContext('2d')       
-        this.draw_tree_animated_from_NicoleEyO()
+        // // Below is the separate 300x300 canvas for the 'tree' in the top right
+        // // ENABLE FOR PRODUCTION!                                                                                                           ENABLE FOR PRODUCTION! 
+        // var canvas_tree = document.getElementById('canvas_tree')
+        // this.vueCanvas_tree = canvas_tree.getContext('2d')       
+        // this.draw_tree_animated_from_NicoleEyO()
 
         // BIG LIST of keypress / draw function lookups:
         this.keys_and_functions = {             
@@ -1194,20 +1237,17 @@ let vue_app = new Vue({
             KeyM: () => this.konva_image_M_mango(),
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // Open some of his videos :
-            // https://www.w3schools.com/jsref/met_win_open.asp :
-            // Numpad0: () => window.open('https://www.youtube.com/watch?v=sYwRV7WHzm8'), // Silent Night
-            Numpad0: () => this.konva_test_video('https://www.youtube.com/watch?v=zRxX63txOXk'),
+            // Open some videos :
+            Numpad0: () => window.open('https://www.youtube.com/watch?v=sYwRV7WHzm8'), // Silent Night
             Numpad1: () => window.open('https://www.youtube.com/watch?v=zRxX63txOXk'), // Pupu Hinuhinu
-            Numpad2: () => window.open('https://www.youtube.com/watch?v=ssHkMWcGat4'), // Arecibo Observatory collapse from 1 Dec 2020
-                // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
+            Numpad2: () => window.open('https://www.youtube.com/watch?v=ssHkMWcGat4'), // Arecibo Observatory collapse from 1 Dec 2020, // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
             Numpad3: () => window.open('https://www.youtube.com/watch?v=FezVApPddqU'), // Mele Kalikimaka psych version
             Numpad4: () => window.open('https://www.youtube.com/watch?v=mjcuxw_HJtw'), // Humuhumunukunukuapua'a
             Numpad5: () => window.open('https://www.youtube.com/watch?v=1h2BqSS5R3U'), // Alicia Keys Puts An At-Home Spin On Flo Rida's "My House"
-            Numpad6: 1,
+            Numpad6: () => this.konva_image_butterfly(),
             Numpad7: 1,
-            Numpad8: 1,
-            Numpad9: () => this.konva_image_butterfly(),
+            Numpad8: () => this.konva_test_video('https://www.youtube.com/watch?v=zRxX63txOXk'),
+            Numpad9: 1,
         
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             // if (KeyboardEvent.keyCode == 91) { // 91 is the ⊞ WINDOWS key
