@@ -2,6 +2,8 @@
 // Capstone Project 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
+
+
 let vue_app = new Vue({
     el: '#vue_app',
     data: {                
@@ -247,8 +249,8 @@ let vue_app = new Vue({
         // / / / / / / / / / / / / / END SECOND / / / / / / / / / / / / / / / / / / 
 
         },
-        konva_test_video: function() {
-            console.log('konva_test_video() START')
+        video_modal_test_2_NumPad8: function() {
+            console.log('video_modal_test_2_NumPad8() START')
             
         // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             // Notes:
@@ -271,8 +273,13 @@ let vue_app = new Vue({
             // this.modal1.style.display = "block"
             this.showModal1 = true
 
+            // Set the focus: https://www.w3schools.com/jsref/met_html_focus.asp
+            // https://www.w3schools.com/jsref/event_onfocus.asp
+            
 
-            console.log('konva_test_video() END')
+
+
+            console.log('video_modal_test_2_NumPad8() END')
 
 
 
@@ -584,7 +591,7 @@ let vue_app = new Vue({
                 ctx.beginPath();
                 ctx.moveTo(trunk.x, H-5);
                 ctx.lineTo(trunk.x, H-trunk.y);
-                ctx.strokeStyle = "black";
+                ctx.strokeStyle = "brown";
                 ctx.lineWidth = line_width;
                 ctx.stroke();
                 
@@ -622,29 +629,31 @@ let vue_app = new Vue({
                     new_start_points.push(ep1);
                     new_start_points.push(ep2);
                 }
-                //Lets add some more color
-                if(length < 10) ctx.strokeStyle = "green";
+                // Let's add some more color
+                if(length < 10) ctx.strokeStyle = "red";
                 else ctx.strokeStyle = "brown";
                 ctx.stroke();
                 start_points = new_start_points;
-                //recursive call - only if length is more than 2.
-                //Else it will fall in an long loop
+                // recursive call - only if length is more than 2.
+                // Else it will fall in a long loop
                 if(length > 2) setTimeout(branches, 100);
 
+                // CHANGE TIME HERE :
+                // CHANGE TIME HERE :
+                // CHANGE TIME HERE :
+                // CHANGE TIME HERE :
                 // Time in miliseconds, so 1,000 = 1s or 5,000 = 5s, etc.
-                else setTimeout(init, 2500);
-            }
-            
+                else setTimeout(init, 500);
+            }            
             function get_endpoint(x, y, a, length)
             {
-                //This function will calculate the end points based on simple vectors
-                //http://physics.about.com/od/mathematics/a/VectorMath.htm
-                //You can read about basic vectors from this link
+                // This function will calculate the end points based on simple vectors
+                // You can read about basic vectors from this link:
+                // http://physics.about.com/od/mathematics/a/VectorMath.htm
                 var epx = x + length * Math.cos(a*Math.PI/180);
                 var epy = y + length * Math.sin(a*Math.PI/180);
                 return {x: epx, y: epy};
             }
-
             init();
         },
 
@@ -1189,17 +1198,37 @@ let vue_app = new Vue({
 
         this.video_modal_initialize()
 
-        // Below is the separate 300x300 canvas for the 'tree' in the top right
-        // ENABLE FOR PRODUCTION!                                                                                                           ENABLE FOR PRODUCTION! 
-        var canvas_tree = document.getElementById('canvas_tree')
-        this.vueCanvas_tree = canvas_tree.getContext('2d')       
-        this.draw_tree_animated_from_NicoleEyO()
+        // // Below is the separate 300x300 canvas for the 'tree' in the top right
+        // // ENABLE FOR PRODUCTION!                                                                                                           ENABLE FOR PRODUCTION! 
+        // var canvas_tree = document.getElementById('canvas_tree')
+        // this.vueCanvas_tree = canvas_tree.getContext('2d')       
+        // this.draw_tree_animated_from_NicoleEyO()
 
         // BIG LIST of keypress / draw function lookups:
         this.keys_and_functions = {             
             // NOTE: The reason this can't be in the data raw 'data' is because it would start executing the functions. So we replace the blank data object here on 'mounted()'
             // Thanks Pete! This makes an easy lookup with a lookup on the left and a function on the right WITH arguments!
             // Space: () => console.log('I am a console.log() function, inside a key/value pair inside an object, inside the mounted function, inside the Vue shell!!!!'),
+        
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+            // if (KeyboardEvent.keyCode == 91) { // 91 is the ⊞ WINDOWS key
+            //     // event.preventDefault(); // won't work
+            //     console.log("Win Key was clicked.")
+            // }
+
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / Numpad Videos :
+            Numpad0: () => window.open('https://www.youtube.com/watch?v=sYwRV7WHzm8'), // Silent Night
+            Numpad1: () => window.open('https://www.youtube.com/watch?v=zRxX63txOXk'), // Pupu Hinuhinu
+            Numpad2: () => window.open('https://www.youtube.com/watch?v=ssHkMWcGat4'), // Arecibo Observatory collapse from 1 Dec 2020, // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
+            Numpad3: () => window.open('https://www.youtube.com/watch?v=FezVApPddqU'), // Mele Kalikimaka psych version
+            Numpad4: () => window.open('https://www.youtube.com/watch?v=mjcuxw_HJtw'), // Humuhumunukunukuapua'a (Hawai'i state fish)
+            Numpad5: () => window.open('https://www.youtube.com/watch?v=1h2BqSS5R3U'), // Alicia Keys Puts An At-Home Spin On Flo Rida's "My House"
+            Numpad6: () => this.konva_image_butterfly(),
+            Numpad7: 1,
+            Numpad8: () => this.video_modal_test_2_NumPad8(),
+            Numpad9: 1,
+
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             default: () => this.draw_random_circle(),
             F11: () => this.fullscreen_f11_toggle_data_only(),
             Space: () => this.clear_canvas(),
@@ -1236,28 +1265,61 @@ let vue_app = new Vue({
             KeyB: () => this.konva_image_B_banana_ape(),
             KeyN: () => this.konva_image_N_nine(), 
             KeyM: () => this.konva_image_M_mango(),
-
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // Open some videos :
-            Numpad0: () => window.open('https://www.youtube.com/watch?v=sYwRV7WHzm8'), // Silent Night
-            Numpad1: () => window.open('https://www.youtube.com/watch?v=zRxX63txOXk'), // Pupu Hinuhinu
-            Numpad2: () => window.open('https://www.youtube.com/watch?v=ssHkMWcGat4'), // Arecibo Observatory collapse from 1 Dec 2020, // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
-            Numpad3: () => window.open('https://www.youtube.com/watch?v=FezVApPddqU'), // Mele Kalikimaka psych version
-            Numpad4: () => window.open('https://www.youtube.com/watch?v=mjcuxw_HJtw'), // Humuhumunukunukuapua'a
-            Numpad5: () => window.open('https://www.youtube.com/watch?v=1h2BqSS5R3U'), // Alicia Keys Puts An At-Home Spin On Flo Rida's "My House"
-            Numpad6: () => this.konva_image_butterfly(),
-            Numpad7: 1,
-            Numpad8: () => this.konva_test_video(),
-            Numpad9: 1,
-        
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // if (KeyboardEvent.keyCode == 91) { // 91 is the ⊞ WINDOWS key
-            //     // event.preventDefault(); // won't work
-            //     console.log("Win Key was clicked.")
-            // }
         }
         console.log(`mounted() END`)
     },
+});
+
+Vue.component("modal", {
+    // template: "#modal-template"
+    props: ['src_url'],
+    template: `    
+    <transition name="modal">
+        <div class="modal-mask">
+            <div class="modal-wrapper">
+                <div class="modal-container">
+
+                    <div class="modal-header">
+                        <slot name="header">
+                        default header
+                        </slot>
+                    </div>
+
+                    <div class="modal-body">
+                        <slot name="body">
+                        body:
+                        <!-- 
+                        Removed this from <iframe> : 
+                            src = video_URL_string
+                            id="video_1"
+                            NOTE:
+                            Each URL needs the suffix "?autoplay=1" to autoplay
+                        -->
+                        <iframe
+                        width="560" 
+                        height="315" 
+                        :src=src_url
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                        allowfullscreen
+                        ></iframe>
+                        </slot>
+                    </div>
+
+                    <div class="modal-footer">
+                        <slot name="footer">
+                        default footer
+                        <button class="modal-default-button" @click="$emit('close')">
+                            OK
+                        </button>
+                        </slot>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </transition>
+    `
 });
 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 

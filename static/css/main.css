@@ -55,7 +55,7 @@ a {
     margin: 1%;
 }
 #div_konva_canvas {  /* MAIN CANVAS HERE */
-    background-color: rgb(201, 0, 167);
+    background-color: rgb(146, 0, 146);
     width: 1300px;
     height: 1100px;
     margin: 1%;
@@ -124,10 +124,11 @@ a {
 }
 
 .modal-container {
-    width: 300px;
+    /* width: 300px; */
+    width: 90%;
     margin: 0px auto;
     padding: 20px 30px;
-    background-color: #fff;
+    background-color: grey;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
