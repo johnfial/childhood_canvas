@@ -55,7 +55,7 @@ a {
     margin: 1%;
 }
 #div_konva_canvas {  /* MAIN CANVAS HERE */
-    background-color: rgb(0, 167, 130);
+    background-color: rgb(201, 0, 167);
     width: 1300px;
     height: 1100px;
     margin: 1%;
@@ -69,7 +69,7 @@ a {
 /* https://www.w3schools.com/howto/howto_css_modals.asp */
  /* The Modal (background) */
  .modal {
-    display: none; /* Hidden by default */
+    display: block; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     left: 0;
@@ -78,7 +78,7 @@ a {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
   }  
   /* Modal Content/Box */
   .modal-content {
@@ -86,11 +86,12 @@ a {
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 93%; /* Could be more or less, depending on screen size */
+    color: red;
   }  
-  /* The Close Button */
+  /* The 'X' Close Button */
   .close {
-    color: #aaa;
+    color: black;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -100,7 +101,74 @@ a {
     color: black;
     text-decoration: none;
     cursor: pointer;
-  } 
+  }
+
+
+/* - - - - - - - - - - - - - - - - - - - - - SECOND SET OF MODAL EXPERIMENTS - - - - - - - - - - - - - -  */
+/* FROM https://vuejs.org/v2/examples/modal.html */
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: table;
+    transition: opacity 0.3s ease;
+}
+
+.modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.modal-container {
+    width: 300px;
+    margin: 0px auto;
+    padding: 20px 30px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    transition: all 0.3s ease;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+    margin-top: 0;
+    color: #42b983;
+}
+
+.modal-body {
+    margin: 20px 0;
+}
+
+.modal-default-button {
+    float: right;
+}
+
+/*
+* The following styles are auto-applied to elements with
+* transition="modal" when their visibility is toggled
+* by Vue.js.
+*
+* You can easily play with the modal transition by editing
+* these styles.
+*/
+
+.modal-enter {
+    opacity: 0;
+}
+
+.modal-leave-active {
+    opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
 /* - - - - - - - - - - - - - - - - - - - - -  END MODAL EXPERIMENTS - - - - - - - - - - - - - -  */
 
 

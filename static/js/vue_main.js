@@ -1,31 +1,10 @@
 // John Fial, 2020-2021 PDX Code Guild, 
 // Capstone Project 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-    // https://github.com/andrewvasilchuk/vue-lazy-youtube-video
-    // import Vue from 'vue';
-    // import { VueLazyYoutubeVideo } from 'vue-lazy-youtube-video'; 
-
-    // // as a plugin
-    // Vue.use(VueLazyYoutubeVideo.Plugin);
-    // // as a component
-    // Vue.use('LazyYoutubeVideo', VueLazyYoutubeVideo.default)
-
-// Vue.use(VueYouTubeEmbed)
 
 let vue_app = new Vue({
     el: '#vue_app',
-    data: {
-        fullscreen: false,
-
-        vueCanvas: null, // unused
-        vueCanvas_tree: null,
-        Konva_canvas_Stage: null,
-
-        is_drawing: false,
-        x: null,
-        y: null,
-        keys_and_functions: {}, // we can't have the arrow () => functions here, so this is blank and they'll load on mounted()
-                
+    data: {                
         random_css_color_list: [ // thanks to https://gist.github.com/bobspace/2712980 for the color list! :
             'white', 'black',
             'white', 'black',
@@ -197,6 +176,17 @@ let vue_app = new Vue({
             "Yellow",
         ],
 
+        fullscreen: false,
+
+        vueCanvas: null, // unused
+        vueCanvas_tree: null,
+        Konva_canvas_Stage: null,
+
+        is_drawing: false,
+        x: null,
+        y: null,
+        keys_and_functions: {}, // we can't have the arrow () => functions here, so this is blank and they'll load on mounted()
+
         canvas_width: 1300, // unused
         canvas_height: 1100, // unused
         
@@ -215,11 +205,79 @@ let vue_app = new Vue({
         },
 
         // Video Modal tests:
-        modal1: null,
-        btn1: null,
-        span1: null,
+        // modal1: null,
+        // btn1: null,
+        // span1: {
+        //     onclick: function() {
+        //         this.modal1.style.display = "none";
+        //     }
+        // },
+        showModal1: false,
     },
     methods: {
+        // <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        // <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        video_modal_initialize: function() {
+            // / / / / / / / / / / / / / FIRST TEST START / / / / / / / / / / / / / / / / / / 
+            // // Get the modal
+            // this.modal1 = document.getElementById("myModal")
+
+            // // Get the button that opens the modal
+            // this.btn1 = document.getElementById("myBtn")
+
+            // // Get the <span> element that closes the modal
+            // this.span1 = document.getElementsByClassName("close")[0]
+            
+            // // When the user clicks on <span> (x), close the modal
+            // // this.span1.onclick = function() {
+            // //     this.modal1.style.display = "none"
+            // // }
+
+            // // // When the user clicks anywhere outside of the modal, close it
+            // // window.onclick = function(event) {
+            // //     if (event.target == this.modal1) {
+            // //         this.modal1.style.display = "none"
+            // //     }
+            // // }
+        // / / / / / / / / / / / / / FIRST TEST / / / / / / / / / / / / / / / / / / 
+
+
+
+        // / / / / / / / / / / / / / SECOND TEST, COMPONENT FROM https://vuejs.org/v2/examples/modal.html / / / / / / / / / / / / / / / / / / 
+        // / / / / / / / / / / / / / END SECOND / / / / / / / / / / / / / / / / / / 
+
+        },
+        konva_test_video: function() {
+            console.log('konva_test_video() START')
+            
+        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+            // Notes:
+            // https://www.npmjs.com/package/vue-js-modal
+            // https://v3.vuejs.org/examples/modal.html#modal-component
+            // https://www.w3schools.com/howto/howto_css_modals.asp // CSS Modal
+            // https://reactgo.com/vue-modal-component/
+
+                // with Vue / component open and close a modal:
+                // https://stackoverflow.com/questions/61976043/how-do-i-open-and-close-a-modal-programmatically-using-vue-js
+
+                //  Modal plugin?
+                // https://vue-final-modal.org/examples/
+
+                // Vue docs example:
+                // https://vuejs.org/v2/examples/modal.html
+
+
+            // open the modal
+            // this.modal1.style.display = "block"
+            this.showModal1 = true
+
+
+            console.log('konva_test_video() END')
+
+
+
+        },
+        // <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
         draw_test_smiley: function() {   // unused          
         },
@@ -499,7 +557,7 @@ let vue_app = new Vue({
             function init() {
                 
                 //filling the canvas
-                ctx.fillStyle = "black";
+                ctx.fillStyle = "white";
                 ctx.fillRect(0, 0, W, H);
                 
                 //length of the trunk - 100-150
@@ -526,7 +584,7 @@ let vue_app = new Vue({
                 ctx.beginPath();
                 ctx.moveTo(trunk.x, H-5);
                 ctx.lineTo(trunk.x, H-trunk.y);
-                ctx.strokeStyle = "brown";
+                ctx.strokeStyle = "black";
                 ctx.lineWidth = line_width;
                 ctx.stroke();
                 
@@ -986,10 +1044,6 @@ let vue_app = new Vue({
             })
         },
 
-        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /  
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
         konva_canvas_initialize: function() {
             console.log('konva_canvas_initialize() START')
 
@@ -1006,7 +1060,7 @@ let vue_app = new Vue({
             var welcome_text = new Konva.Text({
                 x: 400,
                 y: 50,
-                text: `Welcome to Childhood Canvas, \nPlease go grab some tea of 'anise. \nNow you're on campus! \n\nMake your browser fullscreen, \nClick the keyboard's buttons, find some beans, \nAnd remember: share this page as a meme!`,
+                text: `Welcome to Childhood Canvas, \nPlease go grab a tea of 'anise. \nNow you're on campus! \n\nMake your browser fullscreen, \nClick the keyboard's buttons, find some beans, \nAnd remember to share this page as a meme!`,
                 fontSize: 30,
                 fontFamily: `Advent Pro`,
                 fill: 'black',
@@ -1045,64 +1099,8 @@ let vue_app = new Vue({
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             console.log('konva_draw_test() END')
         },
-        video_modal_initialize: function() {
-            // <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-            // <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
-            // Get the modal
-            this.modal1 = document.getElementById("myModal");
-
-            // Get the button that opens the modal
-            this.btn1 = document.getElementById("myBtn");
-
-            // Get the <span> element that closes the modal
-            this.span1 = document.getElementsByClassName("close")[0];
-
-            // When the user clicks on the button, open the modal
-            this.btn1.onclick = function() {
-                this.modal.style.display = "block";
-            }
-
-            // When the user clicks on <span> (x), close the modal
-            this.span1.onclick = function() {
-                this.modal1.style.display = "none";
-            }
-
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-                if (event.target == this.modal1) {
-                    this.modal1.style.display = "none";
-                }
-            }
-            // <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-        },
-        konva_test_video: function() {
-            console.log('konva_test_video() START')
-            
-            // Notes:
-            // https://www.npmjs.com/package/vue-js-modal
-            // https://v3.vuejs.org/examples/modal.html#modal-component
-            // https://www.w3schools.com/howto/howto_css_modals.asp // CSS Modal
-            // https://reactgo.com/vue-modal-component/
-
-            // test copy:
-            this.modal1.style.display = "block";
-
-            console.log('konva_test_video() END')
-
-
-
-        },
         konva_test_video_old: function(video_URL_string) {
 
-                // <iframe 
-                // width="560" 
-                // height="315" 
-                // src="https://www.youtube.com/embed/zRxX63txOXk" 
-                // src = video_URL_string
-                // frameborder="0" 
-                // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                // allowfullscreen
-                // ></iframe>
 
             console.log('konva_test_video_old() START')
             // Vue.use(VueYouTubeEmbed)
@@ -1110,7 +1108,6 @@ let vue_app = new Vue({
                 // - https://developers.google.com/youtube/iframe_api_reference
                 // - https://github.com/andrewvasilchuk/vue-lazy-youtube-video
                 // - https://github.com/kaorun343/vue-youtube-embed
-
             // COPIED from https://konvajs.org/docs/sandbox/Video_On_Canvas.html :
             var width = window.innerWidth;
             var height = window.innerHeight;
@@ -1171,6 +1168,9 @@ let vue_app = new Vue({
             // END COPY 
         },
     },
+    created: function() { // created()  >>  mounted()
+        console.log('created() START')
+    },
     mounted:function() {
         console.log(`mounted() START, with window size: ${window.innerWidth} * ${window.innerHeight}.`)
         
@@ -1186,13 +1186,14 @@ let vue_app = new Vue({
         this.Konva_canvas_layer1 = new Konva.Layer()
         this.Konva_canvas_Stage.add(this.Konva_canvas_layer1)
         this.konva_canvas_initialize()
+
         this.video_modal_initialize()
 
-        // // Below is the separate 300x300 canvas for the 'tree' in the top right
-        // // ENABLE FOR PRODUCTION!                                                                                                           ENABLE FOR PRODUCTION! 
-        // var canvas_tree = document.getElementById('canvas_tree')
-        // this.vueCanvas_tree = canvas_tree.getContext('2d')       
-        // this.draw_tree_animated_from_NicoleEyO()
+        // Below is the separate 300x300 canvas for the 'tree' in the top right
+        // ENABLE FOR PRODUCTION!                                                                                                           ENABLE FOR PRODUCTION! 
+        var canvas_tree = document.getElementById('canvas_tree')
+        this.vueCanvas_tree = canvas_tree.getContext('2d')       
+        this.draw_tree_animated_from_NicoleEyO()
 
         // BIG LIST of keypress / draw function lookups:
         this.keys_and_functions = {             
@@ -1246,7 +1247,7 @@ let vue_app = new Vue({
             Numpad5: () => window.open('https://www.youtube.com/watch?v=1h2BqSS5R3U'), // Alicia Keys Puts An At-Home Spin On Flo Rida's "My House"
             Numpad6: () => this.konva_image_butterfly(),
             Numpad7: 1,
-            Numpad8: () => this.konva_test_video('https://www.youtube.com/watch?v=zRxX63txOXk'),
+            Numpad8: () => this.konva_test_video(),
             Numpad9: 1,
         
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
@@ -1256,9 +1257,6 @@ let vue_app = new Vue({
             // }
         }
         console.log(`mounted() END`)
-    },
-    created: function() { // created()  >>  mounted()
-        console.log('created() START')
     },
 });
 

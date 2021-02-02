@@ -20,6 +20,7 @@
 
   
   {% if user.is_authenticated %}
+    <!-- START VUE APP! NOTHING OUTSIDE OF THIS DIV! -->
     <div id='vue_app'>
       
       <!-- https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
@@ -46,71 +47,133 @@
         <button class="button_in_dev"  @click="" >Current Color (dev)</button>
       </div>
 
-    <div id="div_right_logs">
+      <div id="div_right_logs">
 
-      <div id="authenticated_user_account">
-        <p>
-          Welcome user: <strong> {{ user.username }} </strong> | Thanks for logging in! | 
-            <a href="{% url 'logout' %}">Log Out</a>
-          </p>
-      </div>
-
-      <canvas 
-        id="canvas_tree"
-        width="300"
-        height="300"
-        >
-          Fallback: Yikes! Your browser cannot display this HTML5 Drawing Canvas: This is a small tree drawing, for credits (and link) see footer.
-      </canvas>
-    
-      <div>
-          {% comment %}
-              Verbatim tag in Django lets me ignore using custom delimeters for Vue vs. Django., see https://vsupalov.com/vue-js-delimiters-django/
-          {% endcomment %}
-        {% verbatim %}
-            <h1 id="mouse_position"> Mouse: {{ x }}, {{ y }} </h1>
-        {% endverbatim %}
-          <p id="last_keypress">Keyboard: 
-          </p>
-      </div>
-
-      <div>
-        <p class="class_keyboard_logs">Full keypress log:</p>
-        <p class="class_keyboard_logs" id="keyboard_logs"></p>
-      </div>
-
-      <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-      <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
-      <!-- Trigger/Open The Modal -->
-      <button id="myBtn">Open Modal</button>
-      <!-- <button id="myBtn" @click="konva_test_video">Open Modal</button> -->
-
-      <!-- The Modal -->
-      <div id="myModal" class="modal">
-      
-        <!-- Modal content -->
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <p>Some text in the Modal..</p>
+        <div id="authenticated_user_account">
+          <p>
+            Welcome user: <strong> {{ user.username }} </strong> | Thanks for logging in! | 
+              <a href="{% url 'logout' %}">Log Out</a>
+            </p>
         </div>
+
+        <canvas 
+          id="canvas_tree"
+          width="300"
+          height="300"
+          >
+            Fallback: Yikes! Your browser cannot display this HTML5 Drawing Canvas: This is a small tree drawing, for credits (and link) see footer.
+        </canvas>
       
-      </div> 
+        <div>
+            {% comment %}
+                Verbatim tag in Django lets me ignore using custom delimeters for Vue vs. Django., see https://vsupalov.com/vue-js-delimiters-django/
+            {% endcomment %}
+          {% verbatim %}
+              <h1 id="mouse_position"> Mouse: {{ x }}, {{ y }} </h1>
+          {% endverbatim %}
+            <p id="last_keypress">Keyboard: 
+            </p>
+        </div>
+
+        <div>
+          <p class="class_keyboard_logs">Full keypress log:</p>
+          <p class="class_keyboard_logs" id="keyboard_logs"></p>
+        </div>
+        <footer id="credits">
+          <!-- <div id="footer"> -->
+            <h1>Credits:</h1>
+            <ul>
+              <li>Overall: <a href="https://johnfial.github.io/" target="_blank">John Fial</a></li>
+              <li>Tree: <a href="https://codepen.io/ntaylor09/pen/vKGePr" target="_blank">Nicole Eyo</a></li>
+              <li>SVG Images: Most from <a href="https://pixabay.com/vectors/" target="_blank">Pixabay</a> , see source code.</li>
+              <!-- <li>Smiley: Pete's tutorial</li> -->
+            </ul>
+          <!-- </div> -->
+        </footer>
+      </div>
+
+      <div id="all_modals"  v-if="showModal1" @close="showModal1 = false">
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+        <!-- Modal1, component test from https://vuejs.org/v2/examples/modal.html -->
+
+          <!-- https://vuejs.org/v2/examples/modal.html -->
+          <!-- template for the modal component -->
+            <script type="text/x-template" id="modal-template">
+              <transition name="modal">
+                <div class="modal-mask">
+                  <div class="modal-wrapper">
+                    <div class="modal-container">
+
+                      <div class="modal-header">
+                        <slot name="header">
+                          default header
+                        </slot>
+                      </div>
+
+                      <div class="modal-body">
+                        <slot name="body">
+                          default body
+                        </slot>
+                      </div>
+
+                      <div class="modal-footer">
+                        <slot name="footer">
+                          default footer
+                          <button class="modal-default-button" @click="$emit('close')">
+                            OK
+                          </button>
+                        </slot>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </transition>
+            </script>
+          <!-- END template for the modal component -->
+          
+        <div v-if="showModal1" @close="showModal1 = false">
+            <span class="close">&times;</span>
+          <iframe
+          width="560" 
+          height="315" 
+          src="https://www.youtube.com/embed/zRxX63txOXk" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          ></iframe>
+
+        </div>
+
+        <!-- The Modal, working other test -->
+        <!-- <div id="myModal" class="modal">         -->
+          <!-- Modal content -->
+          <!-- <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Some text in the Modal..</p> -->
+            <!-- 
+            Removed this from <iframe> : 
+              src = video_URL_string
+              id="video_1"
+              NOTE:
+                Each URL needs the suffix "?autoplay=1" to autoplay
+            -->
+            <!-- <iframe
+            width="560" 
+            height="315" 
+            src="https://www.youtube.com/embed/zRxX63txOXk" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            ></iframe>
+          </div>        
+        </div> -->
+
+      </div>
       <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
-      <footer id="credits">
-        <!-- <div id="footer"> -->
-          <h1>Credits:</h1>
-          <ul>
-            <li>Overall: <a href="https://johnfial.github.io/" target="_blank">John Fial</a></li>
-            <li>Tree: <a href="https://codepen.io/ntaylor09/pen/vKGePr" target="_blank">Nicole Eyo</a></li>
-            <li>SVG Images: Most from <a href="https://pixabay.com/vectors/" target="_blank">Pixabay</a> , see source code.</li>
-            <!-- <li>Smiley: Pete's tutorial</li> -->
-          </ul>
-        <!-- </div> -->
-      </footer>
-    </div>
-
-
+      <!-- END VUE APP! NOTHING OUTSIDE OF THIS DIV! -->
     </div>
   {% else %}
     <div>
