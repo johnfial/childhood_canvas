@@ -89,22 +89,22 @@
       <div id="all_modals">
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
         <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
-        <!-- Modal1, component test from https://vuejs.org/v2/examples/modal.html -->
-
-          <!-- https://vuejs.org/v2/examples/modal.html -->
-          <!-- template for the modal component -->
-            <!-- <script type="text/x-template" id="modal-template"> -->
-            <!-- </script> -->
-          <!-- END template for the modal component -->
+        <!--  https://vuejs.org/v2/examples/modal.html -->
           
-            <button id="show-modal" @click="showModal1 = true">Show Modal</button>
+        <!-- Remember that the URL suffix "?autoplay=1" autoplays the video, and this is a risk if enabled by default in the background, depending on Vue/browser behavior! -->
 
-            <!-- use the modal component, pass in the prop -->
-            <modal v-if="showModal1" @close="showModal1=false" src_url="https://www.youtube.com/embed/zRxX63txOXk">
-              <!-- you can use custom content here to overwrite default content -->
-              <h3 slot="header">custom header</h3>
-                <span class="close">&times;</span>
-            </modal>
+        
+        <modal v-if="show_video_modal_show_boolean" @close="show_video_modal_show_boolean=false" :source_url="video_modal_selected_URL" :show_modal="false">
+        </modal>
+<!-- 
+
+        <modal v-if="showModal5" @close="showModal5=false" source_url="https://www.youtube.com/embed/1h2BqSS5R3U?autoplay=1" :show_modal="false">
+          {% verbatim %}
+            <h3 slot="header"></h3>
+          {% endverbatim %}
+        </modal> -->
+
+
       </div>
       <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
       <!-- END VUE APP! NOTHING OUTSIDE OF THIS DIV! -->

@@ -206,52 +206,101 @@ let vue_app = new Vue({
             strokeWidth: 4
         },
 
-        // Video Modal tests:
-        // modal1: null,
-        // btn1: null,
-        // span1: {
-        //     onclick: function() {
-        //         this.modal1.style.display = "none";
-        //     }
-        // },
-        showModal1: false,
+        show_video_modal_show_boolean: false,
+        video_modal_selected_URL: "",
+        video_modal_0: "https://www.youtube.com/embed/sYwRV7WHzm8?autoplay=1", // 0 sYwRV7WHzm8 Silent Night
+
+        video_modal_1: "https://www.youtube.com/embed/zRxX63txOXk?autoplay=1", // 1 zRxX63txOXk Pupu Hinuhinu
+        video_modal_2: "https://www.youtube.com/embed/ssHkMWcGat4?autoplay=1", // 2 ssHkMWcGat4 Arecibo Observatory collapse from 1 Dec 2020, // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
+        video_modal_3: "https://www.youtube.com/embed/FezVApPddqU?autoplay=1", // 3 FezVApPddqU Mele Kalikimaka psych version // NOT WORKING! // NOT WORKING! // NOT WORKING! //
+
+        video_modal_4: "https://www.youtube.com/embed/mjcuxw_HJtw?autoplay=1", // 4 mjcuxw_HJtw Humuhumunukunukuapua'a (Hawai'i state fish)
+        video_modal_5: "https://www.youtube.com/embed/1h2BqSS5R3U?autoplay=1", // 5 1h2BqSS5R3U Alicia Keys Puts An At-Home Spin On Flo Rida's "My House"
+        video_modal_6: "https://www.youtube.com/embed/XqZsoesa55w?autoplay=1", // 6 XqZsoesa55w Baby Shark Dance // NOT WORKING! // NOT WORKING! // NOT WORKING! //
+
+        video_modal_7: "https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1", // 7 wCrtk-pyP0I How Microwaving Grapes Makes Plasma
+        video_modal_8: "https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1", // 8 wCrtk-pyP0I How Microwaving Grapes Makes Plasma
+        video_modal_9: "https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1", // 9 wCrtk-pyP0I How Microwaving Grapes Makes Plasma
+        // Add: Elmo's song...
+        // Add: 
     },
     methods: {
+        
+        konva_test_video_old: function(video_URL_string) {
+
+
+            console.log('konva_test_video_old() START')
+            // Vue.use(VueYouTubeEmbed)
+                //             Vue/Youtube players:
+                // - https://developers.google.com/youtube/iframe_api_reference
+                // - https://github.com/andrewvasilchuk/vue-lazy-youtube-video
+                // - https://github.com/kaorun343/vue-youtube-embed
+            // COPIED from https://konvajs.org/docs/sandbox/Video_On_Canvas.html :
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+    
+            var stage = new Konva.Stage({
+                container: 'konva_test',
+                width: width,
+                height: height,
+            });
+    
+            var layer = new Konva.Layer();
+            stage.add(layer);
+    
+            var video = document.createElement('video');
+            video.src = 'https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c4/Physicsworks.ogv/Physicsworks.ogv.240p.vp9.webm';
+    
+            var image = new Konva.Image({
+                image: video,
+                draggable: true,
+                x: 50,
+                y: 20,
+            });
+            layer.add(image);
+    
+            var text = new Konva.Text({
+                text: 'Loading video...',
+                width: stage.width(),
+                height: stage.height(),
+                align: 'center',
+                verticalAlign: 'middle',
+            });
+            layer.add(text);
+    
+            layer.draw();
+    
+            var anim = new Konva.Animation(function () {
+                // do nothing, animation just need to update the layer
+            }, layer);
+    
+            // update Konva.Image size when meta is loaded
+            video.addEventListener('loadedmetadata', function (e) {
+                text.text('Press PLAY...');
+                image.width(video.videoWidth);
+                image.height(video.videoHeight);
+                layer.draw();
+            });
+    
+            document.getElementById('play').addEventListener('click', function () {
+                text.destroy();
+                video.play();
+                anim.start();
+            });
+            document.getElementById('pause').addEventListener('click', function () {
+                video.pause();
+                anim.stop();
+            });
+            
+            // END COPY 
+        },
+        video_modal_NumPad: function(URL) {    // unused
+            console.log('video_modal_NumPad() START')
+            console.log(`URL is: ${URL}`)
+
+            
         // <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
         // <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
-        video_modal_initialize: function() {
-            // / / / / / / / / / / / / / FIRST TEST START / / / / / / / / / / / / / / / / / / 
-            // // Get the modal
-            // this.modal1 = document.getElementById("myModal")
-
-            // // Get the button that opens the modal
-            // this.btn1 = document.getElementById("myBtn")
-
-            // // Get the <span> element that closes the modal
-            // this.span1 = document.getElementsByClassName("close")[0]
-            
-            // // When the user clicks on <span> (x), close the modal
-            // // this.span1.onclick = function() {
-            // //     this.modal1.style.display = "none"
-            // // }
-
-            // // // When the user clicks anywhere outside of the modal, close it
-            // // window.onclick = function(event) {
-            // //     if (event.target == this.modal1) {
-            // //         this.modal1.style.display = "none"
-            // //     }
-            // // }
-        // / / / / / / / / / / / / / FIRST TEST / / / / / / / / / / / / / / / / / / 
-
-
-
-        // / / / / / / / / / / / / / SECOND TEST, COMPONENT FROM https://vuejs.org/v2/examples/modal.html / / / / / / / / / / / / / / / / / / 
-        // / / / / / / / / / / / / / END SECOND / / / / / / / / / / / / / / / / / / 
-
-        },
-        video_modal_test_2_NumPad8: function() {
-            console.log('video_modal_test_2_NumPad8() START')
-            
         // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             // Notes:
             // https://www.npmjs.com/package/vue-js-modal
@@ -269,17 +318,17 @@ let vue_app = new Vue({
                 // https://vuejs.org/v2/examples/modal.html
 
 
-            // open the modal
-            // this.modal1.style.display = "block"
             this.showModal1 = true
+            this.modal1_url = URL
+            console.log(`this.modal1_url is: ${this.modal1_url}`)
 
             // Set the focus: https://www.w3schools.com/jsref/met_html_focus.asp
             // https://www.w3schools.com/jsref/event_onfocus.asp
-            
 
 
 
-            console.log('video_modal_test_2_NumPad8() END')
+
+            console.log('video_modal_NumPad() END')
 
 
 
@@ -1069,7 +1118,7 @@ let vue_app = new Vue({
             var welcome_text = new Konva.Text({
                 x: 400,
                 y: 50,
-                text: `Welcome to Childhood Canvas, \nPlease go grab a tea of 'anise. \nNow you're on campus! \n\nMake your browser fullscreen, \nClick the keyboard's buttons, find some beans, \nAnd remember to share this page as a meme!`,
+                text: `Welcome to Childhood Canvas, \nPlease go grab a tea of 'anise. \nNow you're on campus! \n\nMake your browser fullscreen (F11), \nClick the keyboard's buttons, find some beans, \nRemember: share this page as a meme!`,
                 fontSize: 30,
                 fontFamily: `Advent Pro`,
                 fill: 'black',
@@ -1108,74 +1157,6 @@ let vue_app = new Vue({
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             console.log('konva_draw_test() END')
         },
-        konva_test_video_old: function(video_URL_string) {
-
-
-            console.log('konva_test_video_old() START')
-            // Vue.use(VueYouTubeEmbed)
-                //             Vue/Youtube players:
-                // - https://developers.google.com/youtube/iframe_api_reference
-                // - https://github.com/andrewvasilchuk/vue-lazy-youtube-video
-                // - https://github.com/kaorun343/vue-youtube-embed
-            // COPIED from https://konvajs.org/docs/sandbox/Video_On_Canvas.html :
-            var width = window.innerWidth;
-            var height = window.innerHeight;
-    
-            var stage = new Konva.Stage({
-                container: 'konva_test',
-                width: width,
-                height: height,
-            });
-    
-            var layer = new Konva.Layer();
-            stage.add(layer);
-    
-            var video = document.createElement('video');
-            video.src = 'https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c4/Physicsworks.ogv/Physicsworks.ogv.240p.vp9.webm';
-    
-            var image = new Konva.Image({
-                image: video,
-                draggable: true,
-                x: 50,
-                y: 20,
-            });
-            layer.add(image);
-    
-            var text = new Konva.Text({
-                text: 'Loading video...',
-                width: stage.width(),
-                height: stage.height(),
-                align: 'center',
-                verticalAlign: 'middle',
-            });
-            layer.add(text);
-    
-            layer.draw();
-    
-            var anim = new Konva.Animation(function () {
-                // do nothing, animation just need to update the layer
-            }, layer);
-    
-            // update Konva.Image size when meta is loaded
-            video.addEventListener('loadedmetadata', function (e) {
-                text.text('Press PLAY...');
-                image.width(video.videoWidth);
-                image.height(video.videoHeight);
-                layer.draw();
-            });
-    
-            document.getElementById('play').addEventListener('click', function () {
-                text.destroy();
-                video.play();
-                anim.start();
-            });
-            document.getElementById('pause').addEventListener('click', function () {
-                video.pause();
-                anim.stop();
-            });
-            
-            // END COPY 
-        },
     },
     created: function() { // created()  >>  mounted()
         console.log('created() START')
@@ -1196,13 +1177,11 @@ let vue_app = new Vue({
         this.Konva_canvas_Stage.add(this.Konva_canvas_layer1)
         this.konva_canvas_initialize()
 
-        this.video_modal_initialize()
-
-        // // Below is the separate 300x300 canvas for the 'tree' in the top right
-        // // ENABLE FOR PRODUCTION!                                                                                                           ENABLE FOR PRODUCTION! 
-        // var canvas_tree = document.getElementById('canvas_tree')
-        // this.vueCanvas_tree = canvas_tree.getContext('2d')       
-        // this.draw_tree_animated_from_NicoleEyO()
+        // Below is the separate 300x300 canvas for the 'tree' in the top right
+        // ENABLE FOR PRODUCTION!                                                                                                           ENABLE FOR PRODUCTION! 
+        var canvas_tree = document.getElementById('canvas_tree')
+        this.vueCanvas_tree = canvas_tree.getContext('2d')       
+        this.draw_tree_animated_from_NicoleEyO()
 
         // BIG LIST of keypress / draw function lookups:
         this.keys_and_functions = {             
@@ -1217,16 +1196,16 @@ let vue_app = new Vue({
             // }
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / Numpad Videos :
-            Numpad0: () => window.open('https://www.youtube.com/watch?v=sYwRV7WHzm8'), // Silent Night
-            Numpad1: () => window.open('https://www.youtube.com/watch?v=zRxX63txOXk'), // Pupu Hinuhinu
-            Numpad2: () => window.open('https://www.youtube.com/watch?v=ssHkMWcGat4'), // Arecibo Observatory collapse from 1 Dec 2020, // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
-            Numpad3: () => window.open('https://www.youtube.com/watch?v=FezVApPddqU'), // Mele Kalikimaka psych version
-            Numpad4: () => window.open('https://www.youtube.com/watch?v=mjcuxw_HJtw'), // Humuhumunukunukuapua'a (Hawai'i state fish)
-            Numpad5: () => window.open('https://www.youtube.com/watch?v=1h2BqSS5R3U'), // Alicia Keys Puts An At-Home Spin On Flo Rida's "My House"
-            Numpad6: () => this.konva_image_butterfly(),
-            Numpad7: 1,
-            Numpad8: () => this.video_modal_test_2_NumPad8(),
-            Numpad9: 1,
+            Numpad0: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_0 },
+            Numpad1: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_1 },
+            Numpad2: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_2 },
+            Numpad3: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_3 },
+            Numpad4: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_4 },
+            Numpad5: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_5 },
+            Numpad6: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_6 },
+            Numpad7: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_7 },
+            Numpad8: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_8 },
+            Numpad9: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_9 },
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             default: () => this.draw_random_circle(),
@@ -1237,12 +1216,12 @@ let vue_app = new Vue({
             KeyQ: () => this.draw_random_square('white'),
             KeyW: () => this.konva_image_W_whiskey(),
             KeyE: () => this.konva_image_elephant(),
-            KeyR: 1,
+            KeyR: 1, // Radio?
             KeyT: () => this.konva_image_T_taxi_PNG_NOT_SVG(),
-            KeyY: 1,
+            KeyY: 1, // 
             KeyU: () => this.konva_image_unicorn(),
-            KeyI: 1, 
-            KeyO: 1, 
+            KeyI: 1, // India? Idaho... Insect!
+            KeyO: 1, // Opera? Oval / Operation / 
             KeyP: () => this.konva_image_P_pineapple(),
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
@@ -1250,11 +1229,11 @@ let vue_app = new Vue({
             KeyS: () => this.konva_image_S_snake(), 
             KeyD: () => this.konva_image_dolphin(),
             KeyF: () => this.konva_image_F_flower(), 
-            KeyG: 1, 
+            KeyG: 1, // Golf ball?
             KeyH: () => this.konva_image_H_hospital(), 
             KeyJ: () => this.konva_image_J_jar_jarra(), 
-            KeyK: 1, 
-            KeyL: 1,
+            KeyK: 1, // 
+            KeyL: 1, // Lick/Lamer? 
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             KeyZ: () => this.konva_image_smiley_face_svg(),
@@ -1271,8 +1250,11 @@ let vue_app = new Vue({
 });
 
 Vue.component("modal", {
-    // template: "#modal-template"
-    props: ['src_url'],
+    props: {
+        // https://v3.vuejs.org/guide/component-props.html#prop-types
+        source_url: String,
+        show_modal: Boolean,
+    },
     template: `    
     <transition name="modal">
         <div class="modal-mask">
@@ -1280,38 +1262,46 @@ Vue.component("modal", {
                 <div class="modal-container">
 
                     <div class="modal-header">
+                        <span class="close" @click="$emit('close')">&times;</span>
                         <slot name="header">
-                        default header
-                        </slot>
+                        </slot>                        
                     </div>
 
-                    <div class="modal-body">
+                    <div class="modal-body" v-focus>
                         <slot name="body">
-                        body:
+                        </slot>
+
                         <!-- 
-                        Removed this from <iframe> : 
-                            src = video_URL_string
-                            id="video_1"
-                            NOTE:
-                            Each URL needs the suffix "?autoplay=1" to autoplay
+                            WORKING COMMENTS:
+                            Removed this from <iframe> : 
+                                NOTE:
+                                Each URL needs the suffix "?autoplay=1" to autoplay
+                                Remember that this is a risk if enabled by default in the background, depending on Vue/browser behavior!
+                                BUG with Mele Kalikimaka here:
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/FezVApPddqU" frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                
+                                <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/FezVApPddqU" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                                
                         -->
+                        
                         <iframe
+                        v-focus
                         width="560" 
                         height="315" 
-                        :src=src_url
+                        :src=source_url
                         frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen
                         ></iframe>
-                        </slot>
+
                     </div>
 
                     <div class="modal-footer">
                         <slot name="footer">
-                        default footer
-                        <button class="modal-default-button" @click="$emit('close')">
-                            OK
-                        </button>
+                            <button class="modal-default-button" @click="$emit('close')">
+                                Close
+                            </button>
                         </slot>
                     </div>
 
@@ -1321,5 +1311,13 @@ Vue.component("modal", {
     </transition>
     `
 });
+
+// below test from https://stackoverflow.com/questions/34941829/setting-focus-of-an-input-element-in-vue-js 
+// with "v-focus" inside any HTML element, like this: <input_element v-focus />
+Vue.directive('focus', {
+    inserted: function (el) {
+        el.focus()
+    }
+})
 
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
