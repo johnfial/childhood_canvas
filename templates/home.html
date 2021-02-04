@@ -34,11 +34,11 @@
 
       <div id="button_area">
         <button class="button_working" @click="fullscreen_toggle"                   >fullscreen [F11]</button>
-        <button class="button_working" @click="clear_canvas"                        >blank [spacebar]</button>
-        <button class="button_working"  @click="window.location.reload(true)"       >Reload</button>
+        <button class="button_working" @click="clear_canvas"                        >clear [spacebar]</button>
+        <button class="button_working" @click="this.window.location.reload(true)"   >reload</button> <!-- Why did I have to prefix the command with "this." on this version, but not previously?! Vue version?! -->
         <br>
-        <button class="button_in_dev"  @click="canvas_save_image" >save (dev)</button>
-        <button class="button_in_dev"  @click="" >Current Color (dev)</button>
+        <button class="button_in_dev"  @click="canvas_save_image"                   >save (dev)</button>
+        <button class="button_in_dev"  @click=""                                    >Current Color (dev)</button>
       </div>
 
       <div id="div_right_logs">
@@ -57,13 +57,29 @@
           >
             Fallback: Yikes! Your browser cannot display this HTML5 Drawing Canvas: This is a small tree drawing, for credits (and link) see footer.
         </canvas>
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE WITH SLIDERS!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        <!-- thanks to https://www.w3schools.com/howto/howto_js_rangeslider.asp -->
+        <!--         
+          <div id="slider">            
+            <h3>Tree Redraw Time:</h3>
+            <div class="slidecontainer">
+              <input type="range" class="slider" id="myRange" min="10" max="10000" :v-bind="value" @input="change_tree_timeout_slider">
+              <p>Value, in ms, where 1,000 = 1s : <span id="span_text_redraw_value"></span></p>
+            </div>
+          </div> 
+        -->
+
+      <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
       
         <div>
             {% comment %}
                 Verbatim tag in Django lets me ignore using custom delimeters for Vue vs. Django., see https://vsupalov.com/vue-js-delimiters-django/
             {% endcomment %}
           {% verbatim %}
-              <h1 id="mouse_position"> Mouse: {{ x }}, {{ y }} </h1>
+              <!-- 
+                <h1 id="mouse_position"> Mouse: {{ x }}, {{ y }} </h1> 
+              -->
           {% endverbatim %}
             <p id="last_keypress">Keyboard: 
             </p>
@@ -86,27 +102,12 @@
         </footer>
       </div>
 
-      <div id="all_modals">
-        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-        <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
-        <!--  https://vuejs.org/v2/examples/modal.html -->
-          
-        <!-- Remember that the URL suffix "?autoplay=1" autoplays the video, and this is a risk if enabled by default in the background, depending on Vue/browser behavior! -->
-
-        
+      <div id="invisible_video_modals">
+        <!-- Currently only one because this is a component, but this is a good playground area for other stuff not currently onscreen... -->
         <modal v-if="show_video_modal_show_boolean" @close="show_video_modal_show_boolean=false" :source_url="video_modal_selected_URL" :show_modal="false">
         </modal>
-<!-- 
-
-        <modal v-if="showModal5" @close="showModal5=false" source_url="https://www.youtube.com/embed/1h2BqSS5R3U?autoplay=1" :show_modal="false">
-          {% verbatim %}
-            <h3 slot="header"></h3>
-          {% endverbatim %}
-        </modal> -->
-
-
+        aoeu
       </div>
-      <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
       <!-- END VUE APP! NOTHING OUTSIDE OF THIS DIV! -->
     </div>
 

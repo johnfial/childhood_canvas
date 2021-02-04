@@ -11,8 +11,10 @@
 
 # Project Overview
 
-- Childhood Canvas is a visual play sandbox for older babies and toddlers, intended for full-screen (lock screen), very limited-feature use.
-- The deployed version can be accessed at https://johnfial.pythonanywhere.com . Note that the deployed version is usually at least 1 week delayed.
+- Childhood Canvas is a visual play sandbox for older babies and toddlers, intended for full-screen, limited-feature use, *with a focus on keyboard interaction*.
+- A deployed version, usually refreshed weekly, can be accessed at https://johnfial.pythonanywhere.com . Guest credentials: 
+   - *Username:*  **guest**
+   - *Password:*         **aoeu1234**
 
 <!--  -->
 # Childhood Canvas, o 'Tela di infanzia'
