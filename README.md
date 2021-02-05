@@ -15,6 +15,7 @@
 - A deployed version, usually refreshed weekly, can be accessed at https://johnfial.pythonanywhere.com . Guest credentials: 
    - *Username:*  **guest**
    - *Password:*         **aoeu1234**
+- Class presentation (virtual), Jan 2021: https://www.youtube.com/watch?v=laxBGSLbT28&t=2260s (link points to 37:40)
 
 <!--  -->
 # Childhood Canvas, o 'Tela di infanzia'
