@@ -1,8 +1,7 @@
 // John Fial, 2020-2021 PDX Code Guild, 
 // Capstone Project: Childhood Canvas; see https://github.com/johnfial/childhood_canvas
-
+// link to GitHub project: https://github.com/johnfial/childhood_canvas/projects/1
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-
 
 let vue_app = new Vue({
     el: '#vue_app',
@@ -324,6 +323,7 @@ let vue_app = new Vue({
 
             this.showModal1 = true
             this.modal1_url = URL
+
             console.log(`this.modal1_url is: ${this.modal1_url}`)
 
             // Set the focus: https://www.w3schools.com/jsref/met_html_focus.asp
@@ -1265,10 +1265,34 @@ let vue_app = new Vue({
 });
 
 Vue.component("modal", {
-    props: {
-        // https://v3.vuejs.org/guide/component-props.html#prop-types
+    props: { // https://v3.vuejs.org/guide/component-props.html#prop-types
         source_url: String,
         show_modal: Boolean,
+
+        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+        // link to GitHub project: https://github.com/johnfial/childhood_canvas/projects/1
+        
+        // keypress modal work: 
+        // where is the event listener on the modal? What's the way I close the modal right now? 
+        // Can I add, 
+        // then remove an event listener to the modal to close it?
+        //     // 
+
+        //     <!-- 
+        //     WORKING COMMENTS:
+        //     Removed this from <iframe> : 
+        //         NOTE:
+        //         Each URL needs the suffix "?autoplay=1" to autoplay
+        //         Remember that this is a risk if enabled by default in the background, depending on Vue/browser behavior!
+        //         BUG with Mele Kalikimaka here:
+        //         <iframe width="560" height="315" src="https://www.youtube.com/embed/FezVApPddqU" frameborder="0" 
+        //         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                
+        //         <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/FezVApPddqU" frameborder="0"
+        //         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                                
+        // -->        
+        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+
     },
     template: `    
     <transition name="modal">
@@ -1286,20 +1310,6 @@ Vue.component("modal", {
                         <slot name="body">
                         </slot>
 
-                        <!-- 
-                            WORKING COMMENTS:
-                            Removed this from <iframe> : 
-                                NOTE:
-                                Each URL needs the suffix "?autoplay=1" to autoplay
-                                Remember that this is a risk if enabled by default in the background, depending on Vue/browser behavior!
-                                BUG with Mele Kalikimaka here:
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/FezVApPddqU" frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                
-                                <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/FezVApPddqU" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                                
-                        -->
-                        
                         <iframe
                         v-focus
                         width="560" 
@@ -1329,10 +1339,9 @@ Vue.component("modal", {
 
 // below test from https://stackoverflow.com/questions/34941829/setting-focus-of-an-input-element-in-vue-js 
 // with "v-focus" inside any HTML element, like this: <input_element v-focus />
+// Not sure this is actually working...
 Vue.directive('focus', {
     inserted: function (el) {
         el.focus()
     }
 })
-
-// / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 

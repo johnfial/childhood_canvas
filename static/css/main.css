@@ -55,7 +55,7 @@ a {
     margin: 1%;
 }
 #div_konva_canvas {  /* MAIN CANVAS HERE */
-    background-color: rgb(0, 194, 184);
+    background-color: rgb(100, 0, 194);                                                             /* Frequently changed for version control during testing! */
     width: 1300px;
     height: 1100px;
     margin: 1%;
