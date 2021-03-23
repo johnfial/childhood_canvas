@@ -524,6 +524,7 @@ let vue_app = new Vue({
                 fill: color,
                 stroke: 'white',
                 strokeWidth: 4,
+                draggable: true,
             })
             this.Konva_canvas_layer1.add(circle)
             this.Konva_canvas_layer1.draw()
@@ -638,10 +639,19 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: 2.0,
                     scaleY: 2.0,
+                    draggable: true,
+                })
+                elephant.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                elephant.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(elephant)
                 this.Konva_canvas_layer1.draw()
             })
+            
+
 
         },
         konva_image_smiley_face_svg: function(input_x=this.canvas_width, input_y=this.canvas_height) {
@@ -1006,17 +1016,18 @@ let vue_app = new Vue({
 
             var circle = new Konva.Circle({
                 x: 630, // stage.width() / 2,
-                y: 900,  // stage.height() / 2, 
+                y: 950,  // stage.height() / 2, 
                 radius: 70, 
                 fill: 'red',
                 stroke: 'white',
                 strokeWidth: 4,
+                draggable: true,                
             })
 
             var welcome_text = new Konva.Text({
                 x: 400,
                 y: 50,
-                text: `Welcome to Childhood Canvas, \nPlease go grab a tea of 'anise. \nNow you're on campus! \n\nMake your browser fullscreen (F11), \nClick the keyboard's buttons, find some beans, \nRemember: share this page as a meme!`,
+                text: `Welcome to Childhood Canvas, \nPlease go grab a tea of 'anise. \nNow you're on campus! \n\nMake your browser fullscreen (F11), \nClick the keyboard's buttons, find some beans, \nRemember: share this page as a meme!\n\n(Numpad opens preset videos, too!)`,
                 fontSize: 30,
                 fontFamily: `Advent Pro`,
                 fill: 'white',
@@ -1030,7 +1041,7 @@ let vue_app = new Vue({
             Konva.Image.fromURL('static/media/pixabay_gdj_gordon_johnson_butterfly-5883438.svg', (butterfly) => {
                 butterfly.setAttrs({
                     x: 200,
-                    y: 300,
+                    y: 400,
                     scaleX: 4,
                     scaleY: 4,
                 })
@@ -1079,7 +1090,7 @@ let vue_app = new Vue({
             function init() {
                 
                 //filling the canvas
-                ctx.fillStyle = "grey";
+                ctx.fillStyle = "black";
                 ctx.fillRect(0, 0, W, H);
                 
                 //length of the trunk - 100-150
