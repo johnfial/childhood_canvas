@@ -1,6 +1,6 @@
 // John Fial, 2020-2021 PDX Code Guild, 
 // Capstone Project: Childhood Canvas; see https://github.com/johnfial/childhood_canvas
-// link to GitHub project: https://github.com/johnfial/childhood_canvas/projects/1
+// link to GitHub project: https://github.com/johnfial/childhood_canvas/projects/1 // current working info: see BOTTOM of file...
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
 let vue_app = new Vue({
@@ -526,6 +526,12 @@ let vue_app = new Vue({
                 strokeWidth: 4,
                 draggable: true,
             })
+            circle.on('mouseover', function() {
+                document.body.style.cursor = 'crosshair';
+            })
+            circle.on('mouseout', function() {
+                document.body.style.cursor = 'default';
+            })
             this.Konva_canvas_layer1.add(circle)
             this.Konva_canvas_layer1.draw()
             
@@ -670,6 +676,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: 2.0,
                     scaleY: 2.0,
+                    draggable: true,
+                })
+                smiley.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                smiley.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(smiley)
                 this.Konva_canvas_layer1.draw()
@@ -692,6 +705,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: 2.0,
                     scaleY: 2.0,
+                    draggable: true,
+                })
+                dolphin.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                dolphin.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(dolphin)
                 this.Konva_canvas_layer1.draw()
@@ -714,6 +734,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: 5,
                     scaleY: 5,
+                    draggable: true,
+                })
+                cement.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                cement.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(cement)
                 this.Konva_canvas_layer1.draw()
@@ -736,6 +763,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                butterfly.on('mouseover', function() {
+                document.body.style.cursor = 'crosshair';
+                })
+                butterfly.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(butterfly)
                 this.Konva_canvas_layer1.draw()
@@ -756,6 +790,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                banana_monkey.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                banana_monkey.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(banana_monkey)
                 this.Konva_canvas_layer1.draw()
@@ -775,6 +816,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                unicorn.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                unicorn.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(unicorn)
                 this.Konva_canvas_layer1.draw()
@@ -794,6 +842,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                ambulance.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                ambulance.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(ambulance)
                 this.Konva_canvas_layer1.draw()
@@ -813,6 +868,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                flower.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                flower.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(flower)
                 this.Konva_canvas_layer1.draw()
@@ -832,6 +894,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                hospital.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                hospital.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(hospital)
                 this.Konva_canvas_layer1.draw()
@@ -851,6 +920,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                dolphin.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                dolphin.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(jar)
                 this.Konva_canvas_layer1.draw()
@@ -870,6 +946,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                mango.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                mango.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(mango)
                 this.Konva_canvas_layer1.draw()
@@ -889,6 +972,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                nine.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                nine.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(nine)
                 this.Konva_canvas_layer1.draw()
@@ -908,6 +998,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                dolphin.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                dolphin.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(pineapple)
                 this.Konva_canvas_layer1.draw()
@@ -927,6 +1024,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                dolphin.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                dolphin.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(snake)
                 this.Konva_canvas_layer1.draw()
@@ -946,6 +1050,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                snake.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                snake.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(violin)
                 this.Konva_canvas_layer1.draw()
@@ -966,6 +1077,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                taxi.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                taxi.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(taxi)
                 this.Konva_canvas_layer1.draw()
@@ -985,6 +1103,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                whiskey.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                whiskey.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(whiskey)
                 this.Konva_canvas_layer1.draw()
@@ -1004,6 +1129,13 @@ let vue_app = new Vue({
                     y: random_y,
                     scaleX: scale,
                     scaleY: scale,
+                    draggable: true,
+                })
+                dolphin.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                dolphin.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(xylophone)
                 this.Konva_canvas_layer1.draw()
@@ -1021,7 +1153,13 @@ let vue_app = new Vue({
                 fill: 'red',
                 stroke: 'white',
                 strokeWidth: 4,
-                draggable: true,                
+                draggable: true,
+            })
+            circle.on('mouseover', function() {
+                document.body.style.cursor = 'crosshair';
+            })
+            circle.on('mouseout', function() {
+                document.body.style.cursor = 'default';
             })
 
             var welcome_text = new Konva.Text({
@@ -1044,6 +1182,13 @@ let vue_app = new Vue({
                     y: 400,
                     scaleX: 4,
                     scaleY: 4,
+                    draggable: true,
+                })
+                butterfly.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                butterfly.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(butterfly)
                 this.Konva_canvas_layer1.draw()
@@ -1356,3 +1501,9 @@ Vue.directive('focus', {
         el.focus()
     }
 })
+
+// / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+// current working info: 
+// Adding konva drag and drop to everything, getting the ideal mouse cursor! https://konvajs.org/docs/drag_and_drop/Drag_and_Drop.html
+// So easy, just an attribute.
+// BUT layers will stack and won't change on (click/drag), which would be more intuitive... add JS function to do that?
