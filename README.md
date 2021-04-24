@@ -12,7 +12,9 @@
 # Project Overview
 
 - Childhood Canvas is a visual play sandbox for older babies and toddlers, intended for full-screen, limited-feature use, *with a focus on keyboard interaction*.
-- A deployed version, usually refreshed weekly, can be accessed at https://johnfial.pythonanywhere.com . Guest credentials: 
+- Ages ~6-months through ~42 months (3 1/2 years).
+- A deployed version can be accessed at https://johnfial.pythonanywhere.com . (It is usually ~1-3 weeks older than this repository.) 
+- Guest credentials: 
    - *Username:*  **guest**
    - *Password:*         **aoeu1234**
 - Class presentation (virtual), Jan 2021: https://www.youtube.com/watch?v=laxBGSLbT28&t=2260s (link points to 37:40)
@@ -33,12 +35,6 @@
 
 <!--  -->
 # Features / User Stories
-
-0. User Story **Example:** "As a _____ (user), I want _____ (feature) because _____ (reason)."
-   - Tasks: 
-      - [x] a
-      - [x] b
-      - [ ] c
 
 1. - As a parental/caregiver accountholder, I want the ability to have **multiple profiles (for different children/adults) under my one account** so that everything is in one place.
    - Tasks: 
@@ -93,7 +89,6 @@
       - [ ] Add dark mode
       - [ ] Check system default, put current mode into system default
       - [ ] Add ability for user to permanently select in their account (or user profile?!) settings
-
 <!--  -->
 <!--  -->
 <!--  -->
@@ -196,6 +191,15 @@
 
 <!--  -->
 # Notes for formatting .md files:
+
+# ##  Template User Story
+0. **Example:** "As a _____ (user), I want _____ (feature) because _____ (reason)."
+   - Tasks: 
+      - [x] a
+      - [x] b
+      - [ ] c
+
+---
 
 \# The largest heading (includes \<hr>):
 # The largest heading
