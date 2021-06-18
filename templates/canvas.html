@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<main id="div_main_canvas">
+  <!-- {% block title %} Childhood Canvas {% endblock %} -->
+
+  <header>
+    <!-- {% if user.is_authenticated %}
+    {% else %}
+        <p>
+          User: <strong> Guest </strong> |
+            <a href="{% url 'login' %}">Login</a> |
+            <a href="{% url 'signup' %}">Sign Up</a>
+        </p>
+    {% endif %} -->
+  </header>   
+
+
+    <!-- START VUE APP! NOTHING OUTSIDE OF THIS DIV! -->
+    <div id='vue_app'>
+      
+      <!-- https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
+      <!-- <button id="play">Play</button> -->
+      <!-- <button id="pause">Pause</button> -->
+      <div id="div_konva_canvas">
+        <h2>Fallback</h2>
+          <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a 1300x900 pixel canvas for toddlers.
+            Perhaps try a different, modern browser on the PC in fullscreen.
+      </div>
+
+      <div id="button_area">
+        <button class="button_working" @click="fullscreen_toggle"                   >fullscreen [F11]</button>
+        <button class="button_working" @click="clear_canvas"                        >clear [spacebar]</button>
+        <button class="button_working" @click="this.window.location.reload(true)"   >reload</button> <!-- Why did I have to prefix the command with "this." on this version, but not previously?! Vue version?! -->
+        <br>
+        <button class="button_in_dev"  @click="canvas_save_image"                   >save (dev)</button>
+        <button class="button_in_dev"  @click=""                                    >Current Color (dev)</button>
+      </div>
+
+      <div id="div_right_logs">
+
+        <div id="authenticated_user_account">
+          <p>
+            Welcome user: <strong> {{ user.username }} </strong> | Thanks for logging in! | 
+              <a href="{% url 'logout' %}">Log Out</a>
+            </p>
+        </div>
+
+        <canvas 
+          id="canvas_tree"
+          width="300"
+          height="300"
+          >
+            Fallback: Yikes! Your browser cannot display this HTML5 Drawing Canvas: This is a small tree drawing, for credits (and link) see footer.
+        </canvas>
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE WITH SLIDERS!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        <!-- thanks to https://www.w3schools.com/howto/howto_js_rangeslider.asp -->
+        <!--         
+          <div id="slider">            
+            <h3>Tree Redraw Time:</h3>
+            <div class="slidecontainer">
+              <input type="range" class="slider" id="myRange" min="10" max="10000" :v-bind="value" @input="change_tree_timeout_slider">
+              <p>Value, in ms, where 1,000 = 1s : <span id="span_text_redraw_value"></span></p>
+            </div>
+          </div> 
+        -->
+
+      <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+      
+        <div>
+            {% comment %}
+                Verbatim tag in Django lets me ignore using custom delimeters for Vue vs. Django., see https://vsupalov.com/vue-js-delimiters-django/
+            {% endcomment %}
+          {% verbatim %}
+              <!-- 
+                <h1 id="mouse_position"> Mouse: {{ x }}, {{ y }} </h1> 
+              -->
+          {% endverbatim %}
+            <p id="last_keypress">Keyboard: 
+            </p>
+        </div>
+
+        <div>
+          <p class="class_keyboard_logs">Full keypress log:</p>
+          <p class="class_keyboard_logs" id="keyboard_logs"></p>
+        </div>
+        <footer id="credits">
+          <!-- <div id="footer"> -->
+            <h1>Credits:</h1>
+            <ul>
+              <li>Overall: <a href="https://johnfial.github.io/" target="_blank">John Fial</a></li>
+              <li>Tree: <a href="https://codepen.io/ntaylor09/pen/vKGePr" target="_blank">Nicole Eyo</a></li>
+              <li>SVG Images: Most from <a href="https://pixabay.com/vectors/" target="_blank">Pixabay</a> , see source code.</li>
+              <!-- <li>Smiley: Pete's tutorial</li> -->
+            </ul>
+          <!-- </div> -->
+        </footer>
+      </div>
+
+      <div id="invisible_video_modals">
+        <!-- Currently only one because this is a component, but this is a good playground area for other stuff not currently onscreen... -->
+        <modal v-if="show_video_modal_show_boolean" @close="show_video_modal_show_boolean=false" :source_url="video_modal_selected_URL" :show_modal="false">
+        </modal>
+      </div>
+      <!-- END VUE APP! NOTHING OUTSIDE OF THIS DIV! -->
+    </div>
+
+
+</main>
+{% endblock %}
