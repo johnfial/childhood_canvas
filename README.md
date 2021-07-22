@@ -8,7 +8,7 @@
     https://github.com/PdxCodeGuild/class_orca/blob/main/4%20JavaScript/labs/lab08-bouncing_ball.md 
  
  -->
----
+<!-- ---
 ## test
 1. [Test link bottom](#bottom-link)
 # Table of contents
@@ -17,7 +17,7 @@
     1. [Sub paragraph](#subparagraph1)
 3. [Another paragraph](#paragraph2)
 
----
+--- -->
 
 # Project Overview
 
@@ -197,14 +197,14 @@
 .
 
 ---
-
+<!-- 
 ---
 ### this is the bottom-ish <a name="bottom-link"></a>
 
 ## This is the introduction <a name="introduction"></a>
 Some introduction text, formatted in heading 2 style
 
----
+--- -->
 
 <!--  -->
 # Notes for formatting .md files:
