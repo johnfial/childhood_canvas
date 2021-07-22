@@ -8,10 +8,19 @@
     https://github.com/PdxCodeGuild/class_orca/blob/main/4%20JavaScript/labs/lab08-bouncing_ball.md 
  
  -->
+---
+## test
+1. [Test link bottom](#bottom-link)
+# Table of contents
+1. [Introduction](#introduction)
+2. [Some paragraph](#paragraph1)
+    1. [Sub paragraph](#subparagraph1)
+3. [Another paragraph](#paragraph2)
+
+---
 
 # Project Overview
 
-1. [Test link bottom](#bottom-link)
 - Childhood Canvas is a visual play sandbox for older babies and toddlers, intended for full-screen, limited-feature use, *with a focus on keyboard interaction*.
 - Ages ~6-months through ~42 months (3 1/2 years).
 - A deployed version can be accessed at https://johnfial.pythonanywhere.com . (It is usually ~1-3 weeks older than this repository.) 
@@ -189,7 +198,13 @@
 
 ---
 
-### this is the bottom-ish <a href="#bottom-link"></a>
+---
+### this is the bottom-ish <a name="bottom-link"></a>
+
+## This is the introduction <a name="introduction"></a>
+Some introduction text, formatted in heading 2 style
+
+---
 
 <!--  -->
 # Notes for formatting .md files:
