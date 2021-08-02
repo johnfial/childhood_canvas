@@ -922,10 +922,10 @@ let vue_app = new Vue({
                     scaleY: scale,
                     draggable: true,
                 })
-                dolphin.on('mouseover', function() {
+                jar.on('mouseover', function() {
                     document.body.style.cursor = 'crosshair';
                 })
-                dolphin.on('mouseout', function() {
+                jar.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(jar)
@@ -1000,10 +1000,10 @@ let vue_app = new Vue({
                     scaleY: scale,
                     draggable: true,
                 })
-                dolphin.on('mouseover', function() {
+                pineapple.on('mouseover', function() {
                     document.body.style.cursor = 'crosshair';
                 })
-                dolphin.on('mouseout', function() {
+                pineapple.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(pineapple)
@@ -1026,10 +1026,10 @@ let vue_app = new Vue({
                     scaleY: scale,
                     draggable: true,
                 })
-                dolphin.on('mouseover', function() {
+                snake.on('mouseover', function() {
                     document.body.style.cursor = 'crosshair';
                 })
-                dolphin.on('mouseout', function() {
+                snake.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(snake)
@@ -1052,10 +1052,10 @@ let vue_app = new Vue({
                     scaleY: scale,
                     draggable: true,
                 })
-                snake.on('mouseover', function() {
+                violin.on('mouseover', function() {
                     document.body.style.cursor = 'crosshair';
                 })
-                snake.on('mouseout', function() {
+                violin.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(violin)
@@ -1131,10 +1131,10 @@ let vue_app = new Vue({
                     scaleY: scale,
                     draggable: true,
                 })
-                dolphin.on('mouseover', function() {
+                xylophone.on('mouseover', function() {
                     document.body.style.cursor = 'crosshair';
                 })
-                dolphin.on('mouseout', function() {
+                xylophone.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(xylophone)
@@ -1507,3 +1507,10 @@ Vue.directive('focus', {
 // Adding konva drag and drop to everything, getting the ideal mouse cursor! https://konvajs.org/docs/drag_and_drop/Drag_and_Drop.html
 // So easy, just an attribute.
 // BUT layers will stack and won't change on (click/drag), which would be more intuitive... add JS function to do that?
+
+// July 2021, MS Edge:
+// keys that display basic circle:
+// r, y, i, o
+// g, k, l
+// x, v
+// does nothing: p, s, j, 
