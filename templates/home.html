@@ -5,33 +5,42 @@
 
 <main id="div_main_canvas">
   <!-- {% block title %} Childhood Canvas {% endblock %} -->
-
-  <header>
-    {% if user.is_authenticated %}
-    {% else %}
-        <p>
-          User: <strong> Guest </strong> |
-            <a href="{% url 'login' %}">Login</a> |
-            <a href="{% url 'signup' %}">Sign Up</a>
-        </p>
-    {% endif %}
-  </header>   
-
-
-    <div>
-      <h1>
-        Childhood Canvas
-      </h1>
-      <p class="main_text">
-        Childhood Canvas is a visual play sandbox for older babies and toddlers, aged 12-36months. 
-        Intended for limited-use in a screen-obsessed world, it is evolving into both a keyboard-training application 
-        and a personal 'operating system,' where parents can program shortcuts to their toddler's favorite videos. 
-        <br>
-        For more information or the source code, see the GitHub <a href="https://github.com/johnfial/childhood_canvas">repo and readme.md file here</a>.
-        <br>
-        I've disabled the authentication, so <a href="canvas.html">click here for the canvas page.</a> 
-      </p>
+  
+  <div>
+    <h1>
+      Childhood Canvas
+    </h1>
+    <p class="main_text">
+      <br>
+      <br>
+      Childhood Canvas is a visual play sandbox for older babies and toddlers, aged 12-36months. 
+      Intended for limited-use in a screen-obsessed world, it is evolving into both a keyboard-training application 
+      and a personal 'operating system,' where parents can program shortcuts to their toddler's favorite videos. 
+      <br>
+      <br>
+      For more information or the source code, see the GitHub <a href="https://github.com/johnfial/childhood_canvas">repo and readme.md file here</a>.
+      <br>
+    </p>
+    <h3>
+      <em>
+        Note: I've disabled the authentication, so <a href="canvas.html">click here for the canvas page.</a> 
+      </em>
+    </h3>
     </div>
+    
+      <footer>
+        {% if user.is_authenticated %}
+        {% else %}
+            <p>Deprecated login info :
+              <br>
+              <br>
+                User: <strong> Guest </strong> |
+                <a href="{% url 'login' %}">Login</a> |
+                <a href="{% url 'signup' %}">Sign Up</a>
+            </p>
+        {% endif %}
+      </footer>   
+    
 
 
 </main>

@@ -13,8 +13,12 @@ header {
     text-align: center;
     /* border-bottom: 5px solid #EDF7E1; */
 }
+footer {
+    display: grid;
+    justify-content: center;
+}
 body {    
-    background-color: rgb(0, 54, 41);
+    background-color: rgb(2, 46, 88);
     color: white;
     font-family: 'Advent Pro', sans-serif;
 }
@@ -55,7 +59,7 @@ a {
     margin: 1%;
 }
 #div_konva_canvas {  /* MAIN CANVAS HERE */
-    background-color: rgb(0, 139, 194);                                                             /* Frequently changed for version control during testing! */
+    background-color: rgb(0, 112, 6);                                                             /* Frequently changed for version control during testing! */
     width: 1300px;
     height: 1100px;
     margin: 1%;
@@ -245,11 +249,11 @@ a {
     font-size: 40px;
 }
 #last_keypress {
-    font-size: 40px;
+    font-size: 55px;
     text-align: center;
 }
 .class_keyboard_logs {
-    font-size: 15px;
+    font-size: 18px;
     padding: 2%;
 }
 #credits {

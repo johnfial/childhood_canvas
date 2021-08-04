@@ -406,7 +406,7 @@ let vue_app = new Vue({
             // Right-side keyboard logs:
             console.log(`logKey: function(KeyboardEvent) running with KeyboardEvent.code: ${KeyboardEvent.code} and KeyboardEvent.key : ${KeyboardEvent.key}.`)
             keyboard_logs.textContent += `${KeyboardEvent.code}, `
-            last_keypress.textContent = `Keyboard: ${KeyboardEvent.code}`
+            last_keypress.textContent = `Key: ${KeyboardEvent.code}`
 
             // Left-side Draw function lookup, 
             let key_lookup = KeyboardEvent.code // 
@@ -1150,7 +1150,7 @@ let vue_app = new Vue({
                 x: 630, // stage.width() / 2,
                 y: 950,  // stage.height() / 2, 
                 radius: 70, 
-                fill: 'red',
+                fill: 'blue',
                 stroke: 'white',
                 strokeWidth: 4,
                 draggable: true,
@@ -1333,10 +1333,11 @@ let vue_app = new Vue({
         // Keypress listener:
         document.addEventListener('keyup', this.keypress_listener) // huge difference between 'keyup', 'keydown', and 'keypress'! 
 
-        this.Konva_canvas_Stage = new Konva.Stage({
+        this.Konva_canvas_Stage = new Konva.Stage({ // see https://konvajs.org/api/Konva.Stage.html
             container: 'div_konva_canvas', // this is the div name
             width: 1300,
             height: 1100,
+            draggable: false,
             // color: white,
         })
         this.Konva_canvas_layer1 = new Konva.Layer()
