@@ -629,9 +629,9 @@ let vue_app = new Vue({
         },
 
         // Images:
-        konva_image_elephant: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+        konva_image_E_elephant: function(input_x=this.canvas_width, input_y=this.canvas_height) {
             
-            console.log('konva_image_elephant()')
+            console.log('konva_image_E_elephant()')
             
             // Random position:
             var random_number = Math.random()
@@ -639,7 +639,7 @@ let vue_app = new Vue({
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/Pixabay_Clker-Free-Vector-Images_elephant-24732.svg', (elephant) => {
+            Konva.Image.fromURL('static/media/E_elephant_Pixabay_Clker-Free-Vector-Images-24732.svg', (elephant) => {
                 elephant.setAttrs({
                     x: random_x,
                     y: random_y,
@@ -689,9 +689,9 @@ let vue_app = new Vue({
             })
 
         },
-        konva_image_dolphin: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+        konva_image_D_dolphin: function(input_x=this.canvas_width, input_y=this.canvas_height) {
             
-            console.log('konva_image_dolphin()')
+            console.log('konva_image_D_dolphin()')
             
             // Random position:
             var random_number = Math.random()
@@ -699,7 +699,7 @@ let vue_app = new Vue({
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/pixabay_Clker-Free-Vector-Images_dolphin-41436.svg', (dolphin) => {
+            Konva.Image.fromURL('static/media/D_dolphin_pixabay_Clker-Free-Vector-Images-41436.svg', (dolphin) => {
                 dolphin.setAttrs({
                     x: random_x,
                     y: random_y,
@@ -718,9 +718,9 @@ let vue_app = new Vue({
             })
 
         },
-        konva_image_cement_mixer_truck: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+        konva_image_C_cement_mixer_truck: function(input_x=this.canvas_width, input_y=this.canvas_height) {
             
-            console.log('konva_image_cement_mixer_truck()')
+            console.log('konva_image_C_cement_mixer_truck()')
             
             // Random position:
             var random_number = Math.random()
@@ -728,7 +728,7 @@ let vue_app = new Vue({
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/pixabay_Grafikingenieur_cement-mixer-5630778.svg', (cement) => {
+            Konva.Image.fromURL('static/media/C_cement-mixer_pixabay_Grafikingenieur-5630778.svg', (cement) => {
                 cement.setAttrs({
                     x: random_x,
                     y: random_y,
@@ -747,9 +747,9 @@ let vue_app = new Vue({
             })
 
         },
-        konva_image_butterfly: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {
+        konva_image_B_butterfly: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {
             
-            console.log('konva_image_butterfly()')
+            console.log('konva_image_B_butterfly()')
             
             // Random position:             
             var random_number = Math.random()
@@ -757,7 +757,7 @@ let vue_app = new Vue({
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/pixabay_gdj_gordon_johnson_butterfly-5883438.svg', (butterfly) => {
+            Konva.Image.fromURL('static/media/B_butterfly_pixabay_gdj_gordon_johnson-5883438.svg', (butterfly) => {
                 butterfly.setAttrs({
                     x: random_x,
                     y: random_y,
@@ -802,8 +802,8 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_unicorn: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
-            console.log('konva_image_unicorn()')            
+        konva_image_U_unicorn: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_U_unicorn()')            
             // Random position:             
             var random_number = Math.random()
             let random_x = Math.floor(random_number * Math.floor(input_x))
@@ -1018,7 +1018,7 @@ let vue_app = new Vue({
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/pixabay_OpenClipart-Vectors_rattlesnake-159135.svg', (snake) => {
+            Konva.Image.fromURL('static/media/S_rattlesnake_pixabay_OpenClipart-Vectors-159135.svg', (snake) => {
                 snake.setAttrs({
                     x: random_x,
                     y: random_y,
@@ -1097,7 +1097,7 @@ let vue_app = new Vue({
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/pixabay_juhele_Whiskey_irish-4397841.svg', (whiskey) => {
+            Konva.Image.fromURL('static/media/W_whiskey_pixabay_juhele-4397841.svg', (whiskey) => {
                 whiskey.setAttrs({
                     x: random_x,
                     y: random_y,
@@ -1123,7 +1123,7 @@ let vue_app = new Vue({
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/pixabay_Clker-Free-Vector-Image_X_xylophone-308024.svg', (xylophone) => {
+            Konva.Image.fromURL('static/media/X_xylophone_pixabay_Clker-Free-Vector-308024.svg', (xylophone) => {
                 xylophone.setAttrs({
                     x: random_x,
                     y: random_y,
@@ -1384,13 +1384,14 @@ let vue_app = new Vue({
             Space: () => this.clear_canvas(),
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            KeyQ: () => this.draw_random_square('white'),
+            // KeyQ: () => this.draw_random_square('white'),
+            KeyQ: () => this.konva_image_A_ambulance(),
             KeyW: () => this.konva_image_W_whiskey(),
-            KeyE: () => this.konva_image_elephant(),
+            KeyE: () => this.konva_image_E_elephant(),
             KeyR: 1, // Radio?
             KeyT: () => this.konva_image_T_taxi_PNG_NOT_SVG(),
             KeyY: 1, // 
-            KeyU: () => this.konva_image_unicorn(),
+            KeyU: () => this.konva_image_U_unicorn(),
             KeyI: 1, // India? Idaho... Insect!
             KeyO: 1, // Opera? Oval / Operation / 
             KeyP: () => this.konva_image_P_pineapple(),
@@ -1398,7 +1399,7 @@ let vue_app = new Vue({
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             KeyA: () => this.draw_random_circle('red', 500, 500),
             KeyS: () => this.konva_image_S_snake(), 
-            KeyD: () => this.konva_image_dolphin(),
+            KeyD: () => this.konva_image_D_dolphin(),
             KeyF: () => this.konva_image_F_flower(), 
             KeyG: 1, // Golf ball?
             KeyH: () => this.konva_image_H_hospital(), 
@@ -1410,7 +1411,7 @@ let vue_app = new Vue({
             KeyZ: () => this.konva_image_smiley_face_svg(),
             KeyX: () => this.konva_image_X_xylophone(),
             // KeyC: () => this.draw_face(),
-            KeyC: () => this.konva_image_cement_mixer_truck(),
+            KeyC: () => this.konva_image_C_cement_mixer_truck(),
             KeyV: () => this.konva_image_V_violin(), 
             KeyB: () => this.konva_image_B_banana_ape(),
             KeyN: () => this.konva_image_N_nine(), 
