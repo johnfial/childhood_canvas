@@ -171,6 +171,11 @@ STATICFILES_DIRS = [                                                            
     os.path.join(BASE_DIR, 'static/'),                                                                                        # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
 ]                                                                                                                             # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
 
+# https://github.com/PdxCodeGuild/class_salmon/blob/main/5%20Capstone/Heroku%20Deployment.md
+
+import django_on_heroku
+django_on_heroku.settings(locals())
+
 
 # https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/ :
 # CSRF_COOKIE_SECURE = True # default False                                                                                  # ENABLE THIS FOR PRODUCTION
