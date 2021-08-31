@@ -206,7 +206,7 @@ let vue_app = new Vue({
         video_modal_0: "https://www.youtube.com/embed/sYwRV7WHzm8?autoplay=1", // 0 sYwRV7WHzm8 Silent Night
 
         video_modal_1: "https://www.youtube.com/embed/zRxX63txOXk?autoplay=1", // 1 zRxX63txOXk Pupu Hinuhinu
-        video_modal_2: "https://www.youtube.com/embed/ssHkMWcGat4?autoplay=1", // 2 ssHkMWcGat4 Arecibo Observatory collapse from 1 Dec 2020, // local video.src = 'C:\\-=Cloud=-\\Sync\\~SORT FOLDER~\\joao\\AreciboObservatoryMediaB-Rollwithcollapse.mkv';
+        video_modal_2: "https://www.youtube.com/embed/ssHkMWcGat4?autoplay=1", // 2 ssHkMWcGat4 Arecibo Observatory collapse from 1 Dec 2020, // local video.src = 'static/media/AreciboObservatoryMediaB-Rollwithcollapse.mkv';
         video_modal_3: "https://www.youtube.com/embed/FezVApPddqU?autoplay=1", // 3 FezVApPddqU Mele Kalikimaka psych version // NOT WORKING! // NOT WORKING! // NOT WORKING! //
 
         video_modal_4: "https://www.youtube.com/embed/mjcuxw_HJtw?autoplay=1", // 4 mjcuxw_HJtw Humuhumunukunukuapua'a (Hawai'i state fish)
@@ -217,7 +217,7 @@ let vue_app = new Vue({
         video_modal_8: "https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1", // 8 wCrtk-pyP0I How Microwaving Grapes Makes Plasma
         video_modal_9: "https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1", // 9 wCrtk-pyP0I How Microwaving Grapes Makes Plasma
             // Add: Elmo's song...
-            // Add: 
+            // Add: Lorde ? 
 
         // Unused, I think:
         vueCanvas: null, // unused
@@ -393,6 +393,118 @@ let vue_app = new Vue({
             // window.requestAnimationFrame(() => draw_face(x, y));
             
             window.requestAnimationFrame(() => this.draw_face(yChange))
+        },
+
+        
+        change_tree_timeout_slider: function() {
+            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+            // SLIDER EXPERIMENTS, thanks https://www.w3schools.com/howto/howto_js_rangeslider.asp :
+            console.log('change_tree_timeout_slider')
+            this.span_text_redraw_value.innerHTML = this.value
+        },
+
+        // Tree canvas MODIFIED FROM, CREDITS TO: https://codepen.io/ntaylor09/pen/vKGePr :            
+        draw_tree_animated_from_NicoleEyO: function() {
+                
+            var ctx = this.vueCanvas_tree
+            // var timeout = this.redraw_timeout_for_tree_from_NicoleEyO
+            var timeout = this.value
+            
+            //Some variables
+            var length, divergence, reduction, line_width, start_points = [];
+            var W = 300 // window.innerWidth;
+            var H = 300 // window.innerHeight;
+
+            function init() {
+                
+                //filling the canvas
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, W, H);
+                
+                //length of the trunk - 100-150
+                length = 30 + Math.round(Math.random()*50);
+                
+                //angle at which branches will diverge - 10-60
+                divergence = 15 + Math.round(Math.random()*50);
+                
+                //Every branch will be 0.75times of the previous one - 0.5-0.75
+                //with 2 decimal points
+                reduction = Math.round(50 + Math.random()*20)/100;
+                
+                //width of the branch/trunk
+                line_width = 15;
+                
+                //This is the end point of the trunk, from where branches will diverge
+                var trunk = {x: W/2, y: length+30, angle: 90};
+                //It becomes the start point for branches
+                start_points = []; //empty the start points on every init();
+                start_points.push(trunk);
+                
+                //Y coordinates go positive downwards, hence they are inverted by deducting it
+                //from the canvas height = H
+                ctx.beginPath();
+                ctx.moveTo(trunk.x, H-5);
+                ctx.lineTo(trunk.x, H-trunk.y);
+                ctx.strokeStyle = "brown";
+                ctx.lineWidth = line_width;
+                ctx.stroke();
+                
+                branches();
+            }            
+            
+            //Lets draw the branches now
+            function branches()
+            {
+                //reducing line_width and length
+                length = length * reduction;
+                line_width = line_width * reduction;
+                ctx.lineWidth = line_width;
+                
+                var new_start_points = [];
+                ctx.beginPath();
+                for(var i = 0; i < start_points.length; i++)
+                {
+                    var sp = start_points[i];
+                    //2 branches will come out of every start point. Hence there will be
+                    //2 end points. There is a difference in the divergence.
+                    var ep1 = get_endpoint(sp.x, sp.y, sp.angle+divergence, length);
+                    var ep2 = get_endpoint(sp.x, sp.y, sp.angle-divergence, length);
+                    
+                    //drawing the branches now
+                    ctx.moveTo(sp.x, H-sp.y);
+                    ctx.lineTo(ep1.x, H-ep1.y);
+                    ctx.moveTo(sp.x, H-sp.y);
+                    ctx.lineTo(ep2.x, H-ep2.y);
+                    
+                    //Time to make this function recursive to draw more branches
+                    ep1.angle = sp.angle+divergence;
+                    ep2.angle = sp.angle-divergence;
+                    
+                    new_start_points.push(ep1);
+                    new_start_points.push(ep2);
+                }
+                // Let's add some more color
+                if(length < 10) ctx.strokeStyle = "red";
+                else ctx.strokeStyle = "white";
+                ctx.stroke();
+                start_points = new_start_points;
+                // recursive call - only if length is more than 2.
+                // Else it will fall in a long loop
+                if(length > 2) setTimeout(branches, 100);
+
+                // Time in miliseconds, so 1,000 = 1s or 5,000 = 5s, etc.
+                else setTimeout(init, timeout);
+            }            
+            function get_endpoint(x, y, a, length)
+            {
+                // This function will calculate the end points based on simple vectors
+                // You can read about basic vectors from this link:
+                // http://physics.about.com/od/mathematics/a/VectorMath.htm
+                var epx = x + length * Math.cos(a*Math.PI/180);
+                var epy = y + length * Math.sin(a*Math.PI/180);
+                return {x: epx, y: epy};
+            }
+            init();
         },
 
         // non-draw or helper functions: 
@@ -627,39 +739,9 @@ let vue_app = new Vue({
         page_reload: function() {
             console.log('page_reload() START')
         },
-
+        
         // Images:
-        konva_image_E_elephant: function(input_x=this.canvas_width, input_y=this.canvas_height) {
-            
-            console.log('konva_image_E_elephant()')
-            
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/E_elephant_Pixabay_Clker-Free-Vector-Images-24732.svg', (elephant) => {
-                elephant.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: 2.0,
-                    scaleY: 2.0,
-                    draggable: true,
-                })
-                elephant.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                elephant.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(elephant)
-                this.Konva_canvas_layer1.draw()
-            })
-            
-
-
-        },
         konva_image_smiley_face_svg: function(input_x=this.canvas_width, input_y=this.canvas_height) {
             
             console.log('konva_image_smiley_face_svg()')
@@ -689,63 +771,31 @@ let vue_app = new Vue({
             })
 
         },
-        konva_image_D_dolphin: function(input_x=this.canvas_width, input_y=this.canvas_height) {
-            
-            console.log('konva_image_D_dolphin()')
-            
-            // Random position:
+        konva_image_A_ambulance: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_A_ambulance()')            
+            // Random position:             
             var random_number = Math.random()
             let random_x = Math.floor(random_number * Math.floor(input_x))
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/D_dolphin_pixabay_Clker-Free-Vector-Images-41436.svg', (dolphin) => {
-                dolphin.setAttrs({
+            Konva.Image.fromURL('static/media/A_pixabay_Clker-Free-Vector-Images_ambulance-24405.svg', (ambulance) => {
+                ambulance.setAttrs({
                     x: random_x,
                     y: random_y,
-                    scaleX: 2.0,
-                    scaleY: 2.0,
+                    scaleX: scale,
+                    scaleY: scale,
                     draggable: true,
                 })
-                dolphin.on('mouseover', function() {
+                ambulance.on('mouseover', function() {
                     document.body.style.cursor = 'crosshair';
                 })
-                dolphin.on('mouseout', function() {
+                ambulance.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                 })
-                this.Konva_canvas_layer1.add(dolphin)
+                this.Konva_canvas_layer1.add(ambulance)
                 this.Konva_canvas_layer1.draw()
             })
-
-        },
-        konva_image_C_cement_mixer_truck: function(input_x=this.canvas_width, input_y=this.canvas_height) {
-            
-            console.log('konva_image_C_cement_mixer_truck()')
-            
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/C_cement-mixer_pixabay_Grafikingenieur-5630778.svg', (cement) => {
-                cement.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: 5,
-                    scaleY: 5,
-                    draggable: true,
-                })
-                cement.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                cement.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(cement)
-                this.Konva_canvas_layer1.draw()
-            })
-
         },
         konva_image_B_butterfly: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {
             
@@ -802,55 +852,89 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_U_unicorn: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
-            console.log('konva_image_U_unicorn()')            
-            // Random position:             
+        konva_image_C_cement_mixer_truck: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('konva_image_C_cement_mixer_truck()')
+            
+            // Random position:
             var random_number = Math.random()
             let random_x = Math.floor(random_number * Math.floor(input_x))
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/U_pixabay_Lohrelei_unicorn-1237449.svg', (unicorn) => {
-                unicorn.setAttrs({
+            Konva.Image.fromURL('static/media/C_cement-mixer_pixabay_Grafikingenieur-5630778.svg', (cement) => {
+                cement.setAttrs({
                     x: random_x,
                     y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
+                    scaleX: 5,
+                    scaleY: 5,
                     draggable: true,
                 })
-                unicorn.on('mouseover', function() {
+                cement.on('mouseover', function() {
                     document.body.style.cursor = 'crosshair';
                 })
-                unicorn.on('mouseout', function() {
+                cement.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                 })
-                this.Konva_canvas_layer1.add(unicorn)
+                this.Konva_canvas_layer1.add(cement)
                 this.Konva_canvas_layer1.draw()
             })
+
         },
-        konva_image_A_ambulance: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
-            console.log('konva_image_A_ambulance()')            
-            // Random position:             
+        konva_image_D_dolphin: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('konva_image_D_dolphin()')
+            
+            // Random position:
             var random_number = Math.random()
             let random_x = Math.floor(random_number * Math.floor(input_x))
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/A_pixabay_Clker-Free-Vector-Images_ambulance-24405.svg', (ambulance) => {
-                ambulance.setAttrs({
+            Konva.Image.fromURL('static/media/D_dolphin_pixabay_Clker-Free-Vector-Images-41436.svg', (dolphin) => {
+                dolphin.setAttrs({
                     x: random_x,
                     y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
+                    scaleX: 2.0,
+                    scaleY: 2.0,
                     draggable: true,
                 })
-                ambulance.on('mouseover', function() {
+                dolphin.on('mouseover', function() {
                     document.body.style.cursor = 'crosshair';
                 })
-                ambulance.on('mouseout', function() {
+                dolphin.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                 })
-                this.Konva_canvas_layer1.add(ambulance)
+                this.Konva_canvas_layer1.add(dolphin)
+                this.Konva_canvas_layer1.draw()
+            })
+
+        },
+        konva_image_E_elephant: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('konva_image_E_elephant()')
+            
+            // Random position:
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/E_elephant_Pixabay_Clker-Free-Vector-Images-24732.svg', (elephant) => {
+                elephant.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: 2.0,
+                    scaleY: 2.0,
+                    draggable: true,
+                })
+                elephant.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                elephant.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(elephant)
                 this.Konva_canvas_layer1.draw()
             })
         },
@@ -880,6 +964,32 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
+        konva_image_G_gorilla: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.6) {            
+            console.log('konva_image_G_gorilla()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/G_gorilla_mohamed_hassan-4309441.svg', (gorilla) => {
+                gorilla.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                    draggable: true,
+                })
+                gorilla.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                gorilla.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(gorilla)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
         konva_image_H_hospital: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
             console.log('konva_image_H_hospital()')            
             // Random position:             
@@ -906,6 +1016,32 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
+        konva_image_I_insect: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
+            console.log('konva_image_I_insect()')       // India? Idaho... Insect!     
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/I_insect_beetle_OpenClipart-Vectors_155017.svg', (insect) => {
+                insect.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                    draggable: true,
+                })
+                insect.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                insect.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(insect)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
         konva_image_J_jar_jarra: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1.5) {            
             console.log('konva_image_J_jar_jarra()')            
             // Random position:             
@@ -929,6 +1065,58 @@ let vue_app = new Vue({
                     document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(jar)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_K_kiwi: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1.5) {            
+            console.log('konva_image_K_kiwi()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/K_kiwi_Clker-Free-Vector-Image-42895.svg', (kiwi) => {
+                kiwi.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                    draggable: true,
+                })
+                kiwi.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                kiwi.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(kiwi)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_L_lion: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1.5) {            
+            console.log('konva_image_L_lion()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/L_lion_OpenClipart-Vectors_africa-1300564.svg', (lion) => {
+                lion.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                    draggable: true,
+                })
+                lion.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                lion.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(lion)
                 this.Konva_canvas_layer1.draw()
             })
         },
@@ -984,6 +1172,32 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
+        konva_image_O_opera: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {
+            console.log('konva_image_O_opera()')       // India? Idaho... Insect!     
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/O_opera_sydney_OpenClipart-Vectors-148858.svg', (opera) => {
+                opera.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                    draggable: true,
+                })
+                opera.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                opera.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(opera)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
         konva_image_P_pineapple: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
             console.log('konva_image_P_pineapple()')            
             // Random position:             
@@ -1010,6 +1224,60 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
+        konva_image_Q_quesadilla: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
+            console.log('konva_image_Q_quesadilla()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/Q_OpenClipart-Vectors_quesadilla-575610.svg', (pineappquesadillale) => {
+                quesadilla.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                    draggable: true,
+                })
+                quesadilla.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                quesadilla.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(quesadilla)
+                this.Konva_canvas_layer1.draw()
+            })
+        },    
+        konva_image_R_radio: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+            
+            console.log('konva_image_R_radio()')
+            
+            // Random position:
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/R_radio_pixabay_OpenClipart-Vectors_146124.svg', (radio) => {
+                radio.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: 1.5,
+                    scaleY: 1.5,
+                    draggable: true,
+                })
+                radio.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                radio.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(radio)
+                this.Konva_canvas_layer1.draw()
+            })
+        }, 
         konva_image_S_snake: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
             console.log('konva_image_S_snake()')            
             // Random position:             
@@ -1033,32 +1301,6 @@ let vue_app = new Vue({
                     document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(snake)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_V_violin: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
-            console.log('konva_image_V_violin()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/V_pixabay_Clker-Free-Vector-Images_violin-33610.svg', (violin) => {
-                violin.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                violin.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                violin.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(violin)
                 this.Konva_canvas_layer1.draw()
             })
         },
@@ -1086,6 +1328,58 @@ let vue_app = new Vue({
                     document.body.style.cursor = 'default';
                 })
                 this.Konva_canvas_layer1.add(taxi)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_U_unicorn: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_U_unicorn()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/U_pixabay_Lohrelei_unicorn-1237449.svg', (unicorn) => {
+                unicorn.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                    draggable: true,
+                })
+                unicorn.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                unicorn.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(unicorn)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_V_violin: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+            console.log('konva_image_V_violin()')            
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/V_pixabay_Clker-Free-Vector-Images_violin-33610.svg', (violin) => {
+                violin.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                    draggable: true,
+                })
+                violin.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                violin.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(violin)
                 this.Konva_canvas_layer1.draw()
             })
         },
@@ -1141,7 +1435,58 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
+        konva_image_Y_yogurt: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
+            console.log('konva_image_Y_yogurt()')
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
 
+            Konva.Image.fromURL('static/media/Y_yogurt_mohamed_hassan-4379616.svg', (yogurt) => {
+                yogurt.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                    draggable: true,
+                })
+                yogurt.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                yogurt.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(yogurt)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
+        konva_image_Z_placeholder: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
+            console.log('konva_image_Z_placeholder')
+            // Random position:             
+            var random_number = Math.random()
+            let random_x = Math.floor(random_number * Math.floor(input_x))
+            var random_number = Math.random()
+            let random_y = Math.floor(random_number * Math.floor(input_y))
+
+            Konva.Image.fromURL('static/media/Z_zigzag_chevron_Clker-Free-Vector-Images_26403.svg', (zigzag) => {
+                zigzag.setAttrs({
+                    x: random_x,
+                    y: random_y,
+                    scaleX: scale,
+                    scaleY: scale,
+                    draggable: true,
+                })
+                zigzag.on('mouseover', function() {
+                    document.body.style.cursor = 'crosshair';
+                })
+                zigzag.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                })
+                this.Konva_canvas_layer1.add(zigzag)
+                this.Konva_canvas_layer1.draw()
+            })
+        },
         konva_canvas_initialize: function() {
             console.log('konva_canvas_initialize() START')
 
@@ -1176,7 +1521,7 @@ let vue_app = new Vue({
             })
 
             
-            Konva.Image.fromURL('static/media/pixabay_gdj_gordon_johnson_butterfly-5883438.svg', (butterfly) => {
+            Konva.Image.fromURL('static/media/B_butterfly_pixabay_gdj_gordon_johnson-5883438.svg', (butterfly) => {
                 butterfly.setAttrs({
                     x: 200,
                     y: 400,
@@ -1210,118 +1555,6 @@ let vue_app = new Vue({
             // console.log('this.draw_load_page function() END')
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             console.log('konva_draw_test() END')
-        },
-
-        
-        change_tree_timeout_slider: function() {
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // SLIDER EXPERIMENTS, thanks https://www.w3schools.com/howto/howto_js_rangeslider.asp :
-            console.log('change_tree_timeout_slider')
-            this.span_text_redraw_value.innerHTML = this.value
-        },
-
-        // Tree canvas MODIFIED FROM, CREDITS TO: https://codepen.io/ntaylor09/pen/vKGePr :            
-        draw_tree_animated_from_NicoleEyO: function() {
-                
-            var ctx = this.vueCanvas_tree
-            // var timeout = this.redraw_timeout_for_tree_from_NicoleEyO
-            var timeout = this.value
-            
-            //Some variables
-            var length, divergence, reduction, line_width, start_points = [];
-            var W = 300 // window.innerWidth;
-            var H = 300 // window.innerHeight;
-
-            function init() {
-                
-                //filling the canvas
-                ctx.fillStyle = "black";
-                ctx.fillRect(0, 0, W, H);
-                
-                //length of the trunk - 100-150
-                length = 30 + Math.round(Math.random()*50);
-                
-                //angle at which branches will diverge - 10-60
-                divergence = 15 + Math.round(Math.random()*50);
-                
-                //Every branch will be 0.75times of the previous one - 0.5-0.75
-                //with 2 decimal points
-                reduction = Math.round(50 + Math.random()*20)/100;
-                
-                //width of the branch/trunk
-                line_width = 15;
-                
-                //This is the end point of the trunk, from where branches will diverge
-                var trunk = {x: W/2, y: length+30, angle: 90};
-                //It becomes the start point for branches
-                start_points = []; //empty the start points on every init();
-                start_points.push(trunk);
-                
-                //Y coordinates go positive downwards, hence they are inverted by deducting it
-                //from the canvas height = H
-                ctx.beginPath();
-                ctx.moveTo(trunk.x, H-5);
-                ctx.lineTo(trunk.x, H-trunk.y);
-                ctx.strokeStyle = "brown";
-                ctx.lineWidth = line_width;
-                ctx.stroke();
-                
-                branches();
-            }            
-            
-            //Lets draw the branches now
-            function branches()
-            {
-                //reducing line_width and length
-                length = length * reduction;
-                line_width = line_width * reduction;
-                ctx.lineWidth = line_width;
-                
-                var new_start_points = [];
-                ctx.beginPath();
-                for(var i = 0; i < start_points.length; i++)
-                {
-                    var sp = start_points[i];
-                    //2 branches will come out of every start point. Hence there will be
-                    //2 end points. There is a difference in the divergence.
-                    var ep1 = get_endpoint(sp.x, sp.y, sp.angle+divergence, length);
-                    var ep2 = get_endpoint(sp.x, sp.y, sp.angle-divergence, length);
-                    
-                    //drawing the branches now
-                    ctx.moveTo(sp.x, H-sp.y);
-                    ctx.lineTo(ep1.x, H-ep1.y);
-                    ctx.moveTo(sp.x, H-sp.y);
-                    ctx.lineTo(ep2.x, H-ep2.y);
-                    
-                    //Time to make this function recursive to draw more branches
-                    ep1.angle = sp.angle+divergence;
-                    ep2.angle = sp.angle-divergence;
-                    
-                    new_start_points.push(ep1);
-                    new_start_points.push(ep2);
-                }
-                // Let's add some more color
-                if(length < 10) ctx.strokeStyle = "green";
-                else ctx.strokeStyle = "brown";
-                ctx.stroke();
-                start_points = new_start_points;
-                // recursive call - only if length is more than 2.
-                // Else it will fall in a long loop
-                if(length > 2) setTimeout(branches, 100);
-
-                // Time in miliseconds, so 1,000 = 1s or 5,000 = 5s, etc.
-                else setTimeout(init, timeout);
-            }            
-            function get_endpoint(x, y, a, length)
-            {
-                // This function will calculate the end points based on simple vectors
-                // You can read about basic vectors from this link:
-                // http://physics.about.com/od/mathematics/a/VectorMath.htm
-                var epx = x + length * Math.cos(a*Math.PI/180);
-                var epy = y + length * Math.sin(a*Math.PI/180);
-                return {x: epx, y: epy};
-            }
-            init();
         },
     },
     created: function() { // created()  >>  mounted()
@@ -1359,7 +1592,10 @@ let vue_app = new Vue({
             // NOTE: The reason this can't be in the data raw 'data' is because it would start executing the functions. So we replace the blank data object here on 'mounted()'
             // Thanks Pete! This makes an easy lookup with a lookup on the left and a function on the right WITH arguments!
             // Space: () => console.log('I am a console.log() function, inside a key/value pair inside an object, inside the mounted function, inside the Vue shell!!!!'),
-        
+            
+            //  this is a pretty good list of "words in english and spanish which start with the same letter" :
+            //  https://www.boxofideas.com/list-of-words-that-begin-with-the-same-letter-in-different-languages-english-spanish-french-portuguese-and-italian/ 
+
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
             // if (KeyboardEvent.keyCode == 91) { // 91 is the ⊞ WINDOWS key
             //     // event.preventDefault(); // won't work
@@ -1384,33 +1620,33 @@ let vue_app = new Vue({
             Space: () => this.clear_canvas(),
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // KeyQ: () => this.draw_random_square('white'),
-            KeyQ: () => this.konva_image_A_ambulance(),
+            KeyQ: () => this.konva_image_Q_quesadilla(),
             KeyW: () => this.konva_image_W_whiskey(),
             KeyE: () => this.konva_image_E_elephant(),
-            KeyR: 1, // Radio?
+            KeyR: () => this.konva_image_R_radio(),
             KeyT: () => this.konva_image_T_taxi_PNG_NOT_SVG(),
-            KeyY: 1, // 
+            KeyY: () => this.konva_image_Y_yogurt(),
             KeyU: () => this.konva_image_U_unicorn(),
-            KeyI: 1, // India? Idaho... Insect!
-            KeyO: 1, // Opera? Oval / Operation / 
+            KeyI: () => this.konva_image_I_insect(),
+            KeyO: () => this.konva_image_O_opera(), 
             KeyP: () => this.konva_image_P_pineapple(),
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            KeyA: () => this.draw_random_circle('red', 500, 500),
+            KeyA: () => this.konva_image_A_ambulance(),
             KeyS: () => this.konva_image_S_snake(), 
             KeyD: () => this.konva_image_D_dolphin(),
             KeyF: () => this.konva_image_F_flower(), 
-            KeyG: 1, // Golf ball?
+            KeyG: () => this.konva_image_G_gorilla(),
             KeyH: () => this.konva_image_H_hospital(), 
             KeyJ: () => this.konva_image_J_jar_jarra(), 
-            KeyK: 1, // 
-            KeyL: 1, // Lick/Lamer? 
+            KeyK: () => this.konva_image_K_kiwi(),
+            KeyL: () => this.konva_image_L_lion(),
 
             // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            KeyZ: () => this.konva_image_smiley_face_svg(),
+            // KeyZ: () => this.draw_face(),
+            KeyZ: () => this.konva_image_Z_placeholder(),
+            // KeyZ: () => this.konva_image_smiley_face_svg(),
             KeyX: () => this.konva_image_X_xylophone(),
-            // KeyC: () => this.draw_face(),
             KeyC: () => this.konva_image_C_cement_mixer_truck(),
             KeyV: () => this.konva_image_V_violin(), 
             KeyB: () => this.konva_image_B_banana_ape(),

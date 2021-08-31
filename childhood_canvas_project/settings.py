@@ -22,8 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
                                                                                                                             # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'd4lfp((w_un^az#s7n9qq4qr5t_z$e@l^4h+fb4q*o$w78%q3s' # OLD, committed by accident                            # SECURE THIS FOR PRODUCTION! 
-                                                                                                                            # IF IT WAS ACCIDENTALLY PUSHED, CREATE A NEW ONE!
+# SECRET_KEY = 'd4lfp((w_un^az#s7n9qq4qr5t_z$e@l^4h+fb4q*o$w78%q3s' # OLD, committed by accident                            # SECURE THIS FOR PRODUCTION! -- IF IT WAS ACCIDENTALLY PUSHED, CREATE A NEW ONE!
+# In Deployed Heroku, secret key is set in the environment_variables (via CLI or config page)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True            # DIS-ABLE THIS FOR PRODUCTION
@@ -164,23 +164,23 @@ LOGOUT_REDIRECT_URL = 'home'
 # (seems to be a non-serious debug warning only...)
 STATIC_URL = '/static/'
 # STATIC_ROOT = '/home/johnfial/johnfial.pythonanywhere.com/static/' # Deployed site!
-# STATICFILES_DIRS = [ BASE_DIR / 'static' ]                                                                                  # EXPERIMENTING: ENABLE THIS FOR PRODUCTION when dis-abling DEBUG=TRUE
-if not DEBUG:                                                                                                                 # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
-    STATIC_ROOT = ''                                                                                                          # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
-STATICFILES_DIRS = [                                                                                                          # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
-    os.path.join(BASE_DIR, 'static/'),                                                                                        # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
-]                                                                                                                             # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR PRODUCTION when dis-abling DEBUG=TRUE
+# STATICFILES_DIRS = [ BASE_DIR / 'static' ]                                                                                  # EXPERIMENTING: ENABLE THIS FOR DEPLOYED PRODUCTION when dis-abling DEBUG=TRUE
+if not DEBUG:                                                                                                                 # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR DEPLOYED PRODUCTION when dis-abling DEBUG=TRUE
+    STATIC_ROOT = ''                                                                                                          # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR DEPLOYED PRODUCTION when dis-abling DEBUG=TRUE
+STATICFILES_DIRS = [                                                                                                          # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR DEPLOYED PRODUCTION when dis-abling DEBUG=TRUE
+    os.path.join(BASE_DIR, 'static/'),                                                                                        # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR DEPLOYED PRODUCTION when dis-abling DEBUG=TRUE
+]                                                                                                                             # EXPERIMENTING: DISABLE THESE 4 LINES FOR FOR DEPLOYED PRODUCTION when dis-abling DEBUG=TRUE
 
 # https://github.com/PdxCodeGuild/class_salmon/blob/main/5%20Capstone/Heroku%20Deployment.md
-
-import django_on_heroku
-django_on_heroku.settings(locals())
+# DEPLOYED HEROKU BELOW TWO:
+# import django_on_heroku
+# django_on_heroku.settings(locals())
 
 
 # https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/ :
-# CSRF_COOKIE_SECURE = True # default False                                                                                  # ENABLE THIS FOR PRODUCTION
-# SESSION_COOKIE_SECURE = True # # default False                                                                             # ENABLE THIS FOR PRODUCTION
-# SECURE_SSL_REDIRECT = True # # default False                                                                               # ENABLE THIS FOR PRODUCTION # https://docs.djangoproject.com/en/3.1/ref/settings/#secure-ssl-redirect
+# CSRF_COOKIE_SECURE = True # default False                                                                                  # ENABLE THIS FOR DEPLOYED PRODUCTION
+# SESSION_COOKIE_SECURE = True # # default False                                                                             # ENABLE THIS FOR DEPLOYED PRODUCTION
+# SECURE_SSL_REDIRECT = True # # default False                                                                               # ENABLE THIS FOR DEPLOYED PRODUCTION # https://docs.djangoproject.com/en/3.1/ref/settings/#secure-ssl-redirect
 
 
 

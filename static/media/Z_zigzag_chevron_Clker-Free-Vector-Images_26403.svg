@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <pattern id="a" width="100" height="100" patternUnits="userSpaceOnUse">
+   <path d="m0 0v100h100v-100z" fill="#000080"/>
+   <path d="m0 100v-25l25-25 25 25v25l-25-25z" fill="#00f"/>
+   <path d="m50 100v-25l25-25 25 25v25l-25-25z" fill="#00f"/>
+   <path d="m50 50v-25l25-25 25 25v25l-25-25z" fill="#c0e0ff"/>
+   <path d="m0 50v-25l25-25 25 25v25l-25-25z" fill="#c0e0ff"/>
+  </pattern>
+ </defs>
+ <path d="m0 0h100v100h-100z" fill="url(#a)"/>
+</svg>
