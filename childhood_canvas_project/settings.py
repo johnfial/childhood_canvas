@@ -4,10 +4,7 @@ import os # this is important!!
 # DEPLOYMENT CHANGE #1 / X : Disable below for Heroku, enable for local + PythonAnywhere
 # from . secrets import * # has new secret key
 
-# https://github.com/PdxCodeGuild/class_salmon/blob/main/5%20Capstone/Heroku%20Deployment.md
-# DEPLOYMENT CHANGE #2 / X : Enable below for Heroku, disable for local + PythonAnywhere
-import django_on_heroku
-django_on_heroku.settings(locals())
+# DEPLOYMENT CHANGE #2 / X : see section "import django_on_heroku" at END
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -180,6 +177,11 @@ STATICFILES_DIRS = [                                                            
     # (i.e. HSTS didn’t break anything), it’s a good idea to increase this value 
     # so that infrequent visitors will be protected (31536000 seconds, i.e. 1 year, is common).""
 
+
+# https://github.com/PdxCodeGuild/class_salmon/blob/main/5%20Capstone/Heroku%20Deployment.md
+# DEPLOYMENT CHANGE #2 / X : Enable below for Heroku, disable for local + PythonAnywhere
+import django_on_heroku
+django_on_heroku.settings(locals())
 
 """
 Django settings for childhood_canvas_project project.
