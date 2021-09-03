@@ -445,7 +445,7 @@ let vue_app = new Vue({
                 ctx.beginPath();
                 ctx.moveTo(trunk.x, H-5);
                 ctx.lineTo(trunk.x, H-trunk.y);
-                ctx.strokeStyle = "brown";
+                ctx.strokeStyle = "green";
                 ctx.lineWidth = line_width;
                 ctx.stroke();
                 
@@ -485,7 +485,7 @@ let vue_app = new Vue({
                 }
                 // Let's add some more color
                 if(length < 10) ctx.strokeStyle = "red";
-                else ctx.strokeStyle = "white";
+                else ctx.strokeStyle = "green";
                 ctx.stroke();
                 start_points = new_start_points;
                 // recursive call - only if length is more than 2.
@@ -771,7 +771,7 @@ let vue_app = new Vue({
             })
 
         },
-        konva_image_A_ambulance: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+        konva_image_A_ambulance: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
             console.log('konva_image_A_ambulance()')            
             // Random position:             
             var random_number = Math.random()
@@ -910,7 +910,7 @@ let vue_app = new Vue({
             })
 
         },
-        konva_image_E_elephant: function(input_x=this.canvas_width, input_y=this.canvas_height) {
+        konva_image_E_elephant: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {
             
             console.log('konva_image_E_elephant()')
             
@@ -924,8 +924,8 @@ let vue_app = new Vue({
                 elephant.setAttrs({
                     x: random_x,
                     y: random_y,
-                    scaleX: 2.0,
-                    scaleY: 2.0,
+                    scaleX: scale,
+                    scaleY: scale,
                     draggable: true,
                 })
                 elephant.on('mouseover', function() {
@@ -990,7 +990,7 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_H_hospital: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
+        konva_image_H_hospital: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
             console.log('konva_image_H_hospital()')            
             // Random position:             
             var random_number = Math.random()
@@ -1068,7 +1068,7 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_K_kiwi: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1.5) {            
+        konva_image_K_kiwi: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
             console.log('konva_image_K_kiwi()')            
             // Random position:             
             var random_number = Math.random()
@@ -1146,7 +1146,7 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_N_nine: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
+        konva_image_N_nine: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.8) {            
             console.log('konva_image_N_nine()')            
             // Random position:             
             var random_number = Math.random()
@@ -1224,7 +1224,7 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_Q_quesadilla: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
+        konva_image_Q_quesadilla: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.8) {            
             console.log('konva_image_Q_quesadilla()')            
             // Random position:             
             var random_number = Math.random()
@@ -1232,7 +1232,7 @@ let vue_app = new Vue({
             var random_number = Math.random()
             let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/Q_OpenClipart-Vectors_quesadilla-575610.svg', (pineappquesadillale) => {
+            Konva.Image.fromURL('static/media/Q_OpenClipart-Vectors_quesadilla-575610.svg', (quesadilla) => {
                 quesadilla.setAttrs({
                     x: random_x,
                     y: random_y,
@@ -1304,7 +1304,7 @@ let vue_app = new Vue({
                 this.Konva_canvas_layer1.draw()
             })
         },
-        konva_image_T_taxi_PNG_NOT_SVG: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
+        konva_image_T_taxi_PNG_NOT_SVG: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.7) {            
             console.log('konva_image_T_taxi_PNG_NOT_SVG()')
             console.log('PNG_NOT_SVG!')
             // Random position:             
@@ -1652,6 +1652,7 @@ let vue_app = new Vue({
             KeyB: () => this.konva_image_B_banana_ape(),
             KeyN: () => this.konva_image_N_nine(), 
             KeyM: () => this.konva_image_M_mango(),
+            Escape: () => this.show_video_modal_show_boolean = false,
         }
         // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
         console.log(`mounted() END`)
@@ -1728,7 +1729,14 @@ Vue.component("modal", {
             </div>
         </div>
     </transition>
-    `
+    `, 
+    mounted: function() {
+        // TESTING making escape key close modal...
+        //  https://gist.github.com/JimSchofield/ec06d1f209799f5cd279f5683b178da4
+
+        // document.addEventListener('keyup', this.keypress_listener)
+        console.log('mounted: function() running...')
+    },
 });
 
 // below test from https://stackoverflow.com/questions/34941829/setting-focus-of-an-input-element-in-vue-js 
