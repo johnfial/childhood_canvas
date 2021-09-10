@@ -23,10 +23,12 @@
 
 - Childhood Canvas is a visual play sandbox for older babies and toddlers, intended for full-screen, limited-feature use, *with a focus on keyboard interaction*.
 - Ages ~6-months through ~42 months (3 1/2 years).
-- A deployed version can be accessed at https://johnfial.pythonanywhere.com . (It is usually older than this repository.) 
-- Guest credentials, now unnecessary: 
+<!-- - A deployed version can be accessed at https://johnfial.pythonanywhere.com . (It is usually older than this repository.)  -->
+- A deployed, but slightly outdated version can be accessed at https://childhood-canvas.herokuapp.com/canvas.html . Heroku deployments have a ~10-second "wake up" time, so please be patient!
+
+<!-- - Guest credentials, now unnecessary: 
    - *Username:*  **guest**
-   - *Password:*         **aoeu1234**
+   - *Password:*         **aoeu1234** -->
 - Class presentation (virtual), Jan 2021: https://www.youtube.com/watch?v=laxBGSLbT28&t=2260s (link points to 37:40)
 
 <!--  -->
