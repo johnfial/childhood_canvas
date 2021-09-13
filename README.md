@@ -25,7 +25,6 @@
 - Ages ~6-months through ~42 months (3 1/2 years).
 <!-- - A deployed version can be accessed at https://johnfial.pythonanywhere.com . (It is usually older than this repository.)  -->
 - A deployed, but slightly outdated version can be accessed at https://childhood-canvas.herokuapp.com/canvas.html . Heroku deployments have a ~10-second "wake up" time, so please be patient!
-
 <!-- - Guest credentials, now unnecessary: 
    - *Username:*  **guest**
    - *Password:*         **aoeu1234** -->
