@@ -4,14 +4,14 @@
   Childhood Canvas - canvas page.
   John Fial, PDX Code Guild, 2020-2021, https://github.com/johnfial/childhood_canvas
 
-  Static version (2026): this used to be the Django template templates/canvas.html rendered on
-  top of templates/base.html. The app itself always ran entirely in the browser, so the page is
-  now plain HTML served by GitHub Pages. The original Django project is preserved on the branch
+  Static site served by GitHub Pages. The app itself is static/js/vue_main.js (Vue 2 + Konva 7).
+  The original 2020-2021 Django version is preserved on the branch
   archive/2026-11-04-original-django-app-last-deployed-2021.
 -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="static/media/pixabay_OpenClipart-Vectors_face-1298202.svg" type="image/svg+xml">
 
   <!-- 1. Vue 2 (full build, MIT). Vendored copy of https://unpkg.com/vue@2.6.12/dist/vue.min.js -->
   <script src="static/lib/vue-2.6.12.min.js"></script>
@@ -31,65 +31,80 @@
   <title>Childhood Canvas</title>
 </head>
 
-<body>
+<body class="canvas-page">
 <main id="div_main_canvas">
-  <header></header>
 
   <!-- START VUE APP! NOTHING OUTSIDE OF THIS DIV! -->
-  <div id='vue_app'>
+  <div id="vue_app">
 
-    <!-- https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
+    <!-- Left: the Konva stage is created inside this div, see mounted() in vue_main.js -->
     <div id="div_konva_canvas">
       <h2>Fallback</h2>
-        <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a 1300x900 pixel canvas for toddlers.
-          Perhaps try a different, modern browser on the PC in fullscreen.
+      <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a drawing canvas for toddlers.
+        Perhaps try a different, modern browser on the PC in fullscreen.</p>
     </div>
 
-    <div id="button_area">
-      <button class="button_working" @click="fullscreen_toggle"                   >fullscreen [F11]</button>
-      <button class="button_working" @click="clear_canvas"                        >clear [spacebar]</button>
-      <button class="button_working" @click="this.window.location.reload(true)"   >reload</button> <!-- Why did I have to prefix the command with "this." on this version, but not previously?! Vue version?! -->
-      <br>
-      <button class="button_in_dev"  @click="canvas_save_image"                   >save (dev)</button>
-      <button class="button_in_dev"  @click=""                                    >Current Color (dev)</button>
-    </div>
+    <!-- Right: controls, key display, the little tree, credits -->
+    <aside id="div_right_logs">
 
-    <div id="div_right_logs">
+      <section class="panel_section button_row">
+        <button class="button_working" @click="fullscreen_toggle($event)">{{ fullscreen ? 'exit fullscreen' : 'fullscreen' }}</button>
+        <button class="button_working" @click="clear_canvas($event)">clear [spacebar]</button>
+        <button class="button_working" @click="canvas_save_image($event)">save picture</button>
+        <button class="button_working button_small" @click="page_reload">reload</button>
+      </section>
+      <p class="save_status" aria-live="polite">{{ save_status }}</p>
 
-      <canvas
-        id="canvas_tree"
-        width="300"
-        height="300"
-        >
-          Fallback: Yikes! Your browser cannot display this HTML5 Drawing Canvas: This is a small tree drawing, for credits (and link) see footer.
+      <section class="panel_section">
+        <p class="hint">Mouse / finger:</p>
+        <div class="button_row">
+          <button class="button_working" :class="{ is_active: tool_mode === 'move' }" @click="set_tool_mode('move', $event)">move pictures</button>
+          <button class="button_working" :class="{ is_active: tool_mode === 'draw' }" @click="set_tool_mode('draw', $event)">draw with pen</button>
+        </div>
+        <div class="button_row swatches">
+          <button v-for="c in pen_colors" :key="c" class="swatch"
+                  :class="{ is_active: pen_color === c && tool_mode === 'draw' }"
+                  :style="{ backgroundColor: c }" :title="c" :aria-label="'pen color ' + c"
+                  @click="set_pen_color(c, $event)"></button>
+        </div>
+        <div class="button_row">
+          <button v-for="s in pen_sizes" :key="s.width" class="pen_size_button"
+                  :class="{ is_active: pen_width === s.width && tool_mode === 'draw' }"
+                  :title="s.label" :aria-label="'pen size ' + s.label"
+                  @click="set_pen_width(s.width, $event)">
+            <span class="dot" :style="{ width: s.width + 'px', height: s.width + 'px', backgroundColor: pen_color }"></span>
+          </button>
+        </div>
+      </section>
+
+      <section class="panel_section">
+        <p class="hint">Press any key for a picture. Spacebar clears.</p>
+        <p id="last_keypress">Key: {{ last_key }}</p>
+        <p class="class_keyboard_logs">Full keypress log:</p>
+        <p class="class_keyboard_logs" id="keyboard_logs">{{ key_log }}</p>
+      </section>
+
+      <canvas id="canvas_tree" width="300" height="300">
+        Fallback: Yikes! Your browser cannot display this HTML5 Drawing Canvas: This is a small tree drawing, for credits (and link) see footer.
       </canvas>
 
-      <div>
-          <p id="last_keypress">Key:
-          </p>
-      </div>
-
-      <div>
-        <p class="class_keyboard_logs">Full keypress log:</p>
-        <p class="class_keyboard_logs" id="keyboard_logs"></p>
-      </div>
       <footer id="credits">
-          <h1>Credits:</h1>
-          <ul>
-            <li>Overall: <a href="https://johnfial.github.io/" target="_blank">John Fial</a></li>
-            <li>Tree: <a href="https://codepen.io/ntaylor09/pen/vKGePr" target="_blank">Nicole Eyo</a></li>
-            <li>SVG Images: Most from <a href="https://pixabay.com/vectors/" target="_blank">Pixabay</a> , see source code.</li>
-          </ul>
+        <h1>Credits:</h1>
+        <ul>
+          <li>Overall: <a href="https://johnfial.github.io/" target="_blank">John Fial</a></li>
+          <li>Tree: <a href="https://codepen.io/ntaylor09/pen/vKGePr" target="_blank">Nicole Eyo</a></li>
+          <li>SVG Images: Most from <a href="https://pixabay.com/vectors/" target="_blank">Pixabay</a> , see source code.</li>
+          <li>Built with <a href="https://v2.vuejs.org/" target="_blank">Vue 2</a> and <a href="https://konvajs.org/" target="_blank">Konva</a>.</li>
+        </ul>
       </footer>
-    </div>
+    </aside>
 
     <div id="invisible_video_modals">
-      <!-- Currently only one because this is a component, but this is a good playground area for other stuff not currently onscreen... -->
-      <modal v-if="show_video_modal_show_boolean" @close="show_video_modal_show_boolean=false" :source_url="video_modal_selected_URL" :show_modal="false">
+      <modal v-if="show_video_modal_show_boolean" @close="close_video" :source_url="video_modal_selected_URL" :show_modal="false">
       </modal>
     </div>
-    <!-- END VUE APP! NOTHING OUTSIDE OF THIS DIV! -->
   </div>
+  <!-- END VUE APP! NOTHING OUTSIDE OF THIS DIV! -->
 
 </main>
 </body>

@@ -1,1762 +1,650 @@
-// John Fial, 2020-2021 PDX Code Guild, 
-// Capstone Project: Childhood Canvas; see https://github.com/johnfial/childhood_canvas
-// link to GitHub project: https://github.com/johnfial/childhood_canvas/projects/1 // current working info: see BOTTOM of file...
-// / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+// Childhood Canvas, browser app (Vue 2 + Konva 7).
+// John Fial, PDX Code Guild, 2020-2021; see https://github.com/johnfial/childhood_canvas
+// Class presentation, Jan 2021: https://www.youtube.com/watch?v=laxBGSLbT28&t=2260s
+//
+// How it works:
+//   Every key release (keyup) looks up KeyboardEvent.code in `key_actions`. Letter keys add a picture
+//   from PICTURES at a random spot on a Konva stage, any other key draws a random circle, Space clears,
+//   Numpad0-9 open a YouTube video in a modal and Escape closes it. The mouse (or a finger) either
+//   drags pictures around ("move" mode) or draws with the pen ("draw" mode).
+//   The stage uses a fixed "design" coordinate space of DESIGN_WIDTH x DESIGN_HEIGHT, the size of the
+//   original canvas, and fit_stage_to_window() scales the whole stage to the available screen height.
+//   That way picture sizes and positions mean the same thing on every monitor.
+// / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
+
+const DESIGN_WIDTH = 1300
+const DESIGN_HEIGHT = 1100
+const MIN_STAGE_SCALE = 0.35
+const MAX_STAGE_SCALE = 2.5
+const CANVAS_BACKGROUND = 'rgb(0, 112, 6)' // keep in sync with --canvas-bg in main.css
+
+// Letter key -> picture. `scale` multiplies the image's natural size.
+// Most pictures are from Pixabay; the author is part of each file name. See the credits in the side panel.
+const MEDIA_PATH = 'static/media/'
+const PICTURES = {
+    KeyA: { name: 'ambulance',    file: 'A_pixabay_Clker-Free-Vector-Images_ambulance-24405.svg',  scale: 1 },
+    KeyB: { name: 'banana ape',   file: 'B_pixabay_Clker-Free-Vector-Images_banana_ape-44564.svg', scale: 2 },
+    KeyC: { name: 'cement mixer', file: 'C_cement-mixer_pixabay_Grafikingenieur-5630778.svg',      scale: 5 },
+    KeyD: { name: 'dolphin',      file: 'D_dolphin_pixabay_Clker-Free-Vector-Images-41436.svg',    scale: 2 },
+    KeyE: { name: 'elephant',     file: 'E_elephant_Pixabay_Clker-Free-Vector-Images-24732.svg',   scale: 1 },
+    KeyF: { name: 'flower',       file: 'F_pixabay_roark_rose-398576.svg',                         scale: 2 },
+    KeyG: { name: 'gorilla',      file: 'G_gorilla_mohamed_hassan-4309441.svg',                    scale: 0.6 },
+    KeyH: { name: 'hospital',     file: 'H_stockio-com_hospital.svg',                              scale: 1 },
+    KeyI: { name: 'insect',       file: 'I_insect_beetle_OpenClipart-Vectors_155017.svg',          scale: 1 },
+    KeyJ: { name: 'jug (jarra)',  file: 'J_pixabay_OpenClipart-Vectors_jug-158910.svg',            scale: 1.5 },
+    KeyK: { name: 'kiwi',         file: 'K_kiwi_Clker-Free-Vector-Image-42895.svg',                scale: 1 },
+    KeyL: { name: 'lion',         file: 'L_lion_OpenClipart-Vectors_africa-1300564.svg',           scale: 1.5 },
+    KeyM: { name: 'mango',        file: 'M_OpenClipart-Vectors_mango-1295471.svg',                 scale: 0.1 },
+    KeyN: { name: 'nine',         file: 'N_9_Clker-Free-Vector-Images_nine-38583.svg',             scale: 0.8 },
+    KeyO: { name: 'opera house',  file: 'O_opera_sydney_OpenClipart-Vectors-148858.svg',           scale: 1 },
+    KeyP: { name: 'pineapple',    file: 'P_stux_pineapple-300038.svg',                             scale: 1 },
+    KeyQ: { name: 'quesadilla',   file: 'Q_OpenClipart-Vectors_quesadilla-575610.svg',             scale: 0.8 },
+    KeyR: { name: 'radio',        file: 'R_radio_pixabay_OpenClipart-Vectors_146124.svg',          scale: 1.5 },
+    KeyS: { name: 'snake',        file: 'S_rattlesnake_pixabay_OpenClipart-Vectors-159135.svg',    scale: 1 },
+    KeyT: { name: 'taxi',         file: 'T_taxi_freepngimg-com_33090-6-taxi-driver-clipart.png',   scale: 0.7 },
+    KeyU: { name: 'unicorn',      file: 'U_pixabay_Lohrelei_unicorn-1237449.svg',                  scale: 2 },
+    KeyV: { name: 'violin',       file: 'V_pixabay_Clker-Free-Vector-Images_violin-33610.svg',     scale: 2 },
+    KeyW: { name: 'whiskey',      file: 'W_whiskey_pixabay_juhele-4397841.svg',                    scale: 0.2 },
+    KeyX: { name: 'xylophone',    file: 'X_xylophone_pixabay_Clker-Free-Vector-308024.svg',        scale: 1 },
+    KeyY: { name: 'yogurt',       file: 'Y_yogurt_mohamed_hassan-4379616.svg',                     scale: 1 },
+    KeyZ: { name: 'zigzag',       file: 'Z_zigzag_chevron_Clker-Free-Vector-Images_26403.svg',     scale: 1 },
+}
+
+// Numpad0-9 -> YouTube videos (the "parents can program shortcuts to their toddler's favorite videos" idea).
+const VIDEOS = [
+    'https://www.youtube.com/embed/sYwRV7WHzm8?autoplay=1', // 0 Silent Night
+    'https://www.youtube.com/embed/zRxX63txOXk?autoplay=1', // 1 Pupu Hinuhinu
+    'https://www.youtube.com/embed/ssHkMWcGat4?autoplay=1', // 2 Arecibo Observatory collapse, 1 Dec 2020
+    'https://www.youtube.com/embed/FezVApPddqU?autoplay=1', // 3 Mele Kalikimaka, psych version (was noted as not working in 2021)
+    'https://www.youtube.com/embed/mjcuxw_HJtw?autoplay=1', // 4 Humuhumunukunukuapua'a (Hawai'i state fish)
+    'https://www.youtube.com/embed/1h2BqSS5R3U?autoplay=1', // 5 Alicia Keys, at-home spin on "My House"
+    'https://www.youtube.com/embed/XqZsoesa55w?autoplay=1', // 6 Baby Shark Dance (was noted as not working in 2021)
+    'https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1', // 7 How Microwaving Grapes Makes Plasma
+    'https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1', // 8 (same)
+    'https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1', // 9 (same)
+]
+
+// Pen tool choices shown in the side panel.
+const PEN_COLORS = ['white', 'black', 'red', 'orange', 'yellow', 'lime', 'deepskyblue', 'violet', 'hotpink']
+const PEN_SIZES = [
+    { label: 'thin',   width: 4 },
+    { label: 'medium', width: 12 },
+    { label: 'thick',  width: 28 },
+]
+
+// Colors for the random circles drawn by unmapped keys. Weighted on purpose: lots of white, black and
+// rainbow colors, then every CSS color name once. Thanks to https://gist.github.com/bobspace/2712980
+const RANDOM_CIRCLE_COLORS = [
+    'white', 'black',
+    'white', 'black',
+    'white', 'black',
+    'white', 'black',
+    'white', 'black',
+    'white', 'black',
+    'white', 'black',
+    'white', 'black',
+    'white', 'black',
+    'white', 'black', 
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+    "AliceBlue",
+    "AntiqueWhite",
+    "Aqua",
+    "Aquamarine",
+    "Azure",
+    "Beige",
+    "Bisque",
+    "Black",
+    "BlanchedAlmond",
+    "Blue",
+    "BlueViolet",
+    "Brown",
+    "BurlyWood",
+    "CadetBlue",
+    "Chartreuse",
+    "Chocolate",
+    "Coral",
+    "CornflowerBlue",
+    "Cornsilk",
+    "Crimson",
+    "Cyan",
+    "DarkBlue",
+    "DarkCyan",
+    "DarkGoldenRod",
+    "DarkGray",
+    "DarkGrey",
+    "DarkGreen",
+    "DarkKhaki",
+    "DarkMagenta",
+    "DarkOliveGreen",
+    "DarkOrange",
+    "DarkOrchid",
+    "DarkRed",
+    "DarkSalmon",
+    "DarkSeaGreen",
+    "DarkSlateBlue",
+    "DarkSlateGray",
+    "DarkSlateGrey",
+    "DarkTurquoise",
+    "DarkViolet",
+    "DeepPink",
+    "DeepSkyBlue",
+    "DimGray",
+    "DimGrey",
+    "DodgerBlue",
+    "FireBrick",
+    "FloralWhite",
+    "ForestGreen",
+    "Fuchsia",
+    "Gainsboro",
+    "GhostWhite",
+    "Gold",
+    "GoldenRod",
+    "Gray",
+    "Grey",
+    "Green",
+    "GreenYellow",
+    "HoneyDew",
+    "HotPink",
+    "IndianRed",
+    "Indigo",
+    "Ivory",
+    "Khaki",
+    "Lavender",
+    "LavenderBlush",
+    "LawnGreen",
+    "LemonChiffon",
+    "LightBlue",
+    "LightCoral",
+    "LightCyan",
+    "LightGoldenRodYellow",
+    "LightGray",
+    "LightGrey",
+    "LightGreen",
+    "LightPink",
+    "LightSalmon",
+    "LightSeaGreen",
+    "LightSkyBlue",
+    "LightSlateGray",
+    "LightSlateGrey",
+    "LightSteelBlue",
+    "LightYellow",
+    "Lime",
+    "LimeGreen",
+    "Linen",
+    "Magenta",
+    "Maroon",
+    "MediumAquaMarine",
+    "MediumBlue",
+    "MediumOrchid",
+    "MediumPurple",
+    "MediumSeaGreen",
+    "MediumSlateBlue",
+    "MediumSpringGreen",
+    "MediumTurquoise",
+    "MediumVioletRed",
+    "MidnightBlue",
+    "MintCream",
+    "MistyRose",
+    "Moccasin",
+    "NavajoWhite",
+    "Navy",
+    "OldLace",
+    "Olive",
+    "OliveDrab",
+    "Orange",
+    "OrangeRed",
+    "Orchid",
+    "PaleGoldenRod",
+    "PaleGreen",
+    "PaleTurquoise",
+    "PaleVioletRed",
+    "PapayaWhip",
+    "PeachPuff",
+    "Peru",
+    "Pink",
+    "Plum",
+    "PowderBlue",
+    "Purple",
+    "RebeccaPurple",
+    "Red",
+    "RosyBrown",
+    "RoyalBlue",
+    "SaddleBrown",
+    "Salmon",
+    "SandyBrown",
+    "SeaGreen",
+    "SeaShell",
+    "Sienna",
+    "Silver",
+    "SkyBlue",
+    "SlateBlue",
+    "SlateGray",
+    "SlateGrey",
+    "Snow",
+    "SpringGreen",
+    "SteelBlue",
+    "Tan",
+    "Teal",
+    "Thistle",
+    "Tomato",
+    "Turquoise",
+    "Violet",
+    "Wheat",
+    "White",
+    "WhiteSmoke",
+    "Yellow",
+]
+
+// The original welcome screen (removed Nov 2026 so the canvas starts empty) showed this text, a blue
+// circle and a 4x butterfly, all left over from the very first Konva drag-and-drop test:
+//   "Welcome to Childhood Canvas, / Please go grab a tea of 'anise. / Now you're on campus! /
+//    Make your browser fullscreen (F11), / Click the keyboard's buttons, find some beans, /
+//    Remember: share this page as a meme! / (Numpad opens preset videos, too!)"
 
 let vue_app = new Vue({
     el: '#vue_app',
     data: {
-        
-        span_text_redraw_value: null,
-        value: 500,
-
-        keys_and_functions: {}, // we can't have the arrow () => functions here, so this is blank and they'll load on mounted()                   
-        random_css_color_list: [ // thanks to https://gist.github.com/bobspace/2712980 for the color list! :
-            'white', 'black',
-            'white', 'black',
-            'white', 'black',
-            'white', 'black',
-            'white', 'black',
-            'white', 'black',
-            'white', 'black',
-            'white', 'black',
-            'white', 'black',
-            'white', 'black', 
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
-            "AliceBlue",
-            "AntiqueWhite",
-            "Aqua",
-            "Aquamarine",
-            "Azure",
-            "Beige",
-            "Bisque",
-            "Black",
-            "BlanchedAlmond",
-            "Blue",
-            "BlueViolet",
-            "Brown",
-            "BurlyWood",
-            "CadetBlue",
-            "Chartreuse",
-            "Chocolate",
-            "Coral",
-            "CornflowerBlue",
-            "Cornsilk",
-            "Crimson",
-            "Cyan",
-            "DarkBlue",
-            "DarkCyan",
-            "DarkGoldenRod",
-            "DarkGray",
-            "DarkGrey",
-            "DarkGreen",
-            "DarkKhaki",
-            "DarkMagenta",
-            "DarkOliveGreen",
-            "DarkOrange",
-            "DarkOrchid",
-            "DarkRed",
-            "DarkSalmon",
-            "DarkSeaGreen",
-            "DarkSlateBlue",
-            "DarkSlateGray",
-            "DarkSlateGrey",
-            "DarkTurquoise",
-            "DarkViolet",
-            "DeepPink",
-            "DeepSkyBlue",
-            "DimGray",
-            "DimGrey",
-            "DodgerBlue",
-            "FireBrick",
-            "FloralWhite",
-            "ForestGreen",
-            "Fuchsia",
-            "Gainsboro",
-            "GhostWhite",
-            "Gold",
-            "GoldenRod",
-            "Gray",
-            "Grey",
-            "Green",
-            "GreenYellow",
-            "HoneyDew",
-            "HotPink",
-            "IndianRed",
-            "Indigo",
-            "Ivory",
-            "Khaki",
-            "Lavender",
-            "LavenderBlush",
-            "LawnGreen",
-            "LemonChiffon",
-            "LightBlue",
-            "LightCoral",
-            "LightCyan",
-            "LightGoldenRodYellow",
-            "LightGray",
-            "LightGrey",
-            "LightGreen",
-            "LightPink",
-            "LightSalmon",
-            "LightSeaGreen",
-            "LightSkyBlue",
-            "LightSlateGray",
-            "LightSlateGrey",
-            "LightSteelBlue",
-            "LightYellow",
-            "Lime",
-            "LimeGreen",
-            "Linen",
-            "Magenta",
-            "Maroon",
-            "MediumAquaMarine",
-            "MediumBlue",
-            "MediumOrchid",
-            "MediumPurple",
-            "MediumSeaGreen",
-            "MediumSlateBlue",
-            "MediumSpringGreen",
-            "MediumTurquoise",
-            "MediumVioletRed",
-            "MidnightBlue",
-            "MintCream",
-            "MistyRose",
-            "Moccasin",
-            "NavajoWhite",
-            "Navy",
-            "OldLace",
-            "Olive",
-            "OliveDrab",
-            "Orange",
-            "OrangeRed",
-            "Orchid",
-            "PaleGoldenRod",
-            "PaleGreen",
-            "PaleTurquoise",
-            "PaleVioletRed",
-            "PapayaWhip",
-            "PeachPuff",
-            "Peru",
-            "Pink",
-            "Plum",
-            "PowderBlue",
-            "Purple",
-            "RebeccaPurple",
-            "Red",
-            "RosyBrown",
-            "RoyalBlue",
-            "SaddleBrown",
-            "Salmon",
-            "SandyBrown",
-            "SeaGreen",
-            "SeaShell",
-            "Sienna",
-            "Silver",
-            "SkyBlue",
-            "SlateBlue",
-            "SlateGray",
-            "SlateGrey",
-            "Snow",
-            "SpringGreen",
-            "SteelBlue",
-            "Tan",
-            "Teal",
-            "Thistle",
-            "Tomato",
-            "Turquoise",
-            "Violet",
-            "Wheat",
-            "White",
-            "WhiteSmoke",
-            "Yellow",
-        ],
-
-        // Konva Stuff here:
-        redraw_timeout_for_tree_from_NicoleEyO: 50, // This is the slidable redraw tree time for the canvas tree (from NicoleEyO )
-        configKonva: {
-            width: 1300,
-            height: 1100,
-          },
-        configCircle: {
-            x: 100,
-            y: 100,
-            radius: 70,
-            fill: 'red',
-            stroke: 'black',
-            strokeWidth: 4
-        },
         fullscreen: false,
-        vueCanvas_tree: null,
-        Konva_canvas_Stage: null,
-
-        // Video modals (Numpad0-Numpad9) Here:
+        last_key: '',
+        key_log: '',
+        stage_scale: 1,
+        // Mouse / touch tool:
+        tool_mode: 'move',          // 'move' drags pictures around, 'draw' uses the pen
+        pen_colors: PEN_COLORS,
+        pen_sizes: PEN_SIZES,
+        pen_color: 'white',
+        pen_width: 12,
+        save_status: '',
+        // Video modal (Numpad0-9):
         show_video_modal_show_boolean: false,
-        video_modal_selected_URL: "",
-        video_modal_0: "https://www.youtube.com/embed/sYwRV7WHzm8?autoplay=1", // 0 sYwRV7WHzm8 Silent Night
-
-        video_modal_1: "https://www.youtube.com/embed/zRxX63txOXk?autoplay=1", // 1 zRxX63txOXk Pupu Hinuhinu
-        video_modal_2: "https://www.youtube.com/embed/ssHkMWcGat4?autoplay=1", // 2 ssHkMWcGat4 Arecibo Observatory collapse from 1 Dec 2020, // local video.src = 'static/media/AreciboObservatoryMediaB-Rollwithcollapse.mkv';
-        video_modal_3: "https://www.youtube.com/embed/FezVApPddqU?autoplay=1", // 3 FezVApPddqU Mele Kalikimaka psych version // NOT WORKING! // NOT WORKING! // NOT WORKING! //
-
-        video_modal_4: "https://www.youtube.com/embed/mjcuxw_HJtw?autoplay=1", // 4 mjcuxw_HJtw Humuhumunukunukuapua'a (Hawai'i state fish)
-        video_modal_5: "https://www.youtube.com/embed/1h2BqSS5R3U?autoplay=1", // 5 1h2BqSS5R3U Alicia Keys Puts An At-Home Spin On Flo Rida's "My House"
-        video_modal_6: "https://www.youtube.com/embed/XqZsoesa55w?autoplay=1", // 6 XqZsoesa55w Baby Shark Dance // NOT WORKING! // NOT WORKING! // NOT WORKING! //
-
-        video_modal_7: "https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1", // 7 wCrtk-pyP0I How Microwaving Grapes Makes Plasma
-        video_modal_8: "https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1", // 8 wCrtk-pyP0I How Microwaving Grapes Makes Plasma
-        video_modal_9: "https://www.youtube.com/embed/wCrtk-pyP0I?autoplay=1", // 9 wCrtk-pyP0I How Microwaving Grapes Makes Plasma
-            // Add: Elmo's song...
-            // Add: Lorde ? 
-
-        // Unused, I think:
-        vueCanvas: null, // unused
-        is_drawing: false,
-        x: null,
-        y: null,
-        canvas_width: 1300, // unused
-        canvas_height: 1100, // unused
+        video_modal_selected_URL: '',
+    },
+    created: function() {
+        // Konva objects are kept OUT of data() on purpose: Vue 2 would otherwise try to make every
+        // Konva node reactive, which is slow and can interfere with Konva's own internals.
+        this.konva = { stage: null, layer: null, background_layer: null, background_rect: null }
+        this.pen = { drawing: false, line: null }
+        this.key_actions = {}
+        this.tree_context = null
+        this.fit_pending = false
+        this.save_status_timer = null
     },
     methods: {
-        
-        konva_test_video_old: function(video_URL_string) {
-
-
-            console.log('konva_test_video_old() START')
-            // Vue.use(VueYouTubeEmbed)
-                //             Vue/Youtube players:
-                // - https://developers.google.com/youtube/iframe_api_reference
-                // - https://github.com/andrewvasilchuk/vue-lazy-youtube-video
-                // - https://github.com/kaorun343/vue-youtube-embed
-            // COPIED from https://konvajs.org/docs/sandbox/Video_On_Canvas.html :
-            var width = window.innerWidth;
-            var height = window.innerHeight;
-    
-            var stage = new Konva.Stage({
-                container: 'konva_test',
-                width: width,
-                height: height,
-            });
-    
-            var layer = new Konva.Layer();
-            stage.add(layer);
-    
-            var video = document.createElement('video');
-            video.src = 'https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c4/Physicsworks.ogv/Physicsworks.ogv.240p.vp9.webm';
-    
-            var image = new Konva.Image({
-                image: video,
-                draggable: true,
-                x: 50,
-                y: 20,
-            });
-            layer.add(image);
-    
-            var text = new Konva.Text({
-                text: 'Loading video...',
-                width: stage.width(),
-                height: stage.height(),
-                align: 'center',
-                verticalAlign: 'middle',
-            });
-            layer.add(text);
-    
-            layer.draw();
-    
-            var anim = new Konva.Animation(function () {
-                // do nothing, animation just need to update the layer
-            }, layer);
-    
-            // update Konva.Image size when meta is loaded
-            video.addEventListener('loadedmetadata', function (e) {
-                text.text('Press PLAY...');
-                image.width(video.videoWidth);
-                image.height(video.videoHeight);
-                layer.draw();
-            });
-    
-            document.getElementById('play').addEventListener('click', function () {
-                text.destroy();
-                video.play();
-                anim.start();
-            });
-            document.getElementById('pause').addEventListener('click', function () {
-                video.pause();
-                anim.stop();
-            });
-            
-            // END COPY 
-        },
-        video_modal_NumPad: function(URL) {    // unused
-            console.log('video_modal_NumPad() START')
-            console.log(`URL is: ${URL}`)
-
-            
-        // <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-        // <!-- - - - - - - - - - - - - - - - -EXPERIMENTING HERE!  - - - - - - - - - - - - - - - - - - - - - - - -  -->
-        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // Notes:
-            // https://www.npmjs.com/package/vue-js-modal
-            // https://v3.vuejs.org/examples/modal.html#modal-component
-            // https://www.w3schools.com/howto/howto_css_modals.asp // CSS Modal
-            // https://reactgo.com/vue-modal-component/
-
-                // with Vue / component open and close a modal:
-                // https://stackoverflow.com/questions/61976043/how-do-i-open-and-close-a-modal-programmatically-using-vue-js
-
-                //  Modal plugin?
-                // https://vue-final-modal.org/examples/
-
-                // Vue docs example:
-                // https://vuejs.org/v2/examples/modal.html
-
-
-            this.showModal1 = true
-            this.modal1_url = URL
-
-            console.log(`this.modal1_url is: ${this.modal1_url}`)
-
-            // Set the focus: https://www.w3schools.com/jsref/met_html_focus.asp
-            // https://www.w3schools.com/jsref/event_onfocus.asp
-
-
-
-
-            console.log('video_modal_NumPad() END')
-
-
-
-        },
-        // <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-
-        draw_test_smiley: function() {   // unused          
-        },
-        draw_face: function(yChange=50) {
-
-            let canvas = this.vueCanvas
-
-            // context.clearRect(0, 0 + yChange, width, height)
-        
-            // circle x: 375, y: 375, r: 300, start: 0, end: 2π
-            canvas.beginPath()
-            canvas.arc(375, 375 + yChange, 300, 0, 2*Math.PI, true) // arc takes the center of the circle
-            canvas.fillStyle = 'yellow'
-            canvas.fill()
-            canvas.lineWidth = 15
-            canvas.stroke()
-            canvas.closePath()
-            
-            // ellipse x: 375, y; 450, xr: 225, yr: 85, start: 0, end: 2π
-            canvas.beginPath()
-            canvas.ellipse(375, 450 + yChange, 225, 85, 0, 0, 2*Math.PI)
-            canvas.fillStyle = 'red'
-            canvas.lineWidth = 5
-            canvas.fill()
-            canvas.stroke()
-            
-            // eyes x: [275, 475], y: 250, r: 50, start: 0, end: π
-            // pupils x: [275, 475], y: 250, r: 25, start: 0, end: π
-            
-            function drawEyes(x) {
-                //outer eye
-                canvas.beginPath()
-                canvas.arc(x, 250 + yChange, 50, 0, Math.PI)
-                canvas.closePath()
-                canvas.fillStyle = 'white'
-                canvas.fill()
-                canvas.stroke()
-            
-                // pupil
-                canvas.beginPath()
-                canvas.arc(x, 250 + yChange, 25, 0, Math.PI)
-                canvas.closePath()
-                canvas.fillStyle = 'blue'
-                canvas.fill()
-                canvas.stroke()
-            }
-
-            drawEyes(275) // no need this.drawEyes() prefix. because it's within draw_face
-            drawEyes(475)
-            yChange--
-            // x++;
-            // y++;
-            // window.requestAnimationFrame(() => draw_face(x, y));
-            
-            window.requestAnimationFrame(() => this.draw_face(yChange))
-        },
-
-        
-        change_tree_timeout_slider: function() {
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // SLIDER EXPERIMENTS, thanks https://www.w3schools.com/howto/howto_js_rangeslider.asp :
-            console.log('change_tree_timeout_slider')
-            this.span_text_redraw_value.innerHTML = this.value
-        },
-
-        // Tree canvas MODIFIED FROM, CREDITS TO: https://codepen.io/ntaylor09/pen/vKGePr :            
-        draw_tree_animated_from_NicoleEyO: function() {
-                
-            var ctx = this.vueCanvas_tree
-            // var timeout = this.redraw_timeout_for_tree_from_NicoleEyO
-            var timeout = this.value
-            
-            //Some variables
-            var length, divergence, reduction, line_width, start_points = [];
-            var W = 300 // window.innerWidth;
-            var H = 300 // window.innerHeight;
-
-            function init() {
-                
-                //filling the canvas
-                ctx.fillStyle = "black";
-                ctx.fillRect(0, 0, W, H);
-                
-                //length of the trunk - 100-150
-                length = 30 + Math.round(Math.random()*50);
-                
-                //angle at which branches will diverge - 10-60
-                divergence = 15 + Math.round(Math.random()*50);
-                
-                //Every branch will be 0.75times of the previous one - 0.5-0.75
-                //with 2 decimal points
-                reduction = Math.round(50 + Math.random()*20)/100;
-                
-                //width of the branch/trunk
-                line_width = 15;
-                
-                //This is the end point of the trunk, from where branches will diverge
-                var trunk = {x: W/2, y: length+30, angle: 90};
-                //It becomes the start point for branches
-                start_points = []; //empty the start points on every init();
-                start_points.push(trunk);
-                
-                //Y coordinates go positive downwards, hence they are inverted by deducting it
-                //from the canvas height = H
-                ctx.beginPath();
-                ctx.moveTo(trunk.x, H-5);
-                ctx.lineTo(trunk.x, H-trunk.y);
-                ctx.strokeStyle = "green";
-                ctx.lineWidth = line_width;
-                ctx.stroke();
-                
-                branches();
-            }            
-            
-            //Lets draw the branches now
-            function branches()
-            {
-                //reducing line_width and length
-                length = length * reduction;
-                line_width = line_width * reduction;
-                ctx.lineWidth = line_width;
-                
-                var new_start_points = [];
-                ctx.beginPath();
-                for(var i = 0; i < start_points.length; i++)
-                {
-                    var sp = start_points[i];
-                    //2 branches will come out of every start point. Hence there will be
-                    //2 end points. There is a difference in the divergence.
-                    var ep1 = get_endpoint(sp.x, sp.y, sp.angle+divergence, length);
-                    var ep2 = get_endpoint(sp.x, sp.y, sp.angle-divergence, length);
-                    
-                    //drawing the branches now
-                    ctx.moveTo(sp.x, H-sp.y);
-                    ctx.lineTo(ep1.x, H-ep1.y);
-                    ctx.moveTo(sp.x, H-sp.y);
-                    ctx.lineTo(ep2.x, H-ep2.y);
-                    
-                    //Time to make this function recursive to draw more branches
-                    ep1.angle = sp.angle+divergence;
-                    ep2.angle = sp.angle-divergence;
-                    
-                    new_start_points.push(ep1);
-                    new_start_points.push(ep2);
-                }
-                // Let's add some more color
-                if(length < 10) ctx.strokeStyle = "red";
-                else ctx.strokeStyle = "green";
-                ctx.stroke();
-                start_points = new_start_points;
-                // recursive call - only if length is more than 2.
-                // Else it will fall in a long loop
-                if(length > 2) setTimeout(branches, 100);
-
-                // Time in miliseconds, so 1,000 = 1s or 5,000 = 5s, etc.
-                else setTimeout(init, timeout);
-            }            
-            function get_endpoint(x, y, a, length)
-            {
-                // This function will calculate the end points based on simple vectors
-                // You can read about basic vectors from this link:
-                // http://physics.about.com/od/mathematics/a/VectorMath.htm
-                var epx = x + length * Math.cos(a*Math.PI/180);
-                var epy = y + length * Math.sin(a*Math.PI/180);
-                return {x: epx, y: epy};
-            }
-            init();
-        },
-
-        // non-draw or helper functions: 
-        keypress_listener: function(KeyboardEvent) {
-            // NOTES:
+        // ---------------------------------------------------------------- keyboard
+        keypress_listener: function(event) {
+            // KeyboardEvent.code is the PHYSICAL key (same for every keyboard layout); KeyboardEvent.key is the character.
             // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
-            // KeyboardEvent.code is the PHYSICAL key pressed (regardless of modifier OR keyboard layout) 
-            // while KeyboardEvent.key is the 'sent' key...
-            // while KeyboardEvent.keyCode is the numerical code...
-
-            // Right-side keyboard logs:
-            console.log(`logKey: function(KeyboardEvent) running with KeyboardEvent.code: ${KeyboardEvent.code} and KeyboardEvent.key : ${KeyboardEvent.key}.`)
-            keyboard_logs.textContent += `${KeyboardEvent.code}, `
-            last_keypress.textContent = `Key: ${KeyboardEvent.code}`
-
-            // Left-side Draw function lookup, 
-            let key_lookup = KeyboardEvent.code // 
-                // TEMPORARY DEFAULT VALUE WHILE I CREATE LIST:
-            if ( this.keys_and_functions[key_lookup] == 1) {
-                this.keys_and_functions[`default`]()
-            }
-            else if ( this.keys_and_functions[key_lookup] ) {
-                this.keys_and_functions[key_lookup]() // execute it!
-            }
-            else {
-                console.log('LOOKUP NOT FOUND, PERFORMING DEFAULT VALUE:')
-                this.keys_and_functions[`default`]() // perform some default draw value...
-                keyboard_logs.textContent += `(not found) `
+            const code = event.code
+            this.last_key = code
+            this.key_log += `${code}, `
+            if (this.key_log.length > 1500) this.key_log = this.key_log.slice(-1500)
+            const action = this.key_actions[code]
+            if (action) {
+                action()
+            } else {
+                this.key_actions.default()   // any key without its own picture draws a random circle
             }
         },
-        log_this: function(e) {
-            // unused
-            this.x = e.offsetX
-            this.y = e.offsetY
+        unfocus: function(event) {
+            // After a mouse click on a panel button, drop keyboard focus so that the child's next
+            // Space or Enter press does not "click" that same button again.
+            if (event && event.currentTarget && event.currentTarget.blur) event.currentTarget.blur()
+        },
+
+        // ---------------------------------------------------------------- stage size
+        fit_stage_to_window: function() {
+            const stage = this.konva.stage
+            if (!stage) return
+            const box = stage.container().getBoundingClientRect()
+            const width = Math.max(1, Math.floor(box.width))
+            const height = Math.max(1, Math.floor(box.height))
+            // Fit by height: the design height always fills the canvas area, the width follows the monitor.
+            const scale = Math.min(MAX_STAGE_SCALE, Math.max(MIN_STAGE_SCALE, height / DESIGN_HEIGHT))
+            this.stage_scale = scale
+            stage.size({ width: width, height: height })
+            stage.scale({ x: scale, y: scale })
+            this.konva.background_rect.size({ width: width / scale, height: height / scale })
+            stage.batchDraw()
+        },
+        schedule_fit: function() {
+            if (this.fit_pending) return
+            this.fit_pending = true
+            window.requestAnimationFrame(() => {
+                this.fit_pending = false
+                this.fit_stage_to_window()
+            })
+        },
+        design_size: function() {
+            // The visible canvas in design units (see the note at the top of the file).
+            const stage = this.konva.stage
+            return { width: stage.width() / this.stage_scale, height: stage.height() / this.stage_scale }
+        },
+        random_position: function() {
+            const size = this.design_size()
+            return { x: Math.floor(Math.random() * size.width), y: Math.floor(Math.random() * size.height) }
+        },
+
+        // ---------------------------------------------------------------- pictures and shapes
+        add_picture: function(key) {
+            const picture = PICTURES[key]
+            const position = this.random_position()
+            Konva.Image.fromURL(MEDIA_PATH + picture.file, (image) => {
+                image.setAttrs({
+                    x: position.x,
+                    y: position.y,
+                    scaleX: picture.scale,
+                    scaleY: picture.scale,
+                    draggable: this.tool_mode === 'move',
+                    name: 'picture',
+                })
+                this.add_grab_cursor(image)
+                this.konva.layer.add(image)
+                this.konva.layer.batchDraw()
+            })
+        },
+        draw_random_circle: function() {
+            const position = this.random_position()
+            const circle = new Konva.Circle({
+                x: position.x,
+                y: position.y,
+                radius: 40,
+                fill: this.pick_random_color(),
+                stroke: 'white',
+                strokeWidth: 4,
+                draggable: this.tool_mode === 'move',
+                name: 'circle',
+            })
+            this.add_grab_cursor(circle)
+            this.konva.layer.add(circle)
+            this.konva.layer.batchDraw()
         },
         pick_random_color: function() {
-            // console.log(`pick_random_color: function() start`)
-
-            random_color_seed = Math.random()
-            random_color_integer = Math.floor(random_color_seed * Math.floor(this.random_css_color_list.length))
-            color = this.random_css_color_list[random_color_integer]
-
-            console.log(`pick_random_color: function() picking color with ${color}`)
-            return color
+            return RANDOM_CIRCLE_COLORS[Math.floor(Math.random() * RANDOM_CIRCLE_COLORS.length)]
         },
-        fullscreen_toggle: function() {
-            console.log('fullscreen_toggle() START')
-            // thanks https://www.w3schools.com/howto/howto_js_fullscreen.asp
-            var document_main = document.documentElement
+        add_grab_cursor: function(node) {
+            // In move mode show a hand over things that can be dragged. In draw mode the whole canvas
+            // shows the pen crosshair instead (see set_tool_mode).
+            node.on('mouseover', () => { if (this.tool_mode === 'move') this.konva.stage.container().style.cursor = 'grab' })
+            node.on('mouseout', () => { if (this.tool_mode === 'move') this.konva.stage.container().style.cursor = 'default' })
+        },
+        clear_canvas: function(event) {
+            this.unfocus(event)
+            // Destroy the drawing layer and start a fresh one. The green background layer stays.
+            this.konva.layer.destroy()
+            this.konva.layer = new Konva.Layer()
+            this.konva.stage.add(this.konva.layer)
+            this.key_log = ''
+        },
 
-            /* View in fullscreen */
-            function openFullscreen() {
-                if (document_main.requestFullscreen) {
-                document_main.requestFullscreen();
-                } else if (document_main.webkitRequestFullscreen) { /* Safari */
-                document_main.webkitRequestFullscreen();
-                } else if (document_main.msRequestFullscreen) { /* IE11 */
-                document_main.msRequestFullscreen();
+        // ---------------------------------------------------------------- mouse / touch tools
+        set_tool_mode: function(mode, event) {
+            this.unfocus(event)
+            this.tool_mode = mode
+            const draggable = mode === 'move'
+            this.konva.stage.find('Image, Circle').each((node) => node.draggable(draggable))
+            this.konva.stage.container().style.cursor = draggable ? 'default' : 'crosshair'
+        },
+        set_pen_color: function(color, event) {
+            this.pen_color = color
+            this.set_tool_mode('draw', event)
+        },
+        set_pen_width: function(width, event) {
+            this.pen_width = width
+            this.set_tool_mode('draw', event)
+        },
+        pointer_position: function() {
+            // Pointer position in design units (the stage is scaled, see fit_stage_to_window).
+            const p = this.konva.stage.getPointerPosition()
+            return p ? { x: p.x / this.stage_scale, y: p.y / this.stage_scale } : null
+        },
+        pen_down: function(e) {
+            if (this.tool_mode !== 'draw') return
+            const p = this.pointer_position()
+            if (!p) return
+            if (e && e.evt && e.evt.type === 'mousedown') e.evt.preventDefault() // no text selection while drawing
+            this.pen.drawing = true
+            this.pen.line = new Konva.Line({
+                points: [p.x, p.y, p.x, p.y],
+                stroke: this.pen_color,
+                strokeWidth: this.pen_width,
+                lineCap: 'round',
+                lineJoin: 'round',
+                listening: false,   // strokes never block clicks or get dragged
+                name: 'pen-stroke',
+            })
+            this.konva.layer.add(this.pen.line)
+            this.konva.layer.batchDraw()
+        },
+        pen_move: function() {
+            if (!this.pen.drawing || !this.pen.line) return
+            const p = this.pointer_position()
+            if (!p) return
+            this.pen.line.points(this.pen.line.points().concat([p.x, p.y]))
+            this.konva.layer.batchDraw()
+        },
+        pen_up: function() {
+            this.pen.drawing = false
+            this.pen.line = null
+        },
+
+        // ---------------------------------------------------------------- save
+        canvas_save_image: function(event) {
+            this.unfocus(event)
+            let data_url
+            try {
+                // pixelRatio 2 gives a crisp file; the background layer makes it green instead of transparent.
+                data_url = this.konva.stage.toDataURL({ mimeType: 'image/png', pixelRatio: 2 })
+            } catch (error) {
+                console.error('canvas_save_image() failed:', error)
+                window.alert(`Sorry, the browser would not let the page save the picture (${error.message}).
+                    Please take a screenshot instead:
+                    Mac: Shift+Cmd+5. Windows: Start > type 'Snipping'. Linux: PrtSc.`)
+                return
+            }
+            const link = document.createElement('a')
+            link.href = data_url
+            link.download = `childhood-canvas-${this.timestamp_for_filename()}.png`
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+            this.save_status = `Saved ${link.download} to your Downloads folder.`
+            clearTimeout(this.save_status_timer)
+            this.save_status_timer = setTimeout(() => { this.save_status = '' }, 8000)
+        },
+        timestamp_for_filename: function() {
+            const d = new Date()
+            const pad = (n) => String(n).padStart(2, '0')
+            return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`
+        },
+
+        // ---------------------------------------------------------------- fullscreen, reload, videos
+        fullscreen_toggle: function(event) {
+            this.unfocus(event)
+            // https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API
+            const root = document.documentElement
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                const request = root.requestFullscreen || root.webkitRequestFullscreen
+                if (request) {
+                    const result = request.call(root)
+                    if (result && result.catch) result.catch((error) => console.warn('fullscreen refused:', error))
                 }
-            }
-            
-            /* Close fullscreen */
-            function closeFullscreen() {
-                if (document.exitFullscreen) {
-                document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { /* Safari */
-                document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { /* IE11 */
-                document.msExitFullscreen();
-                }
-            }
-
-            if (this.fullscreen === false) {
-                openFullscreen()
-                this.fullscreen = true
-            }
-            else {
-                closeFullscreen()
-                this.fullscreen = false
-            }
-
-
-        },
-        fullscreen_f11_toggle_data_only: function() {
-            console.log('fullscreen_f11_toggle_data_only() START')
-
-            if (this.fullscreen === false) {
-                openFullscreen()
-                this.fullscreen = true
-            }
-            else {
-                closeFullscreen()
-                this.fullscreen = false
+            } else {
+                const exit = document.exitFullscreen || document.webkitExitFullscreen
+                if (exit) exit.call(document)
             }
         },
-        canvas_save_image: function() {
-            console.log('canvas_save_image() START')
-            window.alert(`Sorry! Still under development... For now, you'll have to take a screenshot.
-                ---
-                For Mac: ⇧⌘5 , or see: https://setapp.com/how-to/snipping-tool-for-mac
-                ---
-                For Windows: Start > Type 'Snipping' or see: https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b
-            `)
-
-        },
-
-        // shapes:
-        draw_random_circle: function(color='random', input_x=this.canvas_width, input_y=this.canvas_height) {
-
-            console.log('draw_random_circle() function.')
-
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            // Random color from list in data{}
-            if (color === 'random') {
-                color = this.pick_random_color()
-            }
-
-            // layer = this.Konva_canvas_layer1
-
-            var circle = new Konva.Circle({
-                x: random_x,
-                y: random_y,
-                radius: 40,
-                fill: color,
-                stroke: 'white',
-                strokeWidth: 4,
-                draggable: true,
-            })
-            circle.on('mouseover', function() {
-                document.body.style.cursor = 'crosshair';
-            })
-            circle.on('mouseout', function() {
-                document.body.style.cursor = 'default';
-            })
-            this.Konva_canvas_layer1.add(circle)
-            this.Konva_canvas_layer1.draw()
-            
-        },
-        draw_random_square: function(color='random', input_x=this.canvas_width, input_y=this.canvas_height) {
-            
-            console.log('draw_random_square: function()')
-            
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            // Random color from list in data{}
-            if (color === 'random') {
-                color = this.pick_random_color()
-            }
-
-            // layer = this.Konva_canvas_layer1
-
-            var rect1 = new Konva.Rect({
-                x: random_x,
-                y: random_y,
-                width: 75,
-                height: 75,
-                fill: color,
-                stroke: 'black',
-                strokeWidth: 10,
-            })
-            this.Konva_canvas_layer1.add(rect1)
-            this.Konva_canvas_layer1.draw()
-
-        },
-        draw_triangle: function() { // unused
-        },
-        draw_gradient: function() { // unused
-            var gradient = this.vueCanvas.createLinearGradient(0, 0, 200, 0)
-            gradient.addColorStop(0, "red")
-            gradient.addColorStop(1, "white")
-
-            this.vueCanvas.fillStyle = gradient
-            this.vueCanvas.fillRect(100, 100, 150, 80);
-        },
-        
-        // drawing PEN methods:
-        draw_line: function(x1, y1, x2, y2) {
-            let canvas = this.vueCanvas
-            canvas.beginPath()
-            canvas.strokeStyle = 'black'
-            canvas.lineWidth = 3
-            canvas.moveTo(x1, y1)
-            canvas.lineTo(x2, y2)
-            canvas.stroke()
-            canvas.closePath()
-        },
-        draw: function(e) { // thanks to: https://dev.to/reiallenramos/drawing-in-vue-using-mousemove-event-34cg
-            // this.x = e.offsetX // don't confuse with clientX 
-            // this.y = e.offsetY // and clientY, which are absolute
-            if(this.is_drawing) {
-            this.draw_line(this.x, this.y, e.offsetX, e.offsetY)
-            this.x = e.offsetX 
-            this.y = e.offsetY
-            }
-        },
-        start_drawing: function(e) {
-            this.x = e.offsetX
-            this.y = e.offsetY
-            this.is_drawing = true
-        },        
-        stop_drawing: function(e) {
-            if (this.is_drawing) {
-                this.draw_line(this.x, this.y, e.offsetX, e.offsetY)
-                this.x = 0
-                this.y = 0
-                this.is_drawing = false
-            }
-        },
-
-        clear_canvas: function() {
-            console.log('clear_canvas function()')
-
-            // Destroy the layer, make a new one, add it to the Stage
-            this.Konva_canvas_layer1.destroy()
-            this.Konva_canvas_layer1 = new Konva.Layer()
-            this.Konva_canvas_Stage.add(this.Konva_canvas_layer1)
-            // this.Konva_canvas_Stage.clear()
-
-            // Clear the text logs:
-            keyboard_logs.textContent = ''
-
+        on_fullscreen_change: function() {
+            // Fired for our button AND for the browser's own F11, so the flag stays correct either way.
+            this.fullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement)
+            this.schedule_fit()
         },
         page_reload: function() {
-            console.log('page_reload() START')
+            window.location.reload()
         },
-        
-        // Images:
-
-        konva_image_smiley_face_svg: function(input_x=this.canvas_width, input_y=this.canvas_height) {
-            
-            console.log('konva_image_smiley_face_svg()')
-            
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/pixabay_OpenClipart-Vectors_face-1298202.svg', (smiley) => {
-                smiley.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: 2.0,
-                    scaleY: 2.0,
-                    draggable: true,
-                })
-                smiley.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                smiley.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(smiley)
-                this.Konva_canvas_layer1.draw()
-            })
-
+        open_video: function(n) {
+            this.video_modal_selected_URL = VIDEOS[n]
+            this.show_video_modal_show_boolean = true
         },
-        konva_image_A_ambulance: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
-            console.log('konva_image_A_ambulance()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/A_pixabay_Clker-Free-Vector-Images_ambulance-24405.svg', (ambulance) => {
-                ambulance.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                ambulance.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                ambulance.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(ambulance)
-                this.Konva_canvas_layer1.draw()
-            })
+        close_video: function() {
+            this.show_video_modal_show_boolean = false
         },
-        konva_image_B_butterfly: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {
-            
-            console.log('konva_image_B_butterfly()')
-            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
 
-            Konva.Image.fromURL('static/media/B_butterfly_pixabay_gdj_gordon_johnson-5883438.svg', (butterfly) => {
-                butterfly.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                butterfly.on('mouseover', function() {
-                document.body.style.cursor = 'crosshair';
-                })
-                butterfly.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(butterfly)
-                this.Konva_canvas_layer1.draw()
-            })
+        // ---------------------------------------------------------------- the little tree, top right
+        // Modified from, credits to: https://codepen.io/ntaylor09/pen/vKGePr (Nicole Eyo)
+        draw_tree_animated_from_NicoleEyO: function() {
+            var ctx = this.tree_context
+            var timeout = 500 // pause in ms before the next tree
+            var length, divergence, reduction, line_width, start_points = []
+            var W = 300
+            var H = 300
 
-        },
-        konva_image_B_banana_ape: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
-            console.log('konva_image_B_banana_ape()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/B_pixabay_Clker-Free-Vector-Images_banana_ape-44564.svg', (banana_monkey) => {
-                banana_monkey.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                banana_monkey.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                banana_monkey.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(banana_monkey)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_C_cement_mixer_truck: function(input_x=this.canvas_width, input_y=this.canvas_height) {
-            
-            console.log('konva_image_C_cement_mixer_truck()')
-            
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/C_cement-mixer_pixabay_Grafikingenieur-5630778.svg', (cement) => {
-                cement.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: 5,
-                    scaleY: 5,
-                    draggable: true,
-                })
-                cement.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                cement.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(cement)
-                this.Konva_canvas_layer1.draw()
-            })
-
-        },
-        konva_image_D_dolphin: function(input_x=this.canvas_width, input_y=this.canvas_height) {
-            
-            console.log('konva_image_D_dolphin()')
-            
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/D_dolphin_pixabay_Clker-Free-Vector-Images-41436.svg', (dolphin) => {
-                dolphin.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: 2.0,
-                    scaleY: 2.0,
-                    draggable: true,
-                })
-                dolphin.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                dolphin.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(dolphin)
-                this.Konva_canvas_layer1.draw()
-            })
-
-        },
-        konva_image_E_elephant: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {
-            
-            console.log('konva_image_E_elephant()')
-            
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/E_elephant_Pixabay_Clker-Free-Vector-Images-24732.svg', (elephant) => {
-                elephant.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                elephant.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                elephant.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(elephant)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_F_flower: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
-            console.log('konva_image_F_flower()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/F_pixabay_roark_rose-398576.svg', (flower) => {
-                flower.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                flower.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                flower.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(flower)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_G_gorilla: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.6) {            
-            console.log('konva_image_G_gorilla()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/G_gorilla_mohamed_hassan-4309441.svg', (gorilla) => {
-                gorilla.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                gorilla.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                gorilla.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(gorilla)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_H_hospital: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
-            console.log('konva_image_H_hospital()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/H_stockio-com_hospital.svg', (hospital) => {
-                hospital.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                hospital.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                hospital.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(hospital)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_I_insect: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
-            console.log('konva_image_I_insect()')       // India? Idaho... Insect!     
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/I_insect_beetle_OpenClipart-Vectors_155017.svg', (insect) => {
-                insect.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                insect.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                insect.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(insect)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_J_jar_jarra: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1.5) {            
-            console.log('konva_image_J_jar_jarra()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/J_pixabay_OpenClipart-Vectors_jug-158910.svg', (jar) => {
-                jar.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                jar.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                jar.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(jar)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_K_kiwi: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
-            console.log('konva_image_K_kiwi()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/K_kiwi_Clker-Free-Vector-Image-42895.svg', (kiwi) => {
-                kiwi.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                kiwi.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                kiwi.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(kiwi)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_L_lion: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1.5) {            
-            console.log('konva_image_L_lion()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/L_lion_OpenClipart-Vectors_africa-1300564.svg', (lion) => {
-                lion.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                lion.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                lion.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(lion)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_M_mango: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.1) {            
-            console.log('konva_image_M_mango()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/M_OpenClipart-Vectors_mango-1295471.svg', (mango) => {
-                mango.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                mango.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                mango.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(mango)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_N_nine: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.8) {            
-            console.log('konva_image_N_nine()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/N_9_Clker-Free-Vector-Images_nine-38583.svg', (nine) => {
-                nine.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                nine.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                nine.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(nine)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_O_opera: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {
-            console.log('konva_image_O_opera()')       // India? Idaho... Insect!     
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/O_opera_sydney_OpenClipart-Vectors-148858.svg', (opera) => {
-                opera.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                opera.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                opera.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(opera)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_P_pineapple: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
-            console.log('konva_image_P_pineapple()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/P_stux_pineapple-300038.svg', (pineapple) => {
-                pineapple.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                pineapple.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                pineapple.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(pineapple)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_Q_quesadilla: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.8) {            
-            console.log('konva_image_Q_quesadilla()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/Q_OpenClipart-Vectors_quesadilla-575610.svg', (quesadilla) => {
-                quesadilla.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                quesadilla.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                quesadilla.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(quesadilla)
-                this.Konva_canvas_layer1.draw()
-            })
-        },    
-        konva_image_R_radio: function(input_x=this.canvas_width, input_y=this.canvas_height) {
-            
-            console.log('konva_image_R_radio()')
-            
-            // Random position:
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/R_radio_pixabay_OpenClipart-Vectors_146124.svg', (radio) => {
-                radio.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: 1.5,
-                    scaleY: 1.5,
-                    draggable: true,
-                })
-                radio.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                radio.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(radio)
-                this.Konva_canvas_layer1.draw()
-            })
-        }, 
-        konva_image_S_snake: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
-            console.log('konva_image_S_snake()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/S_rattlesnake_pixabay_OpenClipart-Vectors-159135.svg', (snake) => {
-                snake.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                snake.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                snake.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(snake)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_T_taxi_PNG_NOT_SVG: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.7) {            
-            console.log('konva_image_T_taxi_PNG_NOT_SVG()')
-            console.log('PNG_NOT_SVG!')
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/T_taxi_freepngimg-com_33090-6-taxi-driver-clipart.png', (taxi) => {
-                taxi.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                taxi.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                taxi.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(taxi)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_U_unicorn: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
-            console.log('konva_image_U_unicorn()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/U_pixabay_Lohrelei_unicorn-1237449.svg', (unicorn) => {
-                unicorn.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                unicorn.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                unicorn.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(unicorn)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_V_violin: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=2) {            
-            console.log('konva_image_V_violin()')            
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/V_pixabay_Clker-Free-Vector-Images_violin-33610.svg', (violin) => {
-                violin.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                violin.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                violin.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(violin)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_W_whiskey: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=0.2) {            
-            console.log('konva_image_W_whiskey()')
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/W_whiskey_pixabay_juhele-4397841.svg', (whiskey) => {
-                whiskey.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                whiskey.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                whiskey.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(whiskey)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_X_xylophone: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
-            console.log('konva_image_X_xylophone()')
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/X_xylophone_pixabay_Clker-Free-Vector-308024.svg', (xylophone) => {
-                xylophone.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                xylophone.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                xylophone.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(xylophone)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_Y_yogurt: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
-            console.log('konva_image_Y_yogurt()')
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/Y_yogurt_mohamed_hassan-4379616.svg', (yogurt) => {
-                yogurt.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                yogurt.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                yogurt.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(yogurt)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_image_Z_placeholder: function(input_x=this.canvas_width, input_y=this.canvas_height, scale=1) {            
-            console.log('konva_image_Z_placeholder')
-            // Random position:             
-            var random_number = Math.random()
-            let random_x = Math.floor(random_number * Math.floor(input_x))
-            var random_number = Math.random()
-            let random_y = Math.floor(random_number * Math.floor(input_y))
-
-            Konva.Image.fromURL('static/media/Z_zigzag_chevron_Clker-Free-Vector-Images_26403.svg', (zigzag) => {
-                zigzag.setAttrs({
-                    x: random_x,
-                    y: random_y,
-                    scaleX: scale,
-                    scaleY: scale,
-                    draggable: true,
-                })
-                zigzag.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                zigzag.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(zigzag)
-                this.Konva_canvas_layer1.draw()
-            })
-        },
-        konva_canvas_initialize: function() {
-            console.log('konva_canvas_initialize() START')
-
-
-            var circle = new Konva.Circle({
-                x: 630, // stage.width() / 2,
-                y: 950,  // stage.height() / 2, 
-                radius: 70, 
-                fill: 'blue',
-                stroke: 'white',
-                strokeWidth: 4,
-                draggable: true,
-            })
-            circle.on('mouseover', function() {
-                document.body.style.cursor = 'crosshair';
-            })
-            circle.on('mouseout', function() {
-                document.body.style.cursor = 'default';
-            })
-
-            var welcome_text = new Konva.Text({
-                x: 400,
-                y: 50,
-                text: `Welcome to Childhood Canvas, \nPlease go grab a tea of 'anise. \nNow you're on campus! \n\nMake your browser fullscreen (F11), \nClick the keyboard's buttons, find some beans, \nRemember: share this page as a meme!\n\n(Numpad opens preset videos, too!)`,
-                fontSize: 30,
-                fontFamily: `Advent Pro`,
-                fill: 'white',
-                width: 700,
-                margin: 100,
-                // padding: '10',
-                align: 'left',
-            })
-
-            
-            Konva.Image.fromURL('static/media/B_butterfly_pixabay_gdj_gordon_johnson-5883438.svg', (butterfly) => {
-                butterfly.setAttrs({
-                    x: 200,
-                    y: 400,
-                    scaleX: 4,
-                    scaleY: 4,
-                    draggable: true,
-                })
-                butterfly.on('mouseover', function() {
-                    document.body.style.cursor = 'crosshair';
-                })
-                butterfly.on('mouseout', function() {
-                    document.body.style.cursor = 'default';
-                })
-                this.Konva_canvas_layer1.add(butterfly)
-                this.Konva_canvas_layer1.draw()
-            })
-            this.Konva_canvas_layer1.add(circle, welcome_text)
-            this.Konva_canvas_layer1.draw()
-
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // Here's the old stuff...
-            
-            // canvas.fillStyle = 'rgb(0, 0, 0)'
-            // canvas.font = '75px serif'
-            // // canvas.fillText('                       童年帆布 ', 100, 400)
-            // canvas.font = '35px serif'
-            // canvas.fillText('Welcome to Childhood Canvas! Make your browser fullscreen,', 100, 500)
-            // //  Meant for toddlers
-            // canvas.fillText('then try random keyboard keys or draw on me !', 100, 545)
-
-            // console.log('this.draw_load_page function() END')
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            console.log('konva_draw_test() END')
+            function init() {
+                ctx.fillStyle = "black"
+                ctx.fillRect(0, 0, W, H)
+                length = 30 + Math.round(Math.random() * 50)        // trunk length
+                divergence = 15 + Math.round(Math.random() * 50)    // angle between branches
+                reduction = Math.round(50 + Math.random() * 20) / 100 // each branch is this fraction of the previous
+                line_width = 15
+                var trunk = { x: W / 2, y: length + 30, angle: 90 }
+                start_points = []
+                start_points.push(trunk)
+                // y grows upwards here, hence H - y below
+                ctx.beginPath()
+                ctx.moveTo(trunk.x, H - 5)
+                ctx.lineTo(trunk.x, H - trunk.y)
+                ctx.strokeStyle = "green"
+                ctx.lineWidth = line_width
+                ctx.stroke()
+                branches()
+            }
+            function branches() {
+                length = length * reduction
+                line_width = line_width * reduction
+                ctx.lineWidth = line_width
+                var new_start_points = []
+                ctx.beginPath()
+                for (var i = 0; i < start_points.length; i++) {
+                    var sp = start_points[i]
+                    // two branches leave every start point
+                    var ep1 = get_endpoint(sp.x, sp.y, sp.angle + divergence, length)
+                    var ep2 = get_endpoint(sp.x, sp.y, sp.angle - divergence, length)
+                    ctx.moveTo(sp.x, H - sp.y)
+                    ctx.lineTo(ep1.x, H - ep1.y)
+                    ctx.moveTo(sp.x, H - sp.y)
+                    ctx.lineTo(ep2.x, H - ep2.y)
+                    ep1.angle = sp.angle + divergence
+                    ep2.angle = sp.angle - divergence
+                    new_start_points.push(ep1)
+                    new_start_points.push(ep2)
+                }
+                ctx.strokeStyle = length < 10 ? "red" : "green"
+                ctx.stroke()
+                start_points = new_start_points
+                if (length > 2) setTimeout(branches, 100)
+                else setTimeout(init, timeout)
+            }
+            function get_endpoint(x, y, a, length) {
+                return { x: x + length * Math.cos(a * Math.PI / 180), y: y + length * Math.sin(a * Math.PI / 180) }
+            }
+            init()
         },
     },
-    created: function() { // created()  >>  mounted()
-        console.log('created() START')
-    },
-    mounted:function() {
-        console.log(`mounted() START, with window size: ${window.innerWidth} * ${window.innerHeight}.`)
-        
-        // Keypress listener:
-        document.addEventListener('keyup', this.keypress_listener) // huge difference between 'keyup', 'keydown', and 'keypress'! 
+    mounted: function() {
+        console.log(`Childhood Canvas: mounted with window size ${window.innerWidth} x ${window.innerHeight}.`)
 
-        this.Konva_canvas_Stage = new Konva.Stage({ // see https://konvajs.org/api/Konva.Stage.html
-            container: 'div_konva_canvas', // this is the div name
-            width: 1300,
-            height: 1100,
-            draggable: false,
-            // color: white,
-        })
-        this.Konva_canvas_layer1 = new Konva.Layer()
-        this.Konva_canvas_Stage.add(this.Konva_canvas_layer1)
-        this.konva_canvas_initialize()
+        document.addEventListener('keyup', this.keypress_listener) // keyup, not keydown: no auto-repeat floods
+        document.addEventListener('fullscreenchange', this.on_fullscreen_change)
+        document.addEventListener('webkitfullscreenchange', this.on_fullscreen_change)
+        window.addEventListener('resize', this.schedule_fit)
 
-        // Slider experiments:
-        // this.span_text_redraw_value = document.getElementById("span_text_redraw_value")
+        // Konva stage, see https://konvajs.org/api/Konva.Stage.html
+        const stage = new Konva.Stage({ container: 'div_konva_canvas', width: DESIGN_WIDTH, height: DESIGN_HEIGHT })
+        this.konva.stage = stage
+        // Background layer: a green rectangle, so saved PNGs are not transparent. It survives "clear".
+        this.konva.background_layer = new Konva.Layer({ listening: false })
+        this.konva.background_rect = new Konva.Rect({ x: 0, y: 0, width: DESIGN_WIDTH, height: DESIGN_HEIGHT, fill: CANVAS_BACKGROUND, name: 'background' })
+        this.konva.background_layer.add(this.konva.background_rect)
+        stage.add(this.konva.background_layer)
+        // Drawing layer: pictures, circles and pen strokes.
+        this.konva.layer = new Konva.Layer()
+        stage.add(this.konva.layer)
+        this.fit_stage_to_window()
 
-        // Below is the separate 300x300 canvas for the 'tree' in the top right
-        // ENABLE FOR PRODUCTION!                                                                                                           ENABLE FOR PRODUCTION! 
-        var canvas_tree = document.getElementById('canvas_tree')
-        this.vueCanvas_tree = canvas_tree.getContext('2d')       
+        // Pen tool, mouse and touch:
+        stage.on('mousedown touchstart', this.pen_down)
+        stage.on('mousemove touchmove', this.pen_move)
+        stage.on('mouseup touchend', this.pen_up)
+        window.addEventListener('mouseup', this.pen_up) // button released outside the canvas
+
+        // The small animated tree:
+        this.tree_context = document.getElementById('canvas_tree').getContext('2d')
         this.draw_tree_animated_from_NicoleEyO()
 
-        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-        // BIG LIST of keypress => function lookups:
-        this.keys_and_functions = {             
-            // NOTE: The reason this can't be in the data raw 'data' is because it would start executing the functions. So we replace the blank data object here on 'mounted()'
-            // Thanks Pete! This makes an easy lookup with a lookup on the left and a function on the right WITH arguments!
-            // Space: () => console.log('I am a console.log() function, inside a key/value pair inside an object, inside the mounted function, inside the Vue shell!!!!'),
-            
-            //  this is a pretty good list of "words in english and spanish which start with the same letter" :
-            //  https://www.boxofideas.com/list-of-words-that-begin-with-the-same-letter-in-different-languages-english-spanish-french-portuguese-and-italian/ 
-
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // if (KeyboardEvent.keyCode == 91) { // 91 is the ⊞ WINDOWS key
-            //     // event.preventDefault(); // won't work
-            //     console.log("Win Key was clicked.")
-            // }
-
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / Numpad Videos :
-            Numpad0: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_0 },
-            Numpad1: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_1 },
-            Numpad2: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_2 },
-            Numpad3: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_3 },
-            Numpad4: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_4 },
-            Numpad5: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_5 },
-            Numpad6: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_6 },
-            Numpad7: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_7 },
-            Numpad8: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_8 },
-            Numpad9: () => { this.show_video_modal_show_boolean=true, this.video_modal_selected_URL=this.video_modal_9 },
-
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+        // Key -> action lookup (KeyboardEvent.code values):
+        const actions = {
             default: () => this.draw_random_circle(),
-            F11: () => this.fullscreen_f11_toggle_data_only(),
             Space: () => this.clear_canvas(),
-
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            KeyQ: () => this.konva_image_Q_quesadilla(),
-            KeyW: () => this.konva_image_W_whiskey(),
-            KeyE: () => this.konva_image_E_elephant(),
-            KeyR: () => this.konva_image_R_radio(),
-            KeyT: () => this.konva_image_T_taxi_PNG_NOT_SVG(),
-            KeyY: () => this.konva_image_Y_yogurt(),
-            KeyU: () => this.konva_image_U_unicorn(),
-            KeyI: () => this.konva_image_I_insect(),
-            KeyO: () => this.konva_image_O_opera(), 
-            KeyP: () => this.konva_image_P_pineapple(),
-
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            KeyA: () => this.konva_image_A_ambulance(),
-            KeyS: () => this.konva_image_S_snake(), 
-            KeyD: () => this.konva_image_D_dolphin(),
-            KeyF: () => this.konva_image_F_flower(), 
-            KeyG: () => this.konva_image_G_gorilla(),
-            KeyH: () => this.konva_image_H_hospital(), 
-            KeyJ: () => this.konva_image_J_jar_jarra(), 
-            KeyK: () => this.konva_image_K_kiwi(),
-            KeyL: () => this.konva_image_L_lion(),
-
-            // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-            // KeyZ: () => this.draw_face(),
-            KeyZ: () => this.konva_image_Z_placeholder(),
-            // KeyZ: () => this.konva_image_smiley_face_svg(),
-            KeyX: () => this.konva_image_X_xylophone(),
-            KeyC: () => this.konva_image_C_cement_mixer_truck(),
-            KeyV: () => this.konva_image_V_violin(), 
-            KeyB: () => this.konva_image_B_banana_ape(),
-            KeyN: () => this.konva_image_N_nine(), 
-            KeyM: () => this.konva_image_M_mango(),
-            Escape: () => this.show_video_modal_show_boolean = false,
+            F11: () => {},   // the browser toggles fullscreen itself; on_fullscreen_change keeps our flag in sync
+            Escape: () => this.close_video(),
         }
-        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-        console.log(`mounted() END`)
+        for (const key of Object.keys(PICTURES)) actions[key] = () => this.add_picture(key)
+        for (let n = 0; n <= 9; n++) actions['Numpad' + n] = () => this.open_video(n)
+        this.key_actions = actions
     },
-});
+})
 
+// YouTube video modal, opened by the numpad keys. Based on https://vuejs.org/v2/examples/modal.html
 Vue.component("modal", {
-    props: { // https://v3.vuejs.org/guide/component-props.html#prop-types
+    props: {
         source_url: String,
         show_modal: Boolean,
-
-        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-        // link to GitHub project: https://github.com/johnfial/childhood_canvas/projects/1
-        
-        // keypress modal work: 
-        // where is the event listener on the modal? What's the way I close the modal right now? 
-        // Can I add, 
-        // then remove an event listener to the modal to close it?
-        //     // 
-
-        //     <!-- 
-        //     WORKING COMMENTS:
-        //     Removed this from <iframe> : 
-        //         NOTE:
-        //         Each URL needs the suffix "?autoplay=1" to autoplay
-        //         Remember that this is a risk if enabled by default in the background, depending on Vue/browser behavior!
-        //         BUG with Mele Kalikimaka here:
-        //         <iframe width="560" height="315" src="https://www.youtube.com/embed/FezVApPddqU" frameborder="0" 
-        //         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                
-        //         <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/FezVApPddqU" frameborder="0"
-        //         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                                
-        // -->        
-        // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-
     },
-    template: `    
+    template: `
     <transition name="modal">
         <div class="modal-mask">
             <div class="modal-wrapper">
                 <div class="modal-container">
-
                     <div class="modal-header">
                         <span class="close" @click="$emit('close')">&times;</span>
-                        <slot name="header">
-                        </slot>                        
+                        <slot name="header"></slot>
                     </div>
-
                     <div class="modal-body" v-focus>
-                        <slot name="body">
-                        </slot>
-
+                        <slot name="body"></slot>
                         <iframe
                         v-focus
-                        width="560" 
-                        height="315" 
+                        width="560"
+                        height="315"
                         :src=source_url
-                        frameborder="0" 
+                        frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen
                         ></iframe>
-
                     </div>
-
                     <div class="modal-footer">
                         <slot name="footer">
-                            <button class="modal-default-button" @click="$emit('close')">
-                                Close
-                            </button>
+                            <button class="modal-default-button" @click="$emit('close')">Close</button>
                         </slot>
                     </div>
-
                 </div>
             </div>
         </div>
     </transition>
-    `, 
-    mounted: function() {
-        // TESTING making escape key close modal...
-        //  https://gist.github.com/JimSchofield/ec06d1f209799f5cd279f5683b178da4
-
-        // document.addEventListener('keyup', this.keypress_listener)
-        console.log('mounted: function() running...')
-    },
-});
-
-// below test from https://stackoverflow.com/questions/34941829/setting-focus-of-an-input-element-in-vue-js 
-// with "v-focus" inside any HTML element, like this: <input_element v-focus />
-// Not sure this is actually working...
-Vue.directive('focus', {
-    inserted: function (el) {
-        el.focus()
-    }
+    `,
 })
 
-// / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-// current working info: 
-// Adding konva drag and drop to everything, getting the ideal mouse cursor! https://konvajs.org/docs/drag_and_drop/Drag_and_Drop.html
-// So easy, just an attribute.
-// BUT layers will stack and won't change on (click/drag), which would be more intuitive... add JS function to do that?
-
-// July 2021, MS Edge:
-// keys that display basic circle:
-// r, y, i, o
-// g, k, l
-// x, v
-// does nothing: p, s, j, 
+// "v-focus" on an element focuses it when inserted, see https://stackoverflow.com/questions/34941829
+Vue.directive('focus', {
+    inserted: function(el) {
+        el.focus()
+    },
+})

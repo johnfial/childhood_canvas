@@ -1,88 +1,222 @@
-/* flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
-/* grid: https://css-tricks.com/snippets/css/complete-guide-grid/ */
+/* Childhood Canvas styles.
+   Canvas page layout: mobile-first. The base rules stack the canvas above the control panel; from
+   900px wide the two sit side by side, the canvas fluid on the left and the panel a fixed width on the
+   right. The Konva stage itself is resized and scaled by fit_stage_to_window() in vue_main.js.
+   flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
 
-/* HERE IS MAIN CSS APPLICATBLE TO ALL PAGES */
-h1, h2, h3 , h4, h5, h6 {
-    text-align: center;
+:root {
+    --page-bg: rgb(2, 46, 88);
+    --canvas-bg: rgb(0, 112, 6);   /* keep in sync with CANVAS_BACKGROUND in vue_main.js */
+    --panel-width: 340px;
+    --gap: 10px;
 }
-header {
-    display: grid;
-    /* grid-column-start: 1; */
-    /* grid-row-start: 2; */
-    justify-content: center;
-    text-align: center;
-    /* border-bottom: 5px solid #EDF7E1; */
+
+html, body {
+    height: 100%;
 }
-footer {
-    display: grid;
-    justify-content: center;
-}
-body {    
-    background-color: rgb(2, 46, 88);
+body {
+    margin: 0;
+    background-color: var(--page-bg);
     color: white;
     font-family: 'Advent Pro', sans-serif;
 }
-li, ol {
-    font-size: 15px;
+body.canvas-page {
+    overflow: hidden;              /* the canvas page never scrolls; the side panel scrolls on its own */
 }
-footer {
-    /* border: 1px dashed grey; */
-    margin: 1%;
+h1, h2, h3, h4, h5, h6 {
+    text-align: center;
 }
+a {
+    color: #c8c8c8;
+}
+
+/* ---------------------------------------------------------------- home page */
 .main_text {
     max-width: 50%;
     margin-left: 25%;
 }
-form {
-    /* display: flex; */
-    justify-content: center;
-    /* margin: 10px; */
-    /* padding: 10px; */
-    /* border: 5px dashed red; */
-    max-width: 30%;
-    padding: 5%;
-}
-a {
-    color: grey;
-}
 
-/* 1. HERE STARTS THE CANVAS-SPECIFIC CSS */
-/* Left-side main canvas: */
+/* ---------------------------------------------------------------- canvas page layout */
 #div_main_canvas {
-    display: grid;
+    height: 100vh;
+    height: 100dvh;
 }
 #vue_app {
-    display: grid;
-    grid-template-columns: 1350px 1fr 4fr;
-    border: 1px solid white;
-    border-radius: 2px;
-    margin: 1%;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    padding: var(--gap);
 }
-#div_konva_canvas {  /* MAIN CANVAS HERE */
-    background-color: rgb(0, 112, 6);                                                             /* Frequently changed for version control during testing! */
-    width: 1300px;
-    height: 1100px;
-    margin: 1%;
-    border: 2x solid white;
+#div_konva_canvas {                /* MAIN CANVAS HERE */
+    flex: 0 0 58%;
+    min-width: 0;
+    min-height: 0;
+    background-color: var(--canvas-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    touch-action: none;            /* finger drawing must not scroll the page */
+    user-select: none;
+    -webkit-user-select: none;
+}
+#div_konva_canvas h2, #div_konva_canvas p {
+    display: none;                 /* the fallback text, replaced by the stage when scripts run */
+}
+#div_right_logs {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    padding: var(--gap);
+    border: 1px solid grey;
     border-radius: 10px;
 }
+@media (min-width: 900px) {
+    #vue_app {
+        flex-direction: row;
+    }
+    #div_konva_canvas {
+        flex: 1 1 auto;
+    }
+    #div_right_logs {
+        flex: 0 0 var(--panel-width);
+        width: var(--panel-width);
+    }
+}
 
+/* ---------------------------------------------------------------- panel contents */
+.panel_section {
+    margin: 0;
+}
+.button_row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+}
+.button_working {
+    min-width: 96px;
+    padding: 6px 10px;
+    height: 52px;
+    background-color: blue;
+    color: white;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: bolder;
+    border: 2px solid white;
+    border-radius: 16px;
+    cursor: pointer;
+}
+.button_working:hover {
+    background-color: #2a2aff;
+}
+.button_working.is_active {
+    background-color: white;
+    color: blue;
+}
+.button_small {
+    min-width: 70px;
+    font-size: 15px;
+    height: 40px;
+}
+.swatches {
+    margin-top: 4px;
+    gap: 5px;              /* nine swatches fit on one row of the 340px panel */
+}
+.swatch {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}
+.swatch.is_active {
+    border: 3px solid white;
+    outline: 3px solid blue;
+    transform: scale(1.15);
+}
+.pen_size_button {
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #333;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    cursor: pointer;
+}
+.pen_size_button.is_active {
+    border: 3px solid white;
+    outline: 3px solid blue;
+}
+.pen_size_button .dot {
+    display: block;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+.hint {
+    margin: 0 0 4px;
+    text-align: center;
+    font-size: 18px;
+}
+.save_status {
+    margin: -4px 0 0;
+    min-height: 1.2em;
+    text-align: center;
+    font-size: 15px;
+    color: #9f9;
+}
+#last_keypress {
+    margin: 0;
+    font-size: 44px;
+    text-align: center;
+}
+.class_keyboard_logs {
+    margin: 0;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+}
+#canvas_tree {
+    align-self: center;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+#credits {
+    margin: 0;
+    font-size: 14px;
+}
+#credits h1 {
+    font-size: 18px;
+    margin: 0 0 4px;
+}
+#credits ul {
+    margin: 0;
+    padding-left: 18px;
+}
 
-
-/* - - - - - - - - - - - - - - - - - - - - - START MODAL EXPERIMENTS - - - - - - - - - - - - - -  */
-  /* The 'X' Close Button */
-  .close {
+/* ---------------------------------------------------------------- video modal (numpad keys) */
+/* based on https://vuejs.org/v2/examples/modal.html */
+.close {
     color: black;
     float: right;
     font-size: 28px;
     font-weight: bold;
-  }  
-  .close:hover,
-  .close:focus {
+}
+.close:hover,
+.close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
-  }
+}
 .modal-mask {
     position: fixed;
     z-index: 9998;
@@ -94,14 +228,11 @@ a {
     display: table;
     transition: opacity 0.3s ease;
 }
-
 .modal-wrapper {
     display: table-cell;
     vertical-align: middle;
 }
-
 .modal-container {
-    /* width: 300px; */
     width: 50%;
     margin: 0px auto;
     padding: 20px 30px;
@@ -111,187 +242,34 @@ a {
     transition: all 0.3s ease;
     font-family: Helvetica, Arial, sans-serif;
 }
-
 .modal-header h3 {
     margin-top: 0;
     color: #42b983;
 }
-
 .modal-body {
     margin: 20px 0;
 }
-
+.modal-body iframe {
+    max-width: 100%;
+}
 .modal-default-button {
     float: right;
 }
-
-/*
-* The following styles are auto-applied to elements with
-* transition="modal" when their visibility is toggled
-* by Vue.js.
-*
-* You can easily play with the modal transition by editing
-* these styles.
-*/
 .modal-enter {
     opacity: 0;
 }
-
 .modal-leave-active {
     opacity: 0;
 }
-
 .modal-enter .modal-container,
 .modal-leave-active .modal-container {
-    -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }
-/* - - - - - - - - - - - - - - - - - - - - -  END MODAL EXPERIMENTS - - - - - - - - - - - - - -  */
 
-
-/* - - - - - - - - - - - - - - - - - - - - -  SLIDER FOR TREE REDRAW - - - - - - - - - - - - - -  */
-/* thanks to https://www.w3schools.com/howto/howto_js_rangeslider.asp */
-.slidecontainer {
-    width: 100%;
-  }  
-.slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 15px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-}
-.slider:hover {
-    opacity: 1;
-}
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #4CAF50;
-    cursor: pointer;
-}
-.slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #4CAF50;
-    cursor: pointer;
-}
-/* - - - - - - - - - - - - - - - - - - - - -  END SLIDER FOR TREE REDRAW - - - - - - - - - - - - - -  */
-
-/* 2. BUTTONS IN MIDDLE: */
-/* https://www.w3schools.com/csS/css3_buttons.asp */
-/* Use display:block instead of float:left to group the buttons below each other, instead of side by side: */
-#button_area {
-    display: flex;    
-    flex-direction: column;
-    /* display: grid; */
-    /* grid-template-rows: 100px 100px 100px 500px 1fr; */
-    margin-top: 50px;
-    width: 100px;
-    height: 1000px;
-}
-.button_working { 
-    width: 100px;
-    height: 75px;
-    background-color: blue;
-    color: white;
-    font-size: 20px;
-    font-weight: bolder;
-    border: 2px solid white;
-    border-radius: 30%;
-}
-.button_in_dev {
-    grid-row-start: 5;
-    background-color: grey;
-    font-size: 15px;
-    width: 75px;
-    height: 75px;
-    border-radius: 40%;
-}
-
-
-/* 3. RIGHT LOGS HERE */
-#div_right_logs {
-    /* grid-column-start: 3; */
-    /* grid-row-start: 2; */
-    display: grid;
-    grid-column: 3;
-    grid-template-rows: 50px 350px 150px 1fr 200px;
-    border: 1px solid grey;
-    border-radius: 10px;
-    margin: 25px;
-    /* margin: 20px; */
-    color: white;
-    /* width: 350px; */
-    /* height: 1100px; */
-}
-#authenticated_user_account {
-    /* background-color: black; */
-    margin: 2%;
-}
-#canvas_tree {
-
-    /* border: 1px solid white; */
-    border-radius: 10px;
-    margin-left: 25px;
-    margin-top: 25px;
-}
-#mouse_position {
-    text-align: center;
-    font-size: 40px;
-}
-#last_keypress {
-    font-size: 55px;
-    text-align: center;
-}
-.class_keyboard_logs {
-    font-size: 18px;
-    padding: 2%;
-}
-#credits {
-    padding: 1%;
-}
-
-
-/* Silly fullscreen-via-CSS attempt... */
+/* ---------------------------------------------------------------- fullscreen */
 :fullscreen {
     background-color: black;
 }
-
-:-webkit-full-screen { /* Chrome */
+:-webkit-full-screen {
     background-color: black;
-}
-:-ms-fullscreen {
-    background-color: black;
-}
-
-
-/* Responsive changes, only barely applicable to this site... */
-@media (min-width: 700px) {  
-}
-@media (min-width: 1000px) {   
-    #div_left_canvas {
-        /* max-width: 45%; */
-    }
-    #canvas_main, #div_konva_canvas {  /* MAIN CANVAS HERE */
-        /* width: 1300px; */
-        /* height: 1000px; */
-        /* margin: 1%; */
-    }
-    #div_right_logs {
-        /* width: 800px; */
-        /* height: 800px; */
-        /* max-width: 45%; */
-    }
-    form {
-        /* max-width: 30%; */
-    }
 }
