@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  Childhood Canvas - canvas page.
+  John Fial, PDX Code Guild, 2020-2021, https://github.com/johnfial/childhood_canvas
+
+  Static version (2026): this used to be the Django template templates/canvas.html rendered on
+  top of templates/base.html. The app itself always ran entirely in the browser, so the page is
+  now plain HTML served by GitHub Pages. The original Django project is preserved on the branch
+  archive/2026-11-04-original-django-app-last-deployed-2021.
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- 1. Vue 2 (full build, MIT). Vendored copy of https://unpkg.com/vue@2.6.12/dist/vue.min.js -->
+  <script src="static/lib/vue-2.6.12.min.js"></script>
+
+  <!-- 2. Konva (MIT). Vendored copy of https://cdnjs.cloudflare.com/ajax/libs/konva/7.0.3/konva.min.js -->
+  <script src="static/lib/konva-7.0.3.min.js"></script>
+
+  <!-- 3. General Normalize CSS, Fonts: -->
+  <link rel="stylesheet" href="static/css/github_necolas_normalize.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@500&display=swap">
+
+  <!-- 4. My Main CSS and Vue/Canvas App: -->
+  <link rel="stylesheet" href="static/css/main.css">
+  <script src="static/js/vue_main.js" defer></script>
+
+  <title>Childhood Canvas</title>
+</head>
+
+<body>
+<main id="div_main_canvas">
+  <header></header>
+
+  <!-- START VUE APP! NOTHING OUTSIDE OF THIS DIV! -->
+  <div id='vue_app'>
+
+    <!-- https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
+    <div id="div_konva_canvas">
+      <h2>Fallback</h2>
+        <p>Yikes! Your browser cannot display this HTML5 Drawing Canvas: a 1300x900 pixel canvas for toddlers.
+          Perhaps try a different, modern browser on the PC in fullscreen.
+    </div>
+
+    <div id="button_area">
+      <button class="button_working" @click="fullscreen_toggle"                   >fullscreen [F11]</button>
+      <button class="button_working" @click="clear_canvas"                        >clear [spacebar]</button>
+      <button class="button_working" @click="this.window.location.reload(true)"   >reload</button> <!-- Why did I have to prefix the command with "this." on this version, but not previously?! Vue version?! -->
+      <br>
+      <button class="button_in_dev"  @click="canvas_save_image"                   >save (dev)</button>
+      <button class="button_in_dev"  @click=""                                    >Current Color (dev)</button>
+    </div>
+
+    <div id="div_right_logs">
+
+      <canvas
+        id="canvas_tree"
+        width="300"
+        height="300"
+        >
+          Fallback: Yikes! Your browser cannot display this HTML5 Drawing Canvas: This is a small tree drawing, for credits (and link) see footer.
+      </canvas>
+
+      <div>
+          <p id="last_keypress">Key:
+          </p>
+      </div>
+
+      <div>
+        <p class="class_keyboard_logs">Full keypress log:</p>
+        <p class="class_keyboard_logs" id="keyboard_logs"></p>
+      </div>
+      <footer id="credits">
+          <h1>Credits:</h1>
+          <ul>
+            <li>Overall: <a href="https://johnfial.github.io/" target="_blank">John Fial</a></li>
+            <li>Tree: <a href="https://codepen.io/ntaylor09/pen/vKGePr" target="_blank">Nicole Eyo</a></li>
+            <li>SVG Images: Most from <a href="https://pixabay.com/vectors/" target="_blank">Pixabay</a> , see source code.</li>
+          </ul>
+      </footer>
+    </div>
+
+    <div id="invisible_video_modals">
+      <!-- Currently only one because this is a component, but this is a good playground area for other stuff not currently onscreen... -->
+      <modal v-if="show_video_modal_show_boolean" @close="show_video_modal_show_boolean=false" :source_url="video_modal_selected_URL" :show_modal="false">
+      </modal>
+    </div>
+    <!-- END VUE APP! NOTHING OUTSIDE OF THIS DIV! -->
+  </div>
+
+</main>
+</body>
+</html>

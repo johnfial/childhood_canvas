@@ -23,12 +23,18 @@
 
 - Childhood Canvas is a visual play sandbox for older babies and toddlers, intended for full-screen, limited-feature use, *with a focus on keyboard interaction*.
 - Ages ~6-months through ~42 months (3 1/2 years).
-<!-- - A deployed version can be accessed at https://johnfial.pythonanywhere.com . (It is usually older than this repository.)  -->
-- A deployed, but slightly outdated version can be accessed at https://childhood-canvas.herokuapp.com/canvas.html . Heroku deployments have a ~10-second "wake up" time, so please be patient!
-<!-- - Guest credentials, now unnecessary: 
-   - *Username:*  **guest**
-   - *Password:*         **aoeu1234** -->
+- **Play it here: https://johnfial.github.io/childhood_canvas/canvas.html** (free GitHub Pages hosting, no login needed).
 - Class presentation (virtual), Jan 2021: https://www.youtube.com/watch?v=laxBGSLbT28&t=2260s (link points to 37:40)
+
+<!--  -->
+# Deployment & History (status as of 2026-11-04)
+
+- The site is now a plain static site (HTML, CSS, JavaScript) served by **GitHub Pages** directly from the `main` branch of this repository (repo Settings > Pages > "Deploy from a branch" > `main`, root folder). There is no server, database, login, or signup any more.
+- Home page: https://johnfial.github.io/childhood_canvas/ . Canvas: https://johnfial.github.io/childhood_canvas/canvas.html .
+- To run it locally, serve the repository folder with any static web server, for example `python -m http.server 8000`, then open http://localhost:8000/canvas.html .
+- The original 2020-2021 version was a Django project (custom user accounts, login/signup templates, Heroku and PythonAnywhere deployments). It is preserved, untouched, on the branch `archive/2026-11-04-original-django-app-last-deployed-2021`.
+- Status of the old deployments on 2026-11-04: the Heroku app (childhood-canvas.herokuapp.com) no longer exists, since Heroku ended its free tier in 2022. The PythonAnywhere copy (johnfial.pythonanywhere.com) still responds but serves an older build that has no canvas page.
+- Vue 2.6.12 and Konva 7.0.3 are vendored in `static/lib/` (they were loaded from unpkg and cdnjs before), so the site keeps working even if those CDNs change. Both files match their published integrity hashes.
 
 <!--  -->
 # Childhood Canvas, o 'Tela di infanzia'
