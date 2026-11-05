@@ -75,6 +75,9 @@ a {
     border: 1px solid grey;
     border-radius: 10px;
 }
+#div_right_logs > * {
+    flex-shrink: 0;                /* never squash panel items into each other; the panel scrolls instead */
+}
 @media (min-width: 900px) {
     #vue_app {
         flex-direction: row;
