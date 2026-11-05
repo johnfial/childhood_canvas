@@ -36,6 +36,14 @@
 - Status of the old deployments on 2026-11-04: the Heroku app (childhood-canvas.herokuapp.com) no longer exists, since Heroku ended its free tier in 2022. The PythonAnywhere copy (johnfial.pythonanywhere.com) still responds but serves an older build that has no canvas page.
 - Vue 2.6.12 and Konva 7.0.3 are vendored in `static/lib/` (they were loaded from unpkg and cdnjs before), so the site keeps working even if those CDNs change. Both files match their published integrity hashes.
 
+### What changed in the November 2026 refresh
+
+- The canvas starts empty. The old welcome text, blue circle and 4x butterfly were leftovers from the first Konva drag-and-drop test.
+- **Pen tool**: the side panel has a *move pictures* / *draw with pen* switch, nine colors and three thicknesses. In draw mode the mouse (or a finger on a touch screen) draws instead of dragging pictures.
+- **Save picture**: downloads the canvas as a PNG named `childhood-canvas-YYYY-MM-DD_HH-MM-SS.png` (2x resolution, green background included).
+- **Any monitor**: the canvas fills the space next to the fixed-width side panel and the whole drawing is scaled from the original 1300 x 1100 design size, so pictures look the same on a laptop and a big screen. Narrow screens stack the panel below the canvas (a basic mobile layout; phones still lack the keyboard the app is built around).
+- Code: the 26 copy-pasted picture functions became one table (`PICTURES` in `static/js/vue_main.js`), dead experiments and unreferenced files (two copies of fabric.js, unused SVGs, Windows shortcut files) were removed, and Konva objects are kept out of Vue's reactive data.
+
 <!--  -->
 # Childhood Canvas, o 'Tela di infanzia'
    - ### by John Fial
@@ -60,7 +68,7 @@
 
 2. As a caregiver, **I want a full-screen lock that my child can interact with**, but not escape to the open operating system.
    - Tasks: 
-      - [ ] **MVP**: Get Canvas fullscreen -- first on my screen, then on any 100% screen
+      - [x] **MVP**: Get Canvas fullscreen -- first on my screen, then on any 100% screen (fullscreen button; canvas rescales to any monitor, Nov 2026)
       - [ ] Only a single escape key combination (ideally not F11-Fullscreen, but this kind of 'lock' may not work with modern JS/browsers)
 
 3. As a parent, I want **each keypress to make something visually obvious appear** on that lock screen.
@@ -78,9 +86,9 @@
       - [ ] Set keypress to draw shape
       - [ ] Set keypress to draw animal icons/graphics
       - [ ] Change color/size/style of above
-      - [ ] Mouse: add draw ability
-      - [ ] Mouse: add different paintbrushes (thickness, color, line/brush/dashed/etc.)
-      - [ ] Mouse: add different colors
+      - [x] Mouse: add draw ability (Nov 2026)
+      - [x] Mouse: add different paintbrushes (thickness, color, line/brush/dashed/etc.) (three thicknesses, Nov 2026)
+      - [x] Mouse: add different colors (Nov 2026)
 
 7. As a child, I want **music** because silent computer time is boring!
    - Tasks: 
@@ -98,7 +106,7 @@
 
 9. As a user, I want to be able to **save or print my/our drawings**, and would love these to save to the account (in the cloud, accessible from anywhere).
    - Tasks: 
-      - [ ] **MVP**: Add standard save as jpg/print button
+      - [x] **MVP**: Add standard save as jpg/print button (save picture = PNG download, Nov 2026)
       - [ ] Add save to user profile, store back via django into database (watch storage usage...)
 
 10. As a user, I want to be comfortable using the app at night or day, so I need a light/dark mode.
